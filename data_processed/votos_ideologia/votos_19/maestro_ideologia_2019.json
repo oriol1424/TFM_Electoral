@@ -1,0 +1,67 @@
+{
+    "000002": {
+        "nombre_unificado": "PSOE",
+        "ideologia": 3.76,
+        "voto_retrospectivo_id": "bloque_socialista"
+    },
+    "000005": {
+        "nombre_unificado": "PP",
+        "ideologia": 7.47,
+        "voto_retrospectivo_id": "bloque_popular"
+    },
+    "000011": {
+        "nombre_unificado": "VOX",
+        "ideologia": 8.95,
+        "voto_retrospectivo_id": "bloque_derecha_radical"
+    },
+    "000010": {
+        "nombre_unificado": "SUMAR",
+        "ideologia": 2.24,
+        "voto_retrospectivo_id": "bloque_izquierda_radical"
+    },
+    "000050": {
+        "nombre_unificado": "ERC",
+        "ideologia": 2.83,
+        "voto_retrospectivo_id": "bloque_nacionalista_cat"
+    },
+    "000030": {
+        "nombre_unificado": "EAJ-PNV",
+        "ideologia": 4.88,
+        "voto_retrospectivo_id": "bloque_nacionalista_vasco"
+    },
+    "000057": {
+        "nombre_unificado": "JxCat",
+        "ideologia": 4.51,
+        "voto_retrospectivo_id": "bloque_nacionalista_cat"
+    },
+    "000071": {
+        "nombre_unificado": "EH Bildu",
+        "ideologia": 2.51,
+        "voto_retrospectivo_id": "bloque_nacionalista_vasco"
+    },
+    "000053": {
+        "nombre_unificado": "CUP",
+        "ideologia": 2.5,
+        "voto_retrospectivo_id": "bloque_nacionalista_cat"
+    },
+    "000065": {
+        "nombre_unificado": "BNG",
+        "ideologia": 3.62,
+        "voto_retrospectivo_id": "bloque_nacionalista_gal"
+    },
+    "000031": {
+        "nombre_unificado": "CCa-PNC-NC",
+        "ideologia": 5.31,
+        "voto_retrospectivo_id": "bloque_nacionalista_canario"
+    },
+    "000032": {
+        "nombre_unificado": "CCa-PNC-NC",
+        "ideologia": 5.31,
+        "voto_retrospectivo_id": "bloque_nacionalista_canario"
+    },
+    "000023": {
+        "nombre_unificado": "Teruel Existe",
+        "ideologia": 4.41,
+        "voto_retrospectivo_id": "bloque_nacionalista_canario"
+    }
+}

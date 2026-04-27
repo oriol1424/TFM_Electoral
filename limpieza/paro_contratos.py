@@ -1,0 +1,122 @@
+import os
+from typing import Any, Optional, Union
+import numpy as np
+import pandas as pd
+from .funciones_genericas_limpieza import formatear_serie_codigo, limpiar_valor_numerico, guardar_dataframe_csv
+
+def procesar_hoja_sepe(df: pd.DataFrame, tipo: str = 'paro') -> pd.DataFrame:
+    """
+    Identifica dinámicamente la fila de inicio de datos, asigna las columnas correctas
+    según el tipo y limpia los valores contenidos en ellas.
+    Args:
+        df (pd.DataFrame): DataFrame bruto correspondiente a una hoja del Excel.
+        tipo (str, optional): Indica el tipo de datos para asignar cabeceras ('paro' o 'contratos').
+                              Por defecto es 'paro'.
+    Returns:
+        pd.DataFrame: DataFrame procesado, normalizado y sin cabeceras basuras.
+    """
+    start_row = 0
+    for i in range(len(df)):
+        val = str(df.iloc[i, 0]).split('.')[0]
+        if val.isdigit() and 4 <= len(val) <= 5:
+            start_row = i
+            break
+    
+    df_clean = df.iloc[start_row:].copy()
+    if tipo == 'paro':
+        cols = [
+            'id_municipio', 'nombre_municipio', 'total_paro',
+            'p_h_u25', 'p_h_25_44', 'p_h_o45',
+            'p_m_u25', 'p_m_25_44', 'p_m_o45',
+            'p_agr', 'p_ind', 'p_con', 'p_ser', 'p_sin_empleo'
+        ]
+    else:
+        cols = [
+            'id_municipio', 'nombre_municipio', 'total_contratos',
+            'c_h_indef', 'c_h_temp', 'c_h_conv',
+            'c_m_indef', 'c_m_temp', 'c_m_conv',
+            'c_agr', 'c_ind', 'c_con', 'c_ser'
+        ]
+    
+    faltan_columnas = len(cols) - df_clean.shape[1]
+    if faltan_columnas > 0:
+        for i in range(faltan_columnas):
+            df_clean[f'col_vacia_{i}'] = np.nan
+
+    df_clean = df_clean.iloc[:, :len(cols)]
+    df_clean.columns = cols
+    df_clean['id_municipio'] = formatear_serie_codigo(df_clean['id_municipio'], 5)
+    df_clean = df_clean.dropna(subset=['id_municipio']).reset_index(drop=True)
+
+    for col in cols[2:]:
+        df_clean[col] = df_clean[col].apply(limpiar_valor_numerico, to_nan=False, handle_less_than_5=True)
+
+    return df_clean
+
+
+def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.DataFrame]:
+    """
+    Función maestra que procesa un archivo Excel del SEPE, emparejando hojas 
+    con tolerancia a errores tipográficos y realizando un cruce de datos inclusivo.
+    Args:
+        path_entrada (str): Ruta al archivo Excel crudo (.xls o .xlsx).
+        path_salida (str): Ruta donde se exportará el archivo CSV procesado.
+    Returns:
+        Optional[pd.DataFrame]: DataFrame consolidado resultante, o None si no hay datos 
+        válidos o si se produce una excepción crítica.
+    Raises:
+        Exception: Atrapa y loguea cualquier error de ejecución impredecible, 
+        devolviendo None como control de fallo controlado.
+    """
+    try:
+        engine = 'xlrd' if path_entrada.endswith('.xls') else 'openpyxl'
+        xls = pd.ExcelFile(path_entrada, engine=engine)
+        sheets = xls.sheet_names
+
+        pares_a_procesar = []
+        i = 0
+        while i < len(sheets):
+            s = sheets[i]
+            if 'PARO' in s.upper():
+                s_paro = s
+                s_cont = None
+                if (i + 1) < len(sheets):
+                    next_sheet = sheets[i + 1].upper()
+                    if 'CONTRAT' in next_sheet or 'CONTRTOS' in next_sheet:
+                        s_cont = sheets[i + 1]
+                        i += 1
+                if s_cont:
+                    pares_a_procesar.append((s_paro, s_cont))
+            i += 1
+
+        all_data = []
+
+        for s_paro, s_cont in pares_a_procesar:
+            df_p = pd.read_excel(xls, sheet_name=s_paro)
+            df_c = pd.read_excel(xls, sheet_name=s_cont)
+
+            if df_p.empty or df_c.empty:
+                continue
+
+            clean_p = procesar_hoja_sepe(df_p, tipo='paro')
+            clean_c = procesar_hoja_sepe(df_c, tipo='contratos')
+            merged = pd.merge(clean_p, clean_c, on='id_municipio', how='outer', suffixes=('', '_cont'))
+
+            if 'nombre_municipio_cont' in merged.columns:
+                merged['nombre_municipio'] = merged['nombre_municipio'].fillna(merged['nombre_municipio_cont'])
+                merged = merged.drop(columns=['nombre_municipio_cont'])
+            all_data.append(merged)
+        
+        if not all_data:
+            return None
+        
+        df_ml = pd.concat(all_data, ignore_index=True)
+        cols_numericas = df_ml.columns.drop(['id_municipio', 'nombre_municipio'])
+        df_ml[cols_numericas] = df_ml[cols_numericas].fillna(0).astype(float).astype(int)
+        
+        guardar_dataframe_csv(df_ml, path_salida)
+        return df_ml
+    
+    except Exception as e:
+        print(f"\nError crítico: {e}")
+        return None

@@ -1,0 +1,48 @@
+{
+    "2023": {
+        "raw": {
+            "votos_candidaturas": "data_raw/votos/01_julio_2023/03022307.DAT",
+            "Votos_candidaturas_agrupados": "data_raw/votos/01_julio_2023/06022307.DAT",
+            "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
+            "renta_disponible": "data_raw/renta/30824.csv",
+            "GINI_P80P20": "data_raw/renta/37677.csv",
+            "fuente_ingresos": "data_raw/renta/30825.csv",
+            "paro_contratos": "data_raw/mercado_laboral/mercado_laboral_julio_2023.xls",
+            "geografia": "data_raw/superficie/MUNICIPIOS.csv",
+            "poblacion": "data_raw/demografia/pobmun23.xlsx"
+        },
+        "processed": {
+            "carpeta_votos": "data_processed/votos_ideologia/votos_0723",
+            "renta_disponible": "data_processed/renta/indicadores_renta.csv",
+            "GINI_P80P20": "data_processed/renta/Gini_P80P20.csv",
+            "fuente_ingresos": "data_processed/renta/fuente_ingresos.csv",
+            "paro_contratos": "data_processed/mercado_laboral/mercado_laboral_2023.csv",
+            "geografia": "data_processed/superficie/superficie.csv",
+            "poblacion_json": "data_processed/demografia/poblacion_2023.json",
+            "poblacion_csv": "data_processed/demografia/poblacion_municipios_2023.csv"
+        }
+    },
+    "2019": {
+        "raw": {
+            "votos_candidaturas": "data_raw/votos/02_noviembre_2019/03021911.DAT",
+            "Votos_candidaturas_agrupados": "data_raw/votos/02_noviembre_2019/06021911.DAT",
+            "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
+            "renta_disponible": "data_raw/renta/30824.csv",
+            "GINI_P80P20": "data_raw/renta/37677.csv",
+            "fuente_ingresos": "data_raw/renta/30825.csv",
+            "paro_contratos": "data_raw/mercado_laboral/mercado_laboral_noviembre_2019.xls",
+            "geografia": "data_raw/superficie/MUNICIPIOS.csv",
+            "poblacion": "data_raw/demografia/pobmun19.xlsx"
+        },
+        "processed": {
+            "carpeta_votos": "data_processed/votos_ideologia/votos_19",
+            "renta_disponible": "data_processed/renta/indicadores_renta.csv",
+            "GINI_P80P20": "data_processed/renta/Gini_P80P20.csv",
+            "fuente_ingresos": "data_processed/renta/fuente_ingresos.csv",
+            "paro_contratos": "data_processed/mercado_laboral/mercado_laboral_2019.csv",
+            "geografia": "data_processed/superficie/superficie.csv",
+            "poblacion_json": "data_processed/demografia/poblacion_2019.json",
+            "poblacion_csv": "data_processed/demografia/poblacion_municipios_2019.csv"
+        }
+    }
+}
