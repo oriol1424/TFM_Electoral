@@ -1,41 +1,14 @@
 import pandas as pd
 import seaborn as sns
-import json
-import os
-from EDA.visuals import plot_smart_bar, plot_distribution_analysis, plot_scatter_regression
-
-def obtener_mapeo_provincias(anyo: str) -> dict:
-    """
-    Lee el archivo JSON de población para obtener un mapeo de id_provincia a nombre_provincia.
-    """
-    path_json = f"data_processed/demografia/poblacion_{anyo}.json"
-    if not os.path.exists(path_json):
-        return {}
-    
-    try:
-        with open(path_json, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        provincias = data.get('provincias', {})
-        return {id_prov: info.get('nombre_provincia', id_prov) for id_prov, info in provincias.items()}
-    except Exception:
-        return {}
-
-def mapear_nombres_provincias(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
-    """
-    Añade o completa la columna 'nombre_provincia' en el DataFrame usando el mapeo del JSON.
-    """
-    # Si no hay id_provincia, intentamos sacarlo de Cod_Muni
-    if 'id_provincia' not in df.columns and 'Cod_Muni' in df.columns:
-        df['id_provincia'] = df['Cod_Muni'].astype(str).str.zfill(5).str[:2]
-        
-    if 'id_provincia' in df.columns:
-        mapeo = obtener_mapeo_provincias(anyo)
-        if 'nombre_provincia' not in df.columns:
-            df['nombre_provincia'] = df['id_provincia'].map(mapeo)
-        else:
-            df['nombre_provincia'] = df['nombre_provincia'].fillna(df['id_provincia'].map(mapeo))
-    
-    return df
+import matplotlib.pyplot as plt
+from EDA.visuals import (
+    plot_smart_bar, 
+    plot_distribution_analysis, 
+    plot_scatter_regression,
+    mapear_nombres_provincias,
+    plot_missing_demographics,
+    plot_histogram
+)
 
 def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
     """
@@ -45,7 +18,7 @@ def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
     col_gini = f'Índice de Gini {anyo}'
     col_p80p20 = f'Distribución de la renta P80/P20 {anyo}'
     
-    print(f"\nAUDITORÍA DE DATOS FALTANTES ({anyo})")
+    print(f"\nAUDITORÍA DE DATOS FALTANTES DESIGUALDAD ({anyo})")
     total_filas = len(df_gini)
     print(f"Total de municipios en el dataset: {total_filas}")
     
@@ -53,22 +26,17 @@ def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
         nulos_gini = df_gini[col_gini].isna().sum()
         pct_gini = (nulos_gini / total_filas) * 100
         print(f"Nulos en Gini:      {nulos_gini} municipios ({pct_gini:.1f}% del total)")
-    else:
-        print(f"La columna '{col_gini}' NO existe en el DataFrame.")
-        
+    
     if col_p80p20 in df_gini.columns:
         nulos_p80p20 = df_gini[col_p80p20].isna().sum()
         pct_p80p20 = (nulos_p80p20 / total_filas) * 100
         print(f"Nulos en P80/P20:   {nulos_p80p20} municipios ({pct_p80p20:.1f}% del total)")
-    else:
-        print(f"La columna '{col_p80p20}' NO existe en el DataFrame.")
-        
+
 
 def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
     """
-    Analiza los municipios con valores nulos en el dataset de desigualdad,
-    cruzándolos con los datos demográficos para ver a qué tamaño de población pertenecen,
-    añade porcentajes al gráfico y muestra a qué provincias pertenecen.
+    Analiza los municipios con valores nulos en el dataset de desigualdad
+    utilizando la función genérica de visuals.py.
     """
     col_gini = f'Índice de Gini {anyo}'
     
@@ -77,72 +45,11 @@ def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> 
         return
         
     df_gini_nulos = df_gini[df_gini[col_gini].isna()].copy()
-    df_gini_nulos['Cod_Muni'] = df_gini_nulos['Cod_Muni'].astype(str).str.zfill(5)
     
-    col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
-    df_pob_temp = df_pob.copy()
-    df_pob_temp[col_id_pob] = df_pob_temp[col_id_pob].astype(str).str.zfill(5)
-    
-    codigos_pob = set(df_pob_temp[col_id_pob])
-    fantasmas = df_gini_nulos[~df_gini_nulos['Cod_Muni'].isin(codigos_pob)]
-    
-    print(f"\nMUNICIPIOS FANTASMA DETECTADOS ({anyo})")
-    if fantasmas.empty:
-        print("No se han detectado municipios en el histórico que falten en el padrón.")
+    if not df_gini_nulos.empty:
+        plot_missing_demographics(df_gini_nulos, df_pob, anyo, title_suffix="Desigualdad")
     else:
-        print(f"Hay {len(fantasmas)} municipios en la lista de Renta que NO existen en Población.")
-        print("Se descartarán automáticamente para el análisis.")
-            
-    cols_a_cruzar = [col_id_pob, 'tamano_municipio']
-    if 'id_provincia' in df_pob_temp.columns:
-        cols_a_cruzar.append('id_provincia')
-    if 'nombre_provincia' in df_pob_temp.columns:
-        cols_a_cruzar.append('nombre_provincia')
-        
-    nulos_reales = df_gini_nulos[df_gini_nulos['Cod_Muni'].isin(codigos_pob)]
-    
-    if nulos_reales.empty:
-        print("\nNo hay municipios nulos reales cruzables con el padrón poblacional.")
-        return
-        
-    df_merge = pd.merge(
-        nulos_reales, 
-        df_pob_temp[cols_a_cruzar], 
-        left_on='Cod_Muni', 
-        right_on=col_id_pob, 
-        how='inner'
-    )
-    
-    conteo_tamano = df_merge['tamano_municipio'].value_counts().reset_index()
-    conteo_tamano.columns = ['tamano_municipio', 'cantidad']
-    
-    plot_smart_bar(
-        df=conteo_tamano, 
-        cat_col='tamano_municipio',
-        val_col='cantidad',
-        orientation='h', 
-        title=f'Perfil Demográfico de los Municipios Ocultos ({anyo})',
-        xlabel='Cantidad de Municipios sin datos de renta',
-        ylabel='Categoría de Tamaño Poblacional',
-        palette='magma'
-    )
-
-    print(f"\nIMPACTO DEL SECRETO ESTADÍSTICO POR PROVINCIA ({anyo})")
-    
-    # Aseguramos nombres de provincias mediante el mapeo del JSON
-    df_merge = mapear_nombres_provincias(df_merge, anyo)
-    
-    col_prov = 'nombre_provincia' if 'nombre_provincia' in df_merge.columns and not df_merge['nombre_provincia'].isna().all() else 'id_provincia'
-    
-    if col_prov in df_merge.columns:
-        conteo_prov = df_merge[col_prov].value_counts()
-        total_nulos_reales = conteo_prov.sum()
-        print("Top 15 provincias con más municipios ocultados por el INE:")
-        for prov, cant in conteo_prov.head(15).items():
-            pct_prov = (cant / total_nulos_reales) * 100
-            print(f" - {str(prov):<20}: {cant:4d} municipios ({pct_prov:.1f}% de los ocultos)")
-    else:
-        print("No se encontró información provincial en los datos demográficos.")
+        print(f"No se detectaron nulos en desigualdad para el año {anyo}.")
 
 
 def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
@@ -253,6 +160,18 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
     Genera un histograma de la distribución del Gini y un scatter plot 
     para ver la relación Gini vs P80/P20.
     """
+    # 1. Histograma detallado de Gini
+    plot_histogram(
+        df=df_clean,
+        num_col='gini',
+        title=f'Frecuencia de Municipios por Índice de Gini ({anyo})',
+        xlabel='Índice de Gini (Más alto = Más desigualdad)',
+        ylabel='Número de Municipios',
+        bins=35,
+        color='indigo'
+    )
+
+    # 2. Análisis combinado (Boxplot + Histograma)
     plot_distribution_analysis(
         df=df_clean,
         num_col='gini',
@@ -260,7 +179,7 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
         color='purple'
     )
     
-    # 2. Correlación y Dispersión 
+    # 3. Correlación y Dispersión 
     plot_scatter_regression(
         df=df_clean,
         x_col='gini',
@@ -268,32 +187,7 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
         title=f'Polarización Económica: Gini vs Ratio P80/P20 ({anyo})',
         color='teal'
     )
-    """"
-    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
-    sns.histplot(df_clean['gini'], bins=50, kde=True, color='purple', ax=axes[0])
-    axes[0].set_title(f'Distribución de la Desigualdad (Gini) en {anyo}')
-    axes[0].set_xlabel('Índice de Gini (Más alto = Más desigualdad)')
-    axes[0].set_ylabel('Número de Municipios')
-    
-    media_gini = df_clean['gini'].mean()
-    axes[0].axvline(media_gini, color='red', linestyle='--', label=f'Media Nac: {media_gini:.1f}')
-    axes[0].legend()
-    
-    sns.scatterplot(
-        data=df_clean, x='gini', y='p80_p20', 
-        alpha=0.5, color='teal', edgecolor=None, ax=axes[1]
-    )
-    axes[1].set_title(f'Polarización Económica: Gini vs Ratio P80/P20 ({anyo})')
-    axes[1].set_xlabel('Índice de Gini')
-    axes[1].set_ylabel('Ratio P80/P20\n(Veces que los ingresos del top 20% superan al bottom 20%)')
-    
-    municipio_max_gini = df_clean.loc[df_clean['gini'].idxmax()]
-    axes[1].text(municipio_max_gini['gini'], municipio_max_gini['p80_p20'], 
-                 municipio_max_gini['Nombre_Muni'], fontsize=9, color='red')
-    plt.tight_layout()
-    plt.show()
-"""
-    
+
 def eda_gini_p80p20(df_gini_completo: pd.DataFrame, anyo: str) -> pd.DataFrame:
     """
     Orquestador del análisis de Desigualdad.
