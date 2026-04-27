@@ -1,6 +1,41 @@
 import pandas as pd
 import seaborn as sns
+import json
+import os
 from EDA.visuals import plot_smart_bar, plot_distribution_analysis, plot_scatter_regression
+
+def obtener_mapeo_provincias(anyo: str) -> dict:
+    """
+    Lee el archivo JSON de población para obtener un mapeo de id_provincia a nombre_provincia.
+    """
+    path_json = f"data_processed/demografia/poblacion_{anyo}.json"
+    if not os.path.exists(path_json):
+        return {}
+    
+    try:
+        with open(path_json, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        provincias = data.get('provincias', {})
+        return {id_prov: info.get('nombre_provincia', id_prov) for id_prov, info in provincias.items()}
+    except Exception:
+        return {}
+
+def mapear_nombres_provincias(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
+    """
+    Añade o completa la columna 'nombre_provincia' en el DataFrame usando el mapeo del JSON.
+    """
+    # Si no hay id_provincia, intentamos sacarlo de Cod_Muni
+    if 'id_provincia' not in df.columns and 'Cod_Muni' in df.columns:
+        df['id_provincia'] = df['Cod_Muni'].astype(str).str.zfill(5).str[:2]
+        
+    if 'id_provincia' in df.columns:
+        mapeo = obtener_mapeo_provincias(anyo)
+        if 'nombre_provincia' not in df.columns:
+            df['nombre_provincia'] = df['id_provincia'].map(mapeo)
+        else:
+            df['nombre_provincia'] = df['nombre_provincia'].fillna(df['id_provincia'].map(mapeo))
+    
+    return df
 
 def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
     """
@@ -94,7 +129,10 @@ def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> 
 
     print(f"\nIMPACTO DEL SECRETO ESTADÍSTICO POR PROVINCIA ({anyo})")
     
-    col_prov = 'nombre_provincia' if 'nombre_provincia' in df_merge.columns else 'id_provincia'
+    # Aseguramos nombres de provincias mediante el mapeo del JSON
+    df_merge = mapear_nombres_provincias(df_merge, anyo)
+    
+    col_prov = 'nombre_provincia' if 'nombre_provincia' in df_merge.columns and not df_merge['nombre_provincia'].isna().all() else 'id_provincia'
     
     if col_prov in df_merge.columns:
         conteo_prov = df_merge[col_prov].value_counts()
@@ -107,6 +145,53 @@ def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> 
         print("No se encontró información provincial en los datos demográficos.")
 
 
+def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
+    """
+    Busca si existe algún municipio con 100 o menos habitantes que tenga datos de Gini
+    y muestra un resumen por provincia.
+    """
+    col_gini = f'Índice de Gini {anyo}'
+    col_pob = 'poblacion' if 'poblacion' in df_pob.columns else 'poblacion_total'
+    
+    if col_gini not in df_gini.columns:
+        return
+
+    # Preparar datos
+    df_gini_temp = df_gini.copy()
+    df_gini_temp['Cod_Muni'] = df_gini_temp['Cod_Muni'].astype(str).str.zfill(5)
+    
+    col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
+    df_pob_temp = df_pob.copy()
+    df_pob_temp[col_id_pob] = df_pob_temp[col_id_pob].astype(str).str.zfill(5)
+
+    # Filtrar municipios pequeños y cruzar
+    pequenos = df_pob_temp[df_pob_temp[col_pob] <= 100].copy()
+    df_merge = pd.merge(
+        pequenos,
+        df_gini_temp[['Cod_Muni', col_gini, 'Nombre_Muni']],
+        left_on=col_id_pob,
+        right_on='Cod_Muni',
+        how='inner'
+    )
+    
+    # Filtrar los que TIENEN datos
+    con_datos = df_merge[df_merge[col_gini].notna()].copy()
+
+    print(f"\nANÁLISIS DE EXCEPCIONES AL SECRETO ESTADÍSTICO (<= 100 hab. en {anyo})")
+    
+    if con_datos.empty:
+        print("No hay información de ningún municipio con menos de 100 habitantes (Secreto Estadístico aplicado correctamente).")
+    else:
+        con_datos = mapear_nombres_provincias(con_datos, anyo)
+        
+        # Resumen por provincia
+        resumen_prov = con_datos['nombre_provincia'].value_counts()
+        print(f"Se han encontrado {len(con_datos)} municipios con datos a pesar de su pequeño tamaño (<= 100 hab).")
+        print("\nRESUMEN DE EXCEPCIONES POR PROVINCIA:")
+        for prov, cant in resumen_prov.items():
+            print(f" - {prov}: {cant} municipio(s)")
+
+
 def gestion_nulos_desigualdad(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
     """
     Función orquestadora para la gestión y diagnóstico de los valores nulos.
@@ -114,6 +199,7 @@ def gestion_nulos_desigualdad(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo:
     """
     auditar_nulos_desigualdad(df_gini, anyo)
     municipios_nulos(df_gini, df_pob, anyo)
+    verificar_datos_municipios_pequenos(df_gini, df_pob, anyo)
     
 
 def procesar_desigualdad_anyo(df_gini: pd.DataFrame, anyo: str) -> pd.DataFrame:
