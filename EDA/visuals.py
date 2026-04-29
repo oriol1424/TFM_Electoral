@@ -27,8 +27,15 @@ def mapear_nombres_provincias(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
     """
     Añade o completa la columna 'nombre_provincia' en el DataFrame usando el mapeo del JSON.
     """
-    if 'id_provincia' not in df.columns and 'Cod_Muni' in df.columns:
-        df['id_provincia'] = df['Cod_Muni'].astype(str).str.zfill(5).str[:2]
+    # Estandarizar nombre de columna de entrada
+    col_id = None
+    for c in ['id_provincia', 'Cod_Muni', 'cod_muni', 'id_municipio']:
+        if c in df.columns:
+            col_id = c
+            break
+            
+    if col_id and col_id != 'id_provincia':
+        df['id_provincia'] = df[col_id].astype(str).str.zfill(5).str[:2]
         
     if 'id_provincia' in df.columns:
         mapeo = obtener_mapeo_provincias(anyo)
@@ -39,71 +46,79 @@ def mapear_nombres_provincias(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
     
     return df
 
-def categorizar_municipios_tfm(pob: int) -> str:
+def _limpiar_caracteres_especiales(texto: str) -> str:
     """
-    Categoriza los municipios según los rangos específicos para el TFM.
+    Limpia caracteres corruptos (como el replacement character) que causan errores en fuentes de texto.
     """
-    if pd.isna(pob): return "Sin Datos"
-    if pob <= 100: return "<100"
-    elif pob <= 500: return "101-500"
-    elif pob <= 1000: return "501-1000"
-    elif pob <= 2000: return "1001-2000"
-    elif pob <= 5000: return "2001-5000"
-    elif pob <= 10000: return "5001-10000"
-    elif pob <= 20000: return "10001-20000"
-    elif pob <= 50000: return "20001-50000"
-    elif pob <= 100000: return "50000-100000"
-    elif pob <= 500000: return "100001-500000"
-    else: return ">500000"
+    if not isinstance(texto, str): return texto
+    # Reemplazar el carácter de reemplazo  por una cadena vacía o intentar corregir casos comunes
+    return texto.replace('\ufffd', '').replace('', '')
 
-def plot_missing_demographics(df_nulls: pd.DataFrame, df_pob: pd.DataFrame, anyo: str, title_suffix: str = "") -> None:
+def plot_votos_apilados_provincial(df_plot: pd.DataFrame, title: str):
     """
-    Analiza y grafica el perfil demográfico (tamaño de municipio y provincia) de los nulos.
+    Genera un gráfico de barras apiladas mostrando el peso relativo (%) de cada candidatura por provincia.
     """
-    col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
-    df_pob_temp = df_pob.copy()
-    df_pob_temp[col_id_pob] = df_pob_temp[col_id_pob].astype(str).str.zfill(5)
+    sns.set_theme(style="whitegrid")
     
-    df_nulls_temp = df_nulls.copy()
-    df_nulls_temp['Cod_Muni'] = df_nulls_temp['Cod_Muni'].astype(str).str.zfill(5)
+    cols_evitar = ['id_provincia', 'nombre_provincia']
+    cols_votos = [c for c in df_plot.columns if c.lower() not in cols_evitar]
     
-    # Verificamos qué columnas existen realmente para evitar KeyError
-    cols_a_cruzar = [col_id_pob]
-    if 'tamano_municipio' in df_pob_temp.columns:
-        cols_a_cruzar.append('tamano_municipio')
-    if 'id_provincia' in df_pob_temp.columns: 
-        cols_a_cruzar.append('id_provincia')
-    if 'nombre_provincia' in df_pob_temp.columns: 
-        cols_a_cruzar.append('nombre_provincia')
+    df_pct = df_plot.copy()
+    index_col = 'nombre_provincia' if 'nombre_provincia' in df_pct.columns else 'id_provincia'
+    df_pct = df_pct.set_index(index_col)
+
+    # Limpiar nombres de columnas para evitar warnings de Glyphs
+    df_pct.columns = [_limpiar_caracteres_especiales(c) for c in df_pct.columns]
+    cols_votos = df_pct.columns.tolist()
+
+    # Calcular porcentajes
+    df_pct = df_pct[cols_votos].div(df_pct[cols_votos].sum(axis=1), axis=0) * 100
+    df_pct = df_pct.loc[:, (df_pct != 0).any(axis=0)]
+    
+    ax = df_pct.plot(kind='barh', stacked=True, figsize=(14, 20), colormap='tab20')
+    
+    plt.title(_limpiar_caracteres_especiales(title), fontsize=16, pad=20)
+    plt.xlabel('Porcentaje de Votos (%)')
+    plt.ylabel('Provincia')
+    plt.legend(title='Candidaturas', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout()
+    plt.show()
+
+def plot_votos_individuales_por_provincia(df_final: pd.DataFrame):
+    """
+    Genera un gráfico de barras por cada provincia con etiquetas de porcentaje al lado.
+    """
+    cols_evitar = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion']
+    cols_votos = [c for c in df_final.columns if c.lower() not in cols_evitar]
+    
+    print("\n--- Generando Gráficos Individuales por Provincia ---")
+    
+    for _, row in df_final.iterrows():
+        prov_name = row['nombre_provincia'] if pd.notna(row['nombre_provincia']) else row['id_provincia']
+        prov_name = _limpiar_caracteres_especiales(str(prov_name))
         
-    df_merge = pd.merge(df_nulls_temp, df_pob_temp[cols_a_cruzar], left_on='Cod_Muni', right_on=col_id_pob, how='inner')
-    
-    if df_merge.empty:
-        print(f"No hay datos cruzables para el análisis demográfico de nulos {title_suffix}.")
-        return
-
-    if 'tamano_municipio' in df_merge.columns:
-        conteo_tamano = df_merge['tamano_municipio'].value_counts().reset_index()
-        conteo_tamano.columns = ['tamano_municipio', 'cantidad']
+        data = row[cols_votos].sort_values(ascending=False)
+        data = data[data > 0]
+        if data.empty: continue
+            
+        data_pct = (data / data.sum()) * 100
+        # Limpiar nombres de índices (partidos)
+        data_pct.index = [_limpiar_caracteres_especiales(str(i)) for i in data_pct.index]
         
-        plot_smart_bar(
-            df=conteo_tamano, cat_col='tamano_municipio', val_col='cantidad', orientation='h', 
-            title=f'Perfil Demográfico de Nulos {title_suffix} ({anyo})',
-            xlabel='Cantidad de Municipios', ylabel='Tamaño Poblacional', palette='magma'
-        )
-    else:
-        print(f"Nota: No se puede mostrar el perfil por tamaño de municipio para {title_suffix} porque la columna no existe en los datos proporcionados.")
+        plt.figure(figsize=(10, len(data_pct) * 0.5 + 1))
+        ax = sns.barplot(x=data_pct.values, y=data_pct.index, palette='viridis', hue=data_pct.index, legend=False)
+        
+        plt.title(f"Distribución de Votos en {prov_name} (%)", fontsize=14, pad=15)
+        plt.xlabel("Porcentaje de Votos (%)")
+        plt.xlim(0, max(data_pct.values) * 1.2)
+        
+        for i, v in enumerate(data_pct.values):
+            ax.text(v + 0.5, i, f'{v:.2f}%', color='black', va='center', fontweight='bold')
+            
+        plt.tight_layout()
+        plt.show()
 
-    print(f"\nIMPACTO POR PROVINCIA {title_suffix} ({anyo})")
-    df_merge = mapear_nombres_provincias(df_merge, anyo)
-    col_prov = 'nombre_provincia' if 'nombre_provincia' in df_merge.columns else 'id_provincia'
-    
-    if col_prov in df_merge.columns:
-        conteo_prov = df_merge[col_prov].value_counts()
-        total = conteo_prov.sum()
-        print(f"Top 10 provincias con más nulos {title_suffix}:")
-        for prov, cant in conteo_prov.head(10).items():
-            print(f" - {str(prov):<20}: {cant:4d} municipios ({(cant/total)*100:.1f}%)")
+# ... (resto de funciones anteriores: plot_histogram, plot_smart_bar, etc.) ...
 
 def plot_histogram(
     df: pd.DataFrame, 
@@ -331,3 +346,52 @@ def plot_scatter_regression(
     
     plt.tight_layout()
     plt.show()
+
+def plot_missing_demographics(df_nulls: pd.DataFrame, df_pob: pd.DataFrame, anyo: str, title_suffix: str = "") -> None:
+    """
+    Analiza y grafica el perfil demográfico (tamaño de municipio y provincia) de los nulos.
+    """
+    col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
+    df_pob_temp = df_pob.copy()
+    df_pob_temp[col_id_pob] = df_pob_temp[col_id_pob].astype(str).str.zfill(5)
+    
+    df_nulls_temp = df_nulls.copy()
+    df_nulls_temp['Cod_Muni'] = df_nulls_temp['Cod_Muni'].astype(str).str.zfill(5)
+    
+    # Verificamos qué columnas existen realmente para evitar KeyError
+    cols_a_cruzar = [col_id_pob]
+    if 'tamano_municipio' in df_pob_temp.columns:
+        cols_a_cruzar.append('tamano_municipio')
+    if 'id_provincia' in df_pob_temp.columns: 
+        cols_a_cruzar.append('id_provincia')
+    if 'nombre_provincia' in df_pob_temp.columns: 
+        cols_a_cruzar.append('nombre_provincia')
+        
+    df_merge = pd.merge(df_nulls_temp, df_pob_temp[cols_a_cruzar], left_on='Cod_Muni', right_on=col_id_pob, how='inner')
+    
+    if df_merge.empty:
+        print(f"No hay datos cruzables para el análisis demográfico de nulos {title_suffix}.")
+        return
+
+    if 'tamano_municipio' in df_merge.columns:
+        conteo_tamano = df_merge['tamano_municipio'].value_counts().reset_index()
+        conteo_tamano.columns = ['tamano_municipio', 'cantidad']
+        
+        plot_smart_bar(
+            df=conteo_tamano, cat_col='tamano_municipio', val_col='cantidad', orientation='h', 
+            title=f'Perfil Demográfico de Nulos {title_suffix} ({anyo})',
+            xlabel='Cantidad de Municipios', ylabel='Tamaño Poblacional', palette='magma'
+        )
+    else:
+        print(f"Nota: No se puede mostrar el perfil por tamaño de municipio para {title_suffix} porque la columna no existe en los datos proporcionados.")
+
+    print(f"\nIMPACTO POR PROVINCIA {title_suffix} ({anyo})")
+    df_merge = mapear_nombres_provincias(df_merge, anyo)
+    col_prov = 'nombre_provincia' if 'nombre_provincia' in df_merge.columns else 'id_provincia'
+    
+    if col_prov in df_merge.columns:
+        conteo_prov = df_merge[col_prov].value_counts()
+        total = conteo_prov.sum()
+        print(f"Top 10 provincias con más nulos {title_suffix}:")
+        for prov, cant in conteo_prov.head(10).items():
+            print(f" - {str(prov):<20}: {cant:4d} municipios ({(cant/total)*100:.1f}%)")
