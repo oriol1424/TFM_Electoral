@@ -1,0 +1,69 @@
+INFOELECTORAL-> votos por municipio y resto de votos
+	web: https://infoelectoral.interior.gob.es/es/elecciones-celebradas/area-de-descargas/
+	Carpeta: "votos"
+------------------------------------------
+Atlas de distribución de renta de los hogares. Serie 2015-2023
+Resultados nacionales, por comunidades autónomas, provincias e islas
+Indicadores de renta media y mediana
+Unidades: €
+	web: https://www.ine.es/jaxiT3/Tabla.htm?t=53689
+------------------------------------------
+Atlas de distribución de renta de los hogares. Serie 2015-2023
+Resultados por municipios, distritos y secciones censales
+	web:https://www.ine.es/dynt3/inebase/index.htm?padre=12385&capsel=12384
+	Carpeta: "Atlas de distribución de renta de los hogares. Serie 2015-2023"
+	ME descargado: (todo esta en la carpeta "Atlas de distribución de renta de los hogares. Serie 2015-2023"= ->
+	Indicadores de renta media y mediana (30824);
+		Qué aporta: La capacidad económica base.
+		Variable clave: Renta neta media por persona. sirve para ver si un partido es "voto de barrio rico" o "voto de 			barrio obrero". Es el eje X de casi todos los análisis políticos.
+
+	Distribución por fuente de ingresos (30825);
+		Qué aporta: La naturaleza de la economía local.
+		Variable clave: % de ingresos procedentes de pensiones vs. % de salarios.
+		Valor TFM: para detectar zonas de jubilados (voto más conservador/estable) frente a zonas de trabajadores activos o 		dependientes de subsidios (voto más volátil o de izquierdas).
+
+	Índice de Gini y Distribución de la renta P80/P20 (27677);
+		Qué aporta: La cohesión social.
+		Variable clave: Índice de Gini.
+		Valor TFM: Dos municipios pueden tener la misma renta media, pero uno ser muy igualitario y otro tener una brecha 		enorme entre ricos y pobres. La desigualdad suele ser un motor de voto a partidos antisistema o extremos.
+
+	Indicadores demograficos (30832):
+		Qué aporta: El factor generacional.
+		Variable clave: Edad media y Tamaño medio del hogar.
+		Valor TFM: España tiene una fractura generacional de voto muy clara. Este archivo permitirá segmentar por "España 		joven" vs. "España envejecida".
+
+Datos de navarra:
+	web; https://nastat.navarra.es/es/tablas_powerbi/-/tag/estadistica-renta
+------------------------------------------------
+Estado laborar, web del sepe, piedra roseta doc "Nota_expli_municipios.doc"
+Paro registrado y contratos por municipios
+	web: https://www.sepe.es/HomeSepe/que-es-el-sepe/estadisticas/datos-estadisticos/municipios.html
+	carpera: Mercado laboral
+En este caso me descargo el mes de las elecciones y el mismo mes del año anterior.
+-------------------------------------------------
+Demografía
+web general: https://www.ine.es/dyngs/INEbase/categoria.htm?c=Estadistica_P&cid=1254734710990
+	web municipio y cantidad por sexo: https://www.ine.es/dynt3/inebase/es/index.htm?padre=525
+		Carpeta "demografia del 96-25" Contiene ficheros por años cada uno indica el total de la población y cuanto 			corresponde a cada sexo
+	Web por  extranjeros (2021 - 2025): https://www.ine.es/dynt3/inebase/index.htm?padre=11555&capsel=11532
+		Carpeta: "extranjeros"
+		csv: 68535
+	web edad, estranjeros (2003-2022 islas): https://www.ine.es/dynt3/inebase/index.htm?padre=6237&capsel=6239
+
+	Web nacionalidad, sexo y de 2021 -2025: https://www.ine.es/jaxiT3/Tabla.htm?t=68548
+		Carpeta: "extranjeros"
+		csv: 68548
+	Web por provincia, edad, extrajenro/nacional, sexo del 1998 al 2022: https://www.ine.es/jaxi/Tabla.htm path=/t20/e245/p08/l0/&file=03002.px&L=0
+		Carpeta: "extranjeros"
+		csv: 03002
+web (Censo de Población y Viviendas 2021): https://www.ine.es/dynt3/inebase/index.htm?padre=8952
+-----------------------------------------------
+Educación 
+web de 2021-2023 provincias: https://www.ine.es/jaxiT3/Tabla.htm?t=66615&L=0
+	Carpeta: edu	
+	csv:66615
+Dado que cambian cada poco tiempo pueden usarse para 2019 y 2023
+-----------------------------------------------
+ideología partidos
+	Web: https://www.cis.es/es/estudios/barometro-de-diciembre-2022?cuestionario=17676&muestra=25465&pregunta=632184&variable=971256&chartType=bar
+	Carpeta: ideologia partido politico

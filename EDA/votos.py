@@ -23,7 +23,6 @@ def agrupar_minorias_provincial(df_prov: pd.DataFrame, umbral: float = 0.03) -> 
     Para cada provincia, identifica los partidos que no alcancen un umbral (3% por defecto)
     y los agrupa en la categoría 'Otros'.
     """
-    # Identificar columnas que no son descriptivas
     cols_identificadores = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion']
     cols_votos = [c for c in df_prov.columns if c.lower() not in cols_identificadores]
     
@@ -58,7 +57,6 @@ def visualizar_distribucion_votos_provincia(df_plot: pd.DataFrame, title: str = 
     """
     sns.set_theme(style="whitegrid")
     
-    # Preparar datos para porcentaje
     cols_evitar = ['id_provincia', 'nombre_provincia']
     cols_votos = [c for c in df_plot.columns if c.lower() not in cols_evitar]
     
@@ -68,14 +66,11 @@ def visualizar_distribucion_votos_provincia(df_plot: pd.DataFrame, title: str = 
     else:
         df_pct = df_pct.set_index('id_provincia')
 
-    # Calcular porcentajes
     df_pct = df_pct[cols_votos].div(df_pct[cols_votos].sum(axis=1), axis=0) * 100
     
-    # Eliminar columnas que se quedaron a 0 en todas las provincias tras agrupar minorías
     df_pct = df_pct.loc[:, (df_pct != 0).any(axis=0)]
     cols_votos = df_pct.columns.tolist()
 
-    # Configurar el gráfico
     ax = df_pct.plot(
         kind='barh', stacked=True, figsize=(14, 20), colormap='tab20'
     )
@@ -95,24 +90,20 @@ def visualizar_votos_individual_provincia(df_final: pd.DataFrame):
     cols_evitar = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion']
     cols_votos = [c for c in df_final.columns if c.lower() not in cols_evitar]
     
-    print("\n--- Generando Gráficos Individuales por Provincia ---")
+    print("\nGenerando Gráficos Individuales por Provincia")
     
     for _, row in df_final.iterrows():
         prov_name = row['nombre_provincia'] if pd.notna(row['nombre_provincia']) else row['id_provincia']
         
-        # Obtener datos de la provincia y ordenar de mayor a menor
         data = row[cols_votos].sort_values(ascending=False)
-        # Filtrar solo partidos con votos > 0 en esta provincia
         data = data[data > 0]
         
         if data.empty:
             continue
             
-        # Calcular porcentajes
         total = data.sum()
         data_pct = (data / total) * 100
         
-        # Crear la figura
         plt.figure(figsize=(10, len(data_pct) * 0.5 + 1))
         ax = sns.barplot(
             x=data_pct.values, 
@@ -127,7 +118,6 @@ def visualizar_votos_individual_provincia(df_final: pd.DataFrame):
         plt.ylabel("Partido / Candidatura")
         plt.xlim(0, max(data_pct.values) * 1.15) # Espacio para el texto
         
-        # Añadir etiquetas de porcentaje al lado de cada barra
         for i, v in enumerate(data_pct.values):
             ax.text(v + 0.5, i, f'{v:.2f}%', color='black', va='center', fontweight='bold')
             
@@ -141,18 +131,15 @@ def resumen_estadistico_votos(df_prov: pd.DataFrame):
     cols_evitar = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion']
     cols_votos = [c for c in df_prov.columns if c.lower() not in cols_evitar]
     
-    # Sumar todos los votos a nivel nacional
     total_por_partido = df_prov[cols_votos].sum().sort_values(ascending=False)
     votos_totales_nacionales = total_por_partido.sum()
     
     print("\n" + "="*60)
-    print("      RESUMEN ESTADÍSTICO NACIONAL DE CANDIDATURAS")
+    print("RESUMEN ESTADÍSTICO NACIONAL DE CANDIDATURAS")
     print("="*60)
     
-    # 1. Total de partidos
     print(f"Total de candidaturas analizadas: {len(cols_votos)}")
     
-    # 2. Partidos sin ningún voto
     partidos_cero = total_por_partido[total_por_partido == 0].index.tolist()
     if partidos_cero:
         print(f"\nPartidos con 0 votos en todo el territorio ({len(partidos_cero)}):")
@@ -160,14 +147,12 @@ def resumen_estadistico_votos(df_prov: pd.DataFrame):
     else:
         print("\nNo hay partidos con 0 votos en el recuento.")
         
-    # 3. Top 5 con más votos
     top_5 = total_por_partido.head(5)
     print("\nTOP 5 - CANDIDATURAS MÁS VOTADAS:")
     for partido, votos in top_5.items():
         pct = (votos / votos_totales_nacionales) * 100
         print(f" - {partido:<25} | {int(votos):>10,} votos | {pct:>6.2f}%")
         
-    # 4. Top 5 con menos votos (excluyendo los de 0 votos para ser más descriptivos)
     bottom_5 = total_por_partido[total_por_partido > 0].tail(5).sort_values(ascending=True)
     print("\nTOP 5 - CANDIDATURAS MENOS VOTADAS (con al menos 1 voto):")
     for partido, votos in bottom_5.items():
@@ -180,40 +165,31 @@ def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019
     """
     Orquestador del EDA de votos con granularidad total.
     """
-    print(f"--- Iniciando EDA de Resultados Electorales ({anyo}) ---")
+    print(f"Iniciando EDA de Resultados Electorales ({anyo})")
     
-    # 0. Normalizar nombres de columnas
     df = df_votos_total.copy()
     df.columns = [c.lower() for c in df.columns]
     
-    # 1. Limpieza de nombres de candidaturas
     df = limpieza_columnas_votos(df)
     
-    # 2. Identificación de provincia
     col_muni = 'id_municipio' if 'id_municipio' in df.columns else 'cod_muni'
     if col_muni in df.columns:
         df['id_provincia'] = df[col_muni].astype(str).str.zfill(5).str[:2]
     else:
         raise KeyError(f"No se encontró la columna de municipio.")
     
-    # 3. Agregación provincial
     cols_identificadores = ['id_provincia', col_muni, 'nombre_muni', 'nombre_provincia', 'fecha_eleccion']
     cols_votos = [c for c in df.columns if c not in cols_identificadores]
     df_prov = df.groupby('id_provincia')[cols_votos].sum().reset_index()
     
-    # 4. Mapear nombres de provincias
     df_prov = mapear_nombres_provincias(df_prov, anyo)
     
-    # 5. Generar Resumen Estadístico (antes de agrupar minorías para no perder info)
     resumen_estadistico_votos(df_prov)
     
-    # 6. Tratamiento de minorías para gráficas
     df_final = agrupar_minorias_provincial(df_prov, umbral=0.03)
     
-    # 7. Visualización General (Stacked Bar)
     visualizar_distribucion_votos_provincia(df_final, title=f"Distribución del Peso del Voto por Provincia (Nov {anyo})")
     
-    # 8. Visualizaciones Individuales (si se solicita)
     if individual:
         visualizar_votos_individual_provincia(df_final)
     
