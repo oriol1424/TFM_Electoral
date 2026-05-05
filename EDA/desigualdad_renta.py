@@ -10,13 +10,47 @@ from EDA.visuals import (
     plot_histogram
 )
 
+def _resolver_cols_desigualdad(df: pd.DataFrame, anyo: str) -> tuple[str, str, str]:
+    """
+    Resuelve los nombres de las columnas de Gini, P80/P20 e ID buscando 
+    primero con el año y luego el nombre base.
+    """
+    col_gini_anyo = f'Índice de Gini {anyo}'
+    col_p80p20_anyo = f'Distribución de la renta P80/P20 {anyo}'
+    
+    col_gini = col_gini_anyo if col_gini_anyo in df.columns else 'Índice de Gini'
+    col_p80p20 = col_p80p20_anyo if col_p80p20_anyo in df.columns else 'Distribución de la renta P80/P20'
+    
+    # Resolver ID del municipio (Detección agresiva)
+    col_id = None
+    # 1. Nombres estándar (Añadido 'Código' y 'cod_Muni')
+    for posible_id in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'CPROCMUN', 'id']:
+        if posible_id in df.columns:
+            col_id = posible_id
+            break
+            
+    # 2. Búsqueda por palabras clave si no se encontró
+    if col_id is None:
+        for c in df.columns:
+            if any(key in c.lower() for key in ['cod', 'muni', 'id']):
+                col_id = c
+                break
+                
+    # 3. Fallback: primera columna que no sea de datos
+    if col_id is None:
+        posibles = [c for c in df.columns if c not in [col_gini, col_p80p20]]
+        if posibles:
+            col_id = posibles[0]
+            
+    return col_gini, col_p80p20, col_id
+
+
 def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
     """
     Imprime la cantidad exacta de valores nulos (NaN) para las columnas 
     de Gini y P80/P20 en un año específico antes de limpiar el dataset.
     """
-    col_gini = f'Índice de Gini {anyo}'
-    col_p80p20 = f'Distribución de la renta P80/P20 {anyo}'
+    col_gini, col_p80p20, _ = _resolver_cols_desigualdad(df_gini, anyo)
     
     print(f"\nAUDITORÍA DE DATOS FALTANTES DESIGUALDAD ({anyo})")
     total_filas = len(df_gini)
@@ -25,12 +59,12 @@ def auditar_nulos_desigualdad(df_gini: pd.DataFrame, anyo: str) -> None:
     if col_gini in df_gini.columns:
         nulos_gini = df_gini[col_gini].isna().sum()
         pct_gini = (nulos_gini / total_filas) * 100
-        print(f"Nulos en Gini:      {nulos_gini} municipios ({pct_gini:.1f}% del total)")
+        print(f"Nulos en Gini ({col_gini}):      {nulos_gini} municipios ({pct_gini:.1f}% del total)")
     
     if col_p80p20 in df_gini.columns:
         nulos_p80p20 = df_gini[col_p80p20].isna().sum()
         pct_p80p20 = (nulos_p80p20 / total_filas) * 100
-        print(f"Nulos en P80/P20:   {nulos_p80p20} municipios ({pct_p80p20:.1f}% del total)")
+        print(f"Nulos en P80/P20 ({col_p80p20}):   {nulos_p80p20} municipios ({pct_p80p20:.1f}% del total)")
 
 
 def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
@@ -38,15 +72,23 @@ def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> 
     Analiza los municipios con valores nulos en el dataset de desigualdad
     utilizando la función genérica de visuals.py.
     """
-    col_gini = f'Índice de Gini {anyo}'
+    col_gini, _, col_id = _resolver_cols_desigualdad(df_gini, anyo)
     
     if col_gini not in df_gini.columns:
-        print(f"Error: No existe la columna '{col_gini}' en el dataset.")
+        print(f"Error: No existe la columna de Gini en el dataset.")
         return
         
     df_gini_nulos = df_gini[df_gini[col_gini].isna()].copy()
     
     if not df_gini_nulos.empty:
+        # ASEGURAR COLUMNA Cod_Muni para visuals.py (Crucial)
+        if 'Cod_Muni' not in df_gini_nulos.columns:
+            if col_id:
+                df_gini_nulos['Cod_Muni'] = df_gini_nulos[col_id]
+            else:
+                # Si llegamos aquí sin ID, usamos el índice
+                df_gini_nulos = df_gini_nulos.reset_index().rename(columns={'index': 'Cod_Muni'})
+            
         plot_missing_demographics(df_gini_nulos, df_pob, anyo, title_suffix="Desigualdad")
     else:
         print(f"No se detectaron nulos en desigualdad para el año {anyo}.")
@@ -57,7 +99,7 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
     Busca si existe algún municipio con 100 o menos habitantes que tenga datos de Gini
     y muestra un resumen por provincia.
     """
-    col_gini = f'Índice de Gini {anyo}'
+    col_gini, _, col_id = _resolver_cols_desigualdad(df_gini, anyo)
     col_pob = 'poblacion' if 'poblacion' in df_pob.columns else 'poblacion_total'
     
     if col_gini not in df_gini.columns:
@@ -65,7 +107,13 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
 
     # Preparar datos
     df_gini_temp = df_gini.copy()
-    df_gini_temp['Cod_Muni'] = df_gini_temp['Cod_Muni'].astype(str).str.zfill(5)
+    
+    # Asegurar Cod_Muni
+    if col_id:
+        df_gini_temp['Cod_Muni'] = df_gini_temp[col_id].astype(str).str.zfill(5)
+    else:
+        print("Aviso: No se pudo identificar la columna de código municipal.")
+        return
     
     col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
     df_pob_temp = df_pob.copy()
@@ -73,9 +121,13 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
 
     # Filtrar municipios pequeños y cruzar
     pequenos = df_pob_temp[df_pob_temp[col_pob] <= 100].copy()
+    
+    # Asegurar que existe Nombre_Muni o similar
+    col_nombre = 'Nombre_Muni' if 'Nombre_Muni' in df_gini_temp.columns else (df_gini_temp.columns[1] if len(df_gini_temp.columns) > 1 else col_id)
+
     df_merge = pd.merge(
         pequenos,
-        df_gini_temp[['Cod_Muni', col_gini, 'Nombre_Muni']],
+        df_gini_temp[['Cod_Muni', col_gini, col_nombre]],
         left_on=col_id_pob,
         right_on='Cod_Muni',
         how='inner'
@@ -114,20 +166,44 @@ def procesar_desigualdad_anyo(df_gini: pd.DataFrame, anyo: str) -> pd.DataFrame:
     Filtra las columnas del año específico, limpia los valores nulos debido al 
     secreto estadístico del INE y estandariza los nombres de las columnas.
     """
-    col_gini = f'Índice de Gini {anyo}'
-    col_p80p20 = f'Distribución de la renta P80/P20 {anyo}'
+    col_gini, col_p80p20, col_id = _resolver_cols_desigualdad(df_gini, anyo)
     
     if col_gini not in df_gini.columns or col_p80p20 not in df_gini.columns:
         print(f"Error: No se encuentran las columnas de Gini o P80/P20 para el año {anyo}.")
         print("Columnas disponibles:", df_gini.columns.tolist())
         return pd.DataFrame()
         
-    df_filtrado = df_gini[['Cod_Muni', 'Nombre_Muni', col_gini, col_p80p20]].copy()
+    # Identificar columna de nombre (Excluyendo ID y datos)
+    col_nombre = None
+    prioritarios_nombre = ['Nombre_Muni', 'Nombre', 'Municipio', 'Nombre del municipio', 'nombre_muni']
     
-    df_filtrado.rename(columns={
-        col_gini: 'gini',
-        col_p80p20: 'p80_p20'
-    }, inplace=True)
+    # 1. Buscar por nombres comunes
+    for n in prioritarios_nombre:
+        if n in df_gini.columns and n != col_id:
+            col_nombre = n
+            break
+            
+    # 2. Si no se encuentra, buscar cualquier columna string que no sea el ID o Datos
+    if col_nombre is None:
+        posibles = [c for c in df_gini.columns if c not in [col_id, col_gini, col_p80p20]]
+        if posibles:
+            col_nombre = posibles[0]
+        else:
+            col_nombre = col_id # Fallback extremo
+            
+    # Crear el DataFrame filtrado asegurando que no haya duplicados si col_id == col_nombre
+    if col_id == col_nombre:
+        df_filtrado = df_gini[[col_id, col_gini, col_p80p20]].copy()
+        df_filtrado.insert(1, 'Nombre_Temp', df_filtrado[col_id]) # Duplicamos la columna para tener nombre
+        mapping = {col_id: 'Cod_Muni', 'Nombre_Temp': 'Nombre_Muni', col_gini: 'gini', col_p80p20: 'p80_p20'}
+    else:
+        df_filtrado = df_gini[[col_id, col_nombre, col_gini, col_p80p20]].copy()
+        mapping = {col_id: 'Cod_Muni', col_nombre: 'Nombre_Muni', col_gini: 'gini', col_p80p20: 'p80_p20'}
+
+    df_filtrado.rename(columns=mapping, inplace=True)
+
+    # Asegurar formato de 5 dígitos para Cod_Muni
+    df_filtrado['Cod_Muni'] = df_filtrado['Cod_Muni'].astype(str).str.zfill(5)
     
     nulos_iniciales = df_filtrado['gini'].isna().sum()
     total_munis = len(df_filtrado)
@@ -146,12 +222,14 @@ def mostrar_extremos_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
     top_igualitarios = df_clean.nsmallest(10, 'gini')
     
     print(f"\nTOP 10 MUNICIPIOS MÁS DESIGUALES ({anyo})")
-    for i, row in enumerate(top_desiguales.itertuples(), 1):
-        print(f"{i:2d}. {row.Nombre_Muni:<25} | Gini: {row.gini:.1f} | Los ricos ganan {row.p80_p20:.1f}x más que los pobres")
+    for i, (_, row) in enumerate(top_desiguales.iterrows(), 1):
+        nombre = row['Nombre_Muni']
+        print(f"{i:2d}. {nombre:<25} | Gini: {row['gini']:.1f} | Los ricos ganan {row['p80_p20']:.1f}x más que los pobres")
         
     print(f"\nTOP 10 MUNICIPIOS MÁS IGUALITARIOS ({anyo})")
-    for i, row in enumerate(top_igualitarios.itertuples(), 1):
-        print(f"{i:2d}. {row.Nombre_Muni:<25} | Gini: {row.gini:.1f} | Los ricos ganan {row.p80_p20:.1f}x más que los pobres")
+    for i, (_, row) in enumerate(top_igualitarios.iterrows(), 1):
+        nombre = row['Nombre_Muni']
+        print(f"{i:2d}. {nombre:<25} | Gini: {row['gini']:.1f} | Los ricos ganan {row['p80_p20']:.1f}x más que los pobres")
     print("-" * 50)
 
 
