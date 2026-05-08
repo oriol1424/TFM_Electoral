@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  8 MAY 2026 11:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  8 MAY 2026 14:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -68,7 +68,11 @@ Package babel Info: Making > an active character on input line 722.
 ))
 LaTeX Encoding Info:    Redeclaring text command \guillemotleft (encoding OT1) on input line 7.
 LaTeX Encoding Info:    Redeclaring text command \guillemotright (encoding OT1) on input line 7.
- (C:\Program Files\MiKTeX\tex/latex/graphics\graphicx.sty
+ (C:\Program Files\MiKTeX\tex/latex/psnfss\times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+) (C:\Program Files\MiKTeX\tex/latex/setspace\setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+) (C:\Program Files\MiKTeX\tex/latex/graphics\graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
  (C:\Program Files\MiKTeX\tex/latex/graphics\keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
@@ -218,6 +222,10 @@ Package: titlesec 2025/01/04 v2.17 Sectioning titles
 LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
 Package: cite 2015/02/27  v 5.5
+)
+LaTeX Font Info:    Trying to load font information for T1+ptm on input line 25.
+ (C:\Program Files\MiKTeX\tex/latex/psnfss\t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 ) (C:\Program Files\MiKTeX\tex/latex/l3backend\l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-02-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count302
@@ -229,26 +237,26 @@ Package babel Info: 'spanish' activates 'spanish' shorthands.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Info: Redefining \. on input line 18.
-LaTeX Info: Redefining \% on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 25.
+LaTeX Font Info:    ... okay on input line 25.
+LaTeX Info: Redefining \. on input line 25.
+LaTeX Info: Redefining \% on input line 25.
  (C:\Program Files\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count303
@@ -277,14 +285,14 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
 * h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
-* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* v-part:(T,H,B)=(56.9055pt, 717.00946pt, 71.13188pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
 * \textwidth=455.24411pt
-* \textheight=702.78308pt
+* \textheight=717.00946pt
 * \oddsidemargin=-1.1381pt
 * \evensidemargin=-1.1381pt
-* \topmargin=-38.1381pt
+* \topmargin=-52.36449pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
@@ -302,16 +310,16 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 18.
+Package hyperref Info: Link coloring OFF on input line 25.
 (main.out) (main.out)
 \@outlinefile=\write3
 \openout3 = `main.out'.
 
  (1.tex [1
 
-{C:/Users/oriol/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]) (01_resumen.tex) [1
+{C:/Users/oriol/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Program Files/MiKTeX/fonts/enc/dvips/base/8r.enc}]) (01_resumen.tex [1
 
-] (main.toc
+]) [2] (main.toc
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -320,46 +328,104 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 4.
- [2
+ [3
 
 ])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [3] (03_introduccion.tex
+ [4] (02_introduccion.tex
 Cap\'{\i }tulo 1.
-) (04_diseno.tex
+
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1 \chapter
-            {DiseÃ±o del Proyecto} [1
+l.15 
+      [1
 
-]
+]) (03_estado_del_arte.tex [2]
 Cap\'{\i }tulo 2.
-) (05_analisis.tex [2
+) (04_diseno.tex [3
 
-]
+] [4]
 Cap\'{\i }tulo 3.
-) (06_puesta_en_marcha.tex [3
+[5
 
 ]
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 21.
+ (C:\Program Files\MiKTeX\tex/latex/psnfss\t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)) (05_analisis.tex
+Overfull \hbox (31.82684pt too wide) in paragraph at lines 28--1
+[]\T1/ptm/m/n/12 El pro-ce-di-mien-to ope-ra-ti-vo co-mien-za con la eje-cu-ción de la fun-ción or-ques-ta-do-ra \T1/pcr/m/n/12 ETL_limpieza
+ []
+
+
+Overfull \hbox (6.11682pt too wide) in paragraph at lines 28--1
+\T1/ptm/m/n/12 den-tro de \T1/pcr/m/n/12 main.ipynb\T1/ptm/m/n/12 , la cual in-vo-ca se-cuen-cial-men-te los mó-du-los de la car-pe-ta \T1/pcr/m/n/12 limpieza/\T1/ptm/m/n/12 .
+ []
+
+[6] [7]
 Cap\'{\i }tulo 4.
-) (07_etica.tex [4
+) (06_puesta_en_marcha.tex [8
 
 ]
 Cap\'{\i }tulo 5.
-) (08_conclusiones.tex [5
+) (07_etica.tex [9
 
 ]
 Cap\'{\i }tulo 6.
-) [6
+) (08_conclusiones.tex [10
 
-] (09_bibliografia.tex) (10_anexos.tex [7
+]
+Cap\'{\i }tulo 7.
+) [11
+
+] (09_bibliografia.tex
+Underfull \hbox (badness 2591) in paragraph at lines 13--14
+[]\T1/ptm/m/n/12 Servicio Pú-bli-co de Em-pleo Es-ta-tal (2024). \T1/ptm/m/it/12 Da-tos es-ta-dís-ti-cos de pa-ro y con-
+ []
+
+
+Underfull \hbox (badness 6808) in paragraph at lines 13--14
+\T1/ptm/m/it/12 tra-tos por mu-ni-ci-pios\T1/ptm/m/n/12 . Re-cu-pe-ra-do de []$\T1/pcr/m/n/12 https : / / www . sepe . es / HomeSepe /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 13--14
+\T1/pcr/m/n/12 que-[]es-[]el-[]sepe / estadisticas / datos-[]estadisticos / municipios .
+ []
+
+
+Underfull \hbox (badness 4132) in paragraph at lines 16--17
+[]\T1/ptm/m/n/12 Instituto Na-cio-nal de Es-ta-dís-ti-ca (2024). \T1/ptm/m/it/12 Pa-drón mu-ni-ci-pal de ha-bi-tan-tes\T1/ptm/m/n/12 . Re-
+ []
+
+
+Underfull \hbox (badness 7613) in paragraph at lines 16--17
+\T1/ptm/m/n/12 cu-pe-ra-do de []$\T1/pcr/m/n/12 https : / / www . ine . es / dyngs / INEbase / categoria . htm ? c =
+ []
+
+
+Underfull \hbox (badness 3557) in paragraph at lines 19--20
+[]\T1/ptm/m/n/12 Instituto Geo-grá-fi-co Na-cio-nal (2024). \T1/ptm/m/it/12 De-li-mi-ta-cio-nes Te-rri-to-ria-les y Car-to-gra-fía
+ []
+
+
+Underfull \hbox (badness 2735) in paragraph at lines 19--20
+\T1/ptm/m/it/12 Mu-ni-ci-pal (NG-MEP)\T1/ptm/m/n/12 . Cen-tro de Des-car-gas del CNIG. Re-cu-pe-ra-do de []$\T1/pcr/m/n/12 https :
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 19--20
+\T1/pcr/m/n/12 / / centrodedescargas . cnig . es / CentroDescargas / detalleArchivo ?
+ []
+
+) (10_anexos.tex [12
 
 ]
 Ap\'{e}ndice A.
-) [8
+) [13
 
 ] (main.aux
 LaTeX Info: Redefining \. on input line 11.
@@ -370,20 +436,20 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: E88A0353A19F4ABE0EE3CF073162722D;2735.
+(rerunfilecheck)             Checksum: 8B4AA13B17FD902F13C0544EE2AF444B;7110.
  ) 
 Here is how much of TeX's memory you used:
- 11106 strings out of 467691
- 172396 string characters out of 5425054
- 608459 words of memory out of 5000000
- 39988 multiletter control sequences out of 15000+600000
- 639589 words of font info for 62 fonts, out of 8000000 for 9000
+ 11327 strings out of 467691
+ 176104 string characters out of 5425054
+ 610174 words of memory out of 5000000
+ 40151 multiletter control sequences out of 15000+600000
+ 676626 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,5n,79p,372b,815s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecxc1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1200.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecrm1728.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx1728.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2488.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecti1728.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\eccc1728.pk> <C:\Users\oriol\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecbx2074.pk>
-Output written on main.pdf (12 pages, 138991 bytes).
+ 75i,6n,79p,1283b,786s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (18 pages, 138987 bytes).
 PDF statistics:
- 488 PDF objects out of 1000 (max. 8388607)
- 32 named destinations out of 1000 (max. 500000)
- 145 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 321 PDF objects out of 1000 (max. 8388607)
+ 64 named destinations out of 1000 (max. 500000)
+ 265 words of extra memory for PDF output out of 10000 (max. 10000000)
 

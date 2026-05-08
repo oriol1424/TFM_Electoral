@@ -1,7 +1,28 @@
 \chapter{Diseño del Proyecto}
 
-\section{Fuentes de Datos}
-[Descripción de los datos del INE, Ministerio del Interior, SEPE y CIS.]
+En este capítulo se describe la estrategia técnica adoptada para la resolución del problema planteado. El diseño se fundamenta en la construcción de un ecosistema de datos robusto y una arquitectura de procesamiento modular que permite transformar información administrativa bruta en conocimiento predictivo.
 
-\section{Arquitectura del Sistema}
-[Explicación de los módulos de limpieza, EDA y el motor de simulación electoral.]
+\section{Origen y Adquisición de la Información}
+
+La construcción del dataset maestro ha requerido una fase intensiva de adquisición de datos procedentes de diversos organismos de la Administración Pública. La estrategia de obtención se ha centrado en capturar tres dimensiones críticas del electorado: su comportamiento histórico, su situación económica y su entorno demográfico-espacial.
+
+Los resultados electorales y los datos de escrutinio municipal se han obtenido a través del portal de descargas del Ministerio del Interior \cite{interior_votos}, recuperando los registros detallados de los procesos de 2016, 2019 y 2023. Para la caracterización socioeconómica, el núcleo de la información proviene del Instituto Nacional de Estadística (INE), específicamente del Atlas de Distribución de Renta de los Hogares \cite{ine_renta}. Esta fuente aporta indicadores de renta neta, fuentes de ingresos y métricas de desigualdad (Índice de Gini) que permiten modelizar el contexto material del votante. Debido a las particularidades del sistema foral, esta información se ha complementado con los microdatos de renta proporcionados por Nastat \cite{nastat_navarra} para la Comunidad Foral de Navarra.
+
+Adicionalmente, se ha integrado la visión coyuntural del mercado laboral mediante las estadísticas mensuales de paro y contratos del SEPE \cite{sepe_empleo}, así como la estructura demográfica oficial a través del Padrón Municipal del INE \cite{ine_padron}. Finalmente, para dotar al modelo de una dimensión espacial, se han incorporado las delimitaciones territoriales del Instituto Geográfico Nacional \cite{ign_geo} y, para la vertiente ideológica, las escalas de autoposicionamiento del Centro de Investigaciones Sociológicas \cite{cis_ideologia}. Esta amalgama de fuentes heterogéneas constituye la base empírica sobre la que se asienta el resto de la arquitectura técnica.
+
+\section{Arquitectura del Proyecto y Ciclo de Vida del Dato}
+
+La arquitectura del sistema se ha diseñado bajo un enfoque de ingeniería de datos modular, asegurando que cada etapa del proceso sea reproducible y escalable. El flujo de trabajo se organiza siguiendo una estructura de directorios que refleja el ciclo de vida de la información: de lo "sucio" (\textit{raw}) a lo "procesado".
+
+\subsection{Estructura de Almacenamiento y Repositorio}
+El proyecto se organiza en cuatro capas de datos y tres módulos lógicos de ejecución, lo que permite una clara separación de responsabilidades:
+
+\begin{itemize}
+    \item \textbf{Capa de Datos Brutos (\texttt{data\_raw/}):} Almacena la información original sin modificar, manteniendo la fidelidad a la fuente. Se organiza por categorías (renta, votos, mercado laboral, etc.).
+    \item \textbf{Capa de Procesamiento Lógico (\texttt{limpieza/}):} Contiene los scripts ETL (\textit{Extract, Transform, Load}) encargados de normalizar formatos, gestionar valores nulos y estandarizar las claves de unión (códigos INE municipales).
+    \item \textbf{Capa de Datos Limpios (\texttt{data\_processed/}):} Almacena los DataFrames resultantes tras la limpieza. Es la fuente de verdad para el análisis y el modelado.
+    \item \textbf{Capa de Análisis y Modelado (\texttt{EDA/} y \texttt{calculos\_electorales/}):} Donde se ejecutan los análisis estadísticos y el motor de la Ley D'Hondt.
+\end{itemize}
+
+\subsection{Procedimientos Técnicos y Pipeline}
+El procedimiento operativo comienza con la ejecución de la función orquestadora \texttt{ETL\_limpieza} dentro de \texttt{main.ipynb}, la cual invoca secuencialmente los módulos de la carpeta \texttt{limpieza/}. Una vez consolidado el dataset maestro en memoria, el sistema procede al Análisis Exploratorio de Datos (EDA) para validar correlaciones. Posteriormente, el motor de inferencia alimenta el módulo de simulación electoral, el cual traduce los votos predichos en escaños reales aplicando la normativa electoral vigente. Toda esta arquitectura se gestiona mediante el archivo \texttt{config\_path.json}, que centraliza las rutas y parámetros de configuración para garantizar la portabilidad del proyecto.

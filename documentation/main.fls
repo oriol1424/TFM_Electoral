@@ -26,6 +26,10 @@ INPUT C:\Program Files\MiKTeX\tex\generic\babel\locale\es\babel-es.ini
 INPUT C:\Program Files\MiKTeX\tex\latex\babel-spanish\spanish.ldf
 INPUT C:\Program Files\MiKTeX\tex\latex\babel-spanish\spanish.ldf
 INPUT C:\Program Files\MiKTeX\tex\latex\babel-spanish\spanish.ldf
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\times.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\times.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\setspace\setspace.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\setspace\setspace.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\graphicx.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\graphics\keyval.sty
@@ -102,6 +106,10 @@ INPUT C:\Program Files\MiKTeX\tex\latex\titlesec\titlesec.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\titlesec\titlesec.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\cite\cite.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\cite\cite.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1ptm.fd
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1ptm.fd
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1ptm.fd
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT C:\Program Files\MiKTeX\tex\latex\l3backend\l3backend-pdftex.def
 INPUT .\main.aux
@@ -127,24 +135,43 @@ OUTPUT main.out
 INPUT .\1.tex
 INPUT .\1.tex
 INPUT 1.tex
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecbx1200.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecbx2074.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\eccc1200.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\eccc1728.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecti1200.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecti1728.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecrm2488.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecbx2488.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecrm1728.tfm
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecbx1728.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmrc8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmrc8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
+INPUT C:\Program Files\MiKTeX\fonts\enc\dvips\base\8r.enc
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmrc8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmri8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
 INPUT .\01_resumen.tex
 INPUT .\01_resumen.tex
 INPUT 01_resumen.tex
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmr8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmri8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmri8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmrc8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8r.tfm
 INPUT .\main.toc
 INPUT .\main.toc
 INPUT main.toc
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ecxc1200.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmbc8t.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmr8.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmr6.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmmi12.tfm
@@ -153,20 +180,39 @@ INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmmi6.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmbc8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 OUTPUT main.toc
-INPUT .\03_introduccion.tex
-INPUT .\03_introduccion.tex
-INPUT 03_introduccion.tex
+INPUT .\02_introduccion.tex
+INPUT .\02_introduccion.tex
+INPUT 02_introduccion.tex
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmr8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8t.tfm
+INPUT .\03_estado_del_arte.tex
+INPUT .\03_estado_del_arte.tex
+INPUT 03_estado_del_arte.tex
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\times\ptmb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\times\ptmb8r.tfm
 INPUT .\04_diseno.tex
 INPUT .\04_diseno.tex
 INPUT 04_diseno.tex
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1pcr.fd
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrb8t.tfm
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
 INPUT .\05_analisis.tex
 INPUT .\05_analisis.tex
 INPUT 05_analisis.tex
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrb8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrb8r.tfm
+INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
+INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
 INPUT .\06_puesta_en_marcha.tex
 INPUT .\06_puesta_en_marcha.tex
 INPUT 06_puesta_en_marcha.tex
-INPUT C:\Program Files\MiKTeX\fonts\tfm\jknappen\ec\ectt1200.tfm
 INPUT .\07_etica.tex
 INPUT .\07_etica.tex
 INPUT 07_etica.tex
@@ -182,27 +228,13 @@ INPUT 10_anexos.tex
 INPUT main.aux
 INPUT .\main.out
 INPUT .\main.out
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecxc1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2488.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecti1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1728.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk
-INPUT C:\Users\oriol\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\courier\ucrb8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\courier\ucrb8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\courier\ucrr8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\courier\ucrr8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmb8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmb8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmr8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmr8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmri8a.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\urw\times\utmri8a.pfb

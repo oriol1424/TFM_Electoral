@@ -2,18 +2,33 @@
 \contentsline {chapter}{Resumen}{\es@scroman {i}}{chapter*.1}%
 \contentsline {chapter}{\numberline {1}Introducción y Objetivos}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Introducción}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Objetivos}{1}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Diseño del Proyecto}{2}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Fuentes de Datos}{2}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Arquitectura del Sistema}{2}{section.2.2}%
-\contentsline {chapter}{\numberline {3}Análisis de los Resultados}{3}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Relación con las Materias del Máster}{3}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Resultados Obtenidos}{3}{section.3.2}%
-\contentsline {chapter}{\numberline {4}Puesta en Marcha}{4}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Consideraciones Éticas y Sociales}{5}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Conclusiones, Estudio Económico y Futuro}{6}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusiones}{6}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Estudio Económico}{6}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Líneas de Futuro}{6}{section.6.3}%
-\contentsline {chapter}{Bibliografía}{7}{section.6.3}%
-\contentsline {chapter}{\numberline {A}Anexos}{8}{appendix.Alph1}%
+\contentsline {section}{\numberline {1.2}Objetivos}{2}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Objetivo General}{2}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Objetivos Específicos}{2}{subsection.1.2.2}%
+\contentsline {chapter}{\numberline {2}Marco Teórico y Estado del Arte}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Teorías del Comportamiento Electoral}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}El Modelo Sociológico y la Identidad de Grupo}{3}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}El Voto Económico: Teoría de la Recompensa y el Castigo}{3}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Evolución de la Predicción Electoral}{3}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Limitaciones de la Metodología Basada en Encuestas}{3}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Modelos Econométricos y de ``Fundamentales''}{3}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Data Science Aplicado a la Ciencia Política}{3}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Algoritmos de Gradient Boosting en Series Temporales Sociales}{4}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Análisis Espacial y Teoría de Grafos en Sociología}{4}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}El Sistema Electoral Español}{4}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Diseño del Proyecto}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Origen y Adquisición de la Información}{5}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Arquitectura del Proyecto y Ciclo de Vida del Dato}{6}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Estructura de Almacenamiento y Repositorio}{6}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Procedimientos Técnicos y Pipeline}{6}{subsection.3.2.2}%
+\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{8}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{8}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{8}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Puesta en Marcha}{9}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{10}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{11}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusiones}{11}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Estudio Económico}{11}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Líneas de Futuro}{11}{section.7.3}%
+\contentsline {chapter}{Bibliografía}{12}{section.7.3}%
+\contentsline {chapter}{\numberline {A}Anexos}{13}{appendix.Alph1}%

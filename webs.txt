@@ -10,7 +10,7 @@ Unidades: €
 ------------------------------------------
 Atlas de distribución de renta de los hogares. Serie 2015-2023
 Resultados por municipios, distritos y secciones censales
-	web:https://www.ine.es/dynt3/inebase/index.htm?padre=12385&capsel=12384
+	web: https://www.ine.es/dynt3/inebase/index.htm?padre=12385&capsel=12384
 	Carpeta: "Atlas de distribución de renta de los hogares. Serie 2015-2023"
 	ME descargado: (todo esta en la carpeta "Atlas de distribución de renta de los hogares. Serie 2015-2023"= ->
 	Indicadores de renta media y mediana (30824);
@@ -67,3 +67,9 @@ Dado que cambian cada poco tiempo pueden usarse para 2019 y 2023
 ideología partidos
 	Web: https://www.cis.es/es/estudios/barometro-de-diciembre-2022?cuestionario=17676&muestra=25465&pregunta=632184&variable=971256&chartType=bar
 	Carpeta: ideologia partido politico
+----------------------------------------------
+Superficie de los municipios para poder clasificarlos
+Web: https://centrodedescargas.cnig.es/CentroDescargas/detalleArchivo?sec=9000004#
+	carpeta: superficie
+	db: MUNICIPIOS
+Aquí tengo la superficie de cada municipio y el total de personas

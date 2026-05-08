@@ -4,12 +4,19 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[spanish,es-tabla]{babel}
+\usepackage{times}
+\usepackage{setspace}
+\setstretch{1.5}
 \usepackage{graphicx}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
-\usepackage{hyperref} % Enlaces en el índice
-\usepackage{titlesec} % Formato de títulos
-\usepackage{cite}     % Bibliografía
+\geometry{margin=2.5cm, top=2cm}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{cite}
+
+% --- Ajuste de márgenes de títulos (Versión simplificada para evitar errores) ---
+\titleformat{\chapter}[hang]{\normalfont\huge\bfseries}{\thechapter. }{0pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{-30pt}{20pt}
 
 % --- Configuración de Párrafos ---
 \setlength{\parindent}{0.5cm}
@@ -17,7 +24,7 @@
 
 \begin{document}
 
-% 0. Portada (puedes editar 1.tex para que sea tu portada)
+% 0. Portada
 \input{1.tex}
 
 \newpage
@@ -26,37 +33,28 @@
 % 1. Resumen
 \input{01_resumen.tex}
 
-% 2. Índice
+% 2. Índice (Generado automáticamente)
 \newpage
 \tableofcontents
 \newpage
 
 \pagenumbering{arabic}
 
-% 3. Introducción y Objetivos
-\input{03_introduccion.tex}
-
-% 4. Diseño del Proyecto
+% --- CUERPO DEL TRABAJO ---
+\input{02_introduccion.tex}
+\input{03_estado_del_arte.tex}
 \input{04_diseno.tex}
-
-% 5. Análisis de Resultados
 \input{05_analisis.tex}
-
-% 6. Puesta en Marcha
 \input{06_puesta_en_marcha.tex}
-
-% 7. Consideraciones Éticas
 \input{07_etica.tex}
-
-% 8. Conclusiones y Futuro
 \input{08_conclusiones.tex}
 
-% 9. Bibliografía
+% Bibliografía
 \newpage
 \addcontentsline{toc}{chapter}{Bibliografía}
 \input{09_bibliografia.tex}
 
-% 10. Anexos
+% Anexos
 \appendix
 \input{10_anexos.tex}
 
