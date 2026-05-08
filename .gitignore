@@ -2,3 +2,5 @@ data_raw/
 **/__pycache__/
 *.pyc
 .ipynb_checkpoints/
+.gemini_context.md
+.gemini_memoria_guia.md
