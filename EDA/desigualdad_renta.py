@@ -266,6 +266,95 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
         color='teal'
     )
 
+def analizar_similitud_vecinal_economica(df: pd.DataFrame, w, anyo: str):
+    """
+    Calcula la diferencia porcentual media entre cada municipio y sus vecinos físicos.
+    IMPORTANTE: Los municipios sin datos son eliminados del análisis y no cuentan 
+    para el promedio de sus vecinos.
+    """
+    import numpy as np
+    from libpysal.weights import w_subset
+    from libpysal.weights import lag_spatial
+    
+    print(f"\n--- ANÁLISIS DE COHESIÓN VECINAL FILTRADO ({anyo}) ---")
+    
+    # 1. Preparar indicadores clave
+    cols_estudio = {
+        'renta media persona': 'Renta Persona',
+        'indice gini': 'Índice Gini',
+        'salarios': '% Salarios'
+    }
+    
+    # Asegurar municipio como índice y 5 dígitos
+    df_sp = df.copy()
+    if 'municipio' in df_sp.columns:
+        df_sp['municipio'] = df_sp['municipio'].astype(str).str.zfill(5)
+        df_sp = df_sp.set_index('municipio')
+
+    # 2. FILTRADO ESTRICTO DE MUNICIPIOS CON DATOS
+    # Solo nos quedan los IDs que tienen datos de renta Y están en el grafo original
+    ids_con_datos = df_sp[df_sp['renta media persona'].notna()].index.tolist()
+    ids_validos = [m for m in ids_con_datos if m in w.id_order]
+    
+    print(f"Municipios con datos económicos encontrados en el grafo: {len(ids_validos)}")
+
+    # 3. CREAR SUBGRAFO (Esto elimina a los vecinos sin datos del cálculo)
+    # Al hacer subset, libpysal recalcula las conexiones solo entre los municipios válidos
+    w_sub = w_subset(w, ids_validos, silence_warnings=True)
+    w_sub.transform = 'r' # Normalización por filas para obtener la media aritmética
+    
+    # Sincronizar dataframe con el nuevo orden del subgrafo
+    df_analisis = df_sp.loc[w_sub.id_order].copy()
+    
+    col_plot_names = []
+    
+    for col, alias in cols_estudio.items():
+        if col not in df_analisis.columns:
+            continue
+        
+        y = df_analisis[col].values
+        
+        # Calcular el valor medio de los vecinos (Spatial Lag)
+        # Como usamos el subgrafo, los vecinos sin datos ya no existen aquí
+        lag = lag_spatial(w_sub, y)
+        
+        # Calcular la "Diferencia Porcentual de Vecindad"
+        diff_col = f'Similitud {alias}'
+        # Evitamos división por cero y calculamos la diferencia absoluta
+        df_analisis[diff_col] = np.where(y != 0, (abs(y - lag) / y) * 100, 0)
+        col_plot_names.append(diff_col)
+
+    # 4. ELIMINAR NUEVAS ISLAS
+    # Municipios que tenían vecinos, pero todos sus vecinos han sido eliminados por no tener datos
+    islas_finales = w_sub.islands
+    df_analisis = df_analisis[~df_analisis.index.isin(islas_finales)].copy()
+    
+    print(f"Municipios finales analizados (excluyendo islas resultantes): {len(df_analisis)}")
+
+    # 5. Agrupar por tamaño de población
+    resumen = df_analisis.groupby('rango tamaño población', observed=False)[col_plot_names].mean().reset_index()
+    
+    # 6. Visualización
+    df_melted = resumen.melt(id_vars='rango tamaño población', value_vars=col_plot_names, 
+                             var_name='Indicador', value_name='Diferencia %')
+    
+    plt.figure(figsize=(12, 6))
+    sns.set_theme(style="whitegrid")
+    sns.barplot(data=df_melted, x='rango tamaño población', y='Diferencia %', hue='Indicador', palette='viridis')
+    
+    plt.title(f'Cohesión Territorial: Diferencia con Vecinos con Datos ({anyo})\n(Excluye vecinos sin información del promedio)', fontsize=14)
+    plt.ylabel('Desviación respecto a los vecinos (%)')
+    plt.xlabel('Tamaño del Municipio')
+    plt.xticks(rotation=45)
+    plt.legend(title='Indicadores', bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    plt.tight_layout()
+    plt.show()
+
+    return resumen
+
+
+
 def eda_gini_p80p20(df_gini_completo: pd.DataFrame, anyo: str) -> pd.DataFrame:
     """
     Orquestador del análisis de Desigualdad.
@@ -282,3 +371,4 @@ def eda_gini_p80p20(df_gini_completo: pd.DataFrame, anyo: str) -> pd.DataFrame:
     
     print("="*50 + "\n")
     return df_clean
+
