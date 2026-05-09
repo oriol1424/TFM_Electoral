@@ -134,9 +134,7 @@ def resumen_estadistico_votos(df_prov: pd.DataFrame):
     total_por_partido = df_prov[cols_votos].sum().sort_values(ascending=False)
     votos_totales_nacionales = total_por_partido.sum()
     
-    print("\n" + "="*60)
     print("RESUMEN ESTADÍSTICO NACIONAL DE CANDIDATURAS")
-    print("="*60)
     
     print(f"Total de candidaturas analizadas: {len(cols_votos)}")
     
@@ -159,7 +157,67 @@ def resumen_estadistico_votos(df_prov: pd.DataFrame):
         pct = (votos / votos_totales_nacionales) * 100
         print(f" - {partido:<25} | {int(votos):>10,} votos | {pct:>8.5f}%")
         
-    print("="*60 + "\n")
+def analizar_umbral_votos_nacional(df_votos: pd.DataFrame, umbral: float = 0.03):
+    """
+    Calcula cuántos partidos superan el umbral del % por provincia (usando ID_MUNICIPIO)
+    y resume cuáles son descartados globalmente por no alcanzarlo en ninguna provincia.
+    """
+    df = df_votos.copy()
+    col_muni = None
+    for c in df.columns:
+        if c.upper() == 'ID_MUNICIPIO':
+            col_muni = c
+            break
+    
+    if col_muni is None:
+        print("Error: No se encontró la columna ID_MUNICIPIO")
+        return
+
+    df = limpieza_columnas_votos(df)
+    
+    df[col_muni] = df[col_muni].astype(str).str.zfill(5)
+    df['id_provincia_temp'] = df[col_muni].str[:2]
+
+    cols_evitar = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion', 'cod_muni', 'id_provincia_temp']
+    cols_votos = [c for c in df.columns if c.lower() not in [ce.lower() for ci in cols_evitar for ce in (ci if isinstance(ci, list) else [ci])]]
+    
+    cols_votos = [c for c in cols_votos if df[c].dtype in [np.float64, np.int64]]
+
+    df_prov = df.groupby('id_provincia_temp')[cols_votos].sum()
+    
+    votos_totales_prov = df_prov.sum(axis=1).replace(0, np.nan)
+    
+    df_pct_prov = df_prov.div(votos_totales_prov, axis=0)
+
+    superan_mask = df_pct_prov >= umbral
+    
+    superan_en_alguna = superan_mask.any()
+    partidos_superan = superan_en_alguna[superan_en_alguna].index.tolist()
+    partidos_no_superan = superan_en_alguna[~superan_en_alguna].index.tolist()
+
+    print(f"ANÁLISIS DE RELEVANCIA PROVINCIAL (Umbral: {umbral*100}%)")
+    
+    for id_prov in sorted(df_pct_prov.index):
+        serie_prov = superan_mask.loc[id_prov]
+        si = serie_prov[serie_prov].count()
+        no = serie_prov[~serie_prov].count()
+        print(f"Provincia {id_prov}: {si:>2} partidos superan umbral | {no:>2} no lo alcanzan.")
+
+    print("RESUMEN GLOBAL DE CANDIDATURAS")
+    print(f"Total candidaturas analizadas: {len(cols_votos)}")
+    print(f"Partidos RELEVANTES (pasan el {umbral*100}% en al menos UNA provincia): {len(partidos_superan)}")
+    print(f"Partidos DESCARTADOS (no pasan el {umbral*100}% en NINGUNA provincia): {len(partidos_no_superan)}")
+    
+    if len(partidos_superan) > 0:
+        print(f"\nCandidaturas que se mantienen ({len(partidos_superan)}):")
+        print(f" - {', '.join(sorted(partidos_superan))}")
+
+    if len(partidos_no_superan) > 0:
+        print(f"\nCandidaturas descartadas (ejemplos):")
+        if len(partidos_no_superan) > 20:
+            print(f" - {', '.join(sorted(partidos_no_superan)[:20])} ... (y {len(partidos_no_superan)-20} más)")
+        else:
+            print(f" - {', '.join(sorted(partidos_no_superan))}")
 
 def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019", individual: bool = True):
     """

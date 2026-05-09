@@ -1,9 +1,9 @@
 # Fdb version 4
-["pdflatex"] 1778243515.76642 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778243518.07356 0
+["pdflatex"] 1778323971.5996 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778323973.06358 0
   "01_resumen.tex" 1778235445 2479 2607d25b43a37487d406de78634ec4b9 ""
   "02_introduccion.tex" 1778236980 3631 b39b278fff81a4af55cedc66835fe5f6 ""
   "03_estado_del_arte.tex" 1778240485 1360 b15f28bb7233d92450f244ab5ae205fb ""
-  "04_diseno.tex" 1778243475 4517 eb819b32bd3559afaf2114ff0dd5ce90 ""
+  "04_diseno.tex" 1778323970 4493 abcd6f764c22023518d41274bffee624 ""
   "05_analisis.tex" 1778232404 331 af03fe70ec0edf17ec91ac198579073c ""
   "06_puesta_en_marcha.tex" 1778232404 161 db3d52b41fef0aba450b7cd0de46dea8 ""
   "07_etica.tex" 1778232404 162 99ff17972b10ad2ff066d5454043736f ""
@@ -102,10 +102,10 @@
   "C:/Users/oriol/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1776629729 81107 70b8516c68c2e617189c5e44bfd16b96 ""
   "C:/Users/oriol/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1776630362 13340205 08a86eb87b26f7f7d190d3ff1b9529ff ""
   "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" 1778240392 1312 1da2a44380f9e2c94750ba949500128b ""
-  "main.aux" 1778243517 5716 48db51e5b65dbcb88a0d56e2c186daa4 "pdflatex"
-  "main.out" 1778243517 7110 8b4aa13b17fd902f13c0544ee2af444b "pdflatex"
+  "main.aux" 1778323972 5716 48db51e5b65dbcb88a0d56e2c186daa4 "pdflatex"
+  "main.out" 1778323972 7110 8b4aa13b17fd902f13c0544ee2af444b "pdflatex"
   "main.tex" 1778240392 1312 1da2a44380f9e2c94750ba949500128b ""
-  "main.toc" 1778243517 3083 e8fdda440026b079c17731f63f30e98c "pdflatex"
+  "main.toc" 1778323972 3083 e8fdda440026b079c17731f63f30e98c "pdflatex"
   (generated)
   "main.aux"
   "main.log"
