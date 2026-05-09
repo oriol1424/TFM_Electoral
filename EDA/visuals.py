@@ -51,7 +51,6 @@ def _limpiar_caracteres_especiales(texto: str) -> str:
     Limpia caracteres corruptos (como el replacement character) que causan errores en fuentes de texto.
     """
     if not isinstance(texto, str): return texto
-    # Reemplazar el carácter de reemplazo  por una cadena vacía o intentar corregir casos comunes
     return texto.replace('\ufffd', '').replace('', '')
 
 def plot_votos_apilados_provincial(df_plot: pd.DataFrame, title: str):
@@ -67,11 +66,9 @@ def plot_votos_apilados_provincial(df_plot: pd.DataFrame, title: str):
     index_col = 'nombre_provincia' if 'nombre_provincia' in df_pct.columns else 'id_provincia'
     df_pct = df_pct.set_index(index_col)
 
-    # Limpiar nombres de columnas para evitar warnings de Glyphs
     df_pct.columns = [_limpiar_caracteres_especiales(c) for c in df_pct.columns]
     cols_votos = df_pct.columns.tolist()
 
-    # Calcular porcentajes
     df_pct = df_pct[cols_votos].div(df_pct[cols_votos].sum(axis=1), axis=0) * 100
     df_pct = df_pct.loc[:, (df_pct != 0).any(axis=0)]
     
@@ -117,8 +114,6 @@ def plot_votos_individuales_por_provincia(df_final: pd.DataFrame):
             
         plt.tight_layout()
         plt.show()
-
-# ... (resto de funciones anteriores: plot_histogram, plot_smart_bar, etc.) ...
 
 def plot_histogram(
     df: pd.DataFrame, 
@@ -215,7 +210,6 @@ def plot_smart_bar(
     plt.tight_layout()
     plt.show()
 
-
 def plot_distribution_analysis(
     df: pd.DataFrame, 
     num_col: str, 
@@ -245,7 +239,6 @@ def plot_distribution_analysis(
     
     plt.tight_layout()
     plt.show()
-
 
 def plot_correlation_heatmap(
     df: pd.DataFrame, 
@@ -285,7 +278,6 @@ def plot_correlation_heatmap(
     plt.tight_layout()
     plt.show()
 
-
 def check_missing_values(df: pd.DataFrame, title: str = "Porcentaje de Valores Nulos por Columna") -> None:
     """
     Calcula el porcentaje de nulos y delega el gráfico en plot_smart_bar.
@@ -310,7 +302,6 @@ def check_missing_values(df: pd.DataFrame, title: str = "Porcentaje de Valores N
         palette='rocket',
         is_percentage=True
     )
-
 
 def plot_scatter_regression(
     df: pd.DataFrame, 
@@ -395,3 +386,33 @@ def plot_missing_demographics(df_nulls: pd.DataFrame, df_pob: pd.DataFrame, anyo
         print(f"Top 10 provincias con más nulos {title_suffix}:")
         for prov, cant in conteo_prov.head(10).items():
             print(f" - {str(prov):<20}: {cant:4d} municipios ({(cant/total)*100:.1f}%)")
+
+def plot_adjacency_graph(gdf, w, title: str = "Mapa de Adyacencia Municipal (Grafo Queen)"):
+    """
+    Visualiza el GeoDataFrame de municipios y superpone el grafo de adyacencia.
+    """
+    import geopandas as gpd
+    import matplotlib.pyplot as plt
+    
+    # Asegurar que el GeoDataFrame tiene el código de municipio como índice
+    # libpysal.W.plot() requiere que el índice de 'gdf' coincida con los IDs de 'w'
+    if 'municipio' in gdf.columns:
+        gdf_to_plot = gdf.set_index('municipio')
+    else:
+        gdf_to_plot = gdf
+
+    fig, ax = plt.subplots(figsize=(14, 12))
+    
+    # 1. Dibujar el mapa de fondo
+    gdf_to_plot.plot(ax=ax, color='#f0f0f0', edgecolor='#bdbdbd', linewidth=0.3)
+    
+    # 2. Dibujar las conexiones del grafo
+    w.plot(gdf_to_plot, ax=ax, 
+           edge_kws=dict(color='#e31a1c', linewidth=0.5, alpha=0.4),
+           node_kws=dict(marker='', color='#e31a1c'))
+    
+    ax.set_title(title, fontsize=16, fontweight='bold', pad=20)
+    ax.set_axis_off()
+    
+    plt.tight_layout()
+    plt.show()

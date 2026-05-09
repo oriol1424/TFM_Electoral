@@ -73,3 +73,15 @@ Web: https://centrodedescargas.cnig.es/CentroDescargas/detalleArchivo?sec=900000
 	carpeta: superficie
 	db: MUNICIPIOS
 Aquí tengo la superficie de cada municipio y el total de personas
+----------------------------------------------
+Mapa España con las fronteras municipales 
+	web: https://centrodedescargas.cnig.es/CentroDescargas/limites-municipales-provinciales-autonomicos
+		1. Recintos Municipales (Península y Baleares)Nombre del fichero: poligonos_municipales_inspire_peninbal_etrs89. 
+			Por qué este: Contiene las áreas (polígonos) de los municipios de la península y Baleares. Para crear un grafo, el software necesita comparar las coordenadas de las áreas completas para detectar dónde se tocan. 
+			Sistema: Usa ETRS89, que es el estándar oficial para cálculos precisos en España.
+		2. Recintos Municipales (Islas Canarias)Nombre del fichero: poligonos_municipales_inspire_canarias_regcan95.  
+			Por qué este: Es el equivalente al anterior pero para las Canarias. Es fundamental descargarlo por separado porque las islas utilizan un sistema de referencia distinto (REGCAN95) para evitar deformaciones 				geográficas debido a su ubicación.
+			Nota para el grafo: A menos que consideres los ferrys como conexiones, los municipios de las islas solo tendrán vecinos dentro de su propia isla.
+		3. El archivo .PRJ (Incluido en el SHP)
+			Por qué este: Aunque no lo eliges tú (viene dentro del zip del Shapefile), es vital que no lo borres. Contiene la proyección cartográfica. Sin él, el software no sabrá si las coordenadas están en metros o en 			grados, y fallará al intentar calcular qué municipios están "pegados".
+-----------------------------------------------
