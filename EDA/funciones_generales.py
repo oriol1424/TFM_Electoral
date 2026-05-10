@@ -15,18 +15,15 @@ def auditar_municipios_extintos(df_origen: pd.DataFrame, df_maestro: pd.DataFram
     
     extintos = ids_origen - ids_maestro
     
-    # Imprimir siempre el resultado para conocimiento del usuario
     print(f" -> Dataset '{nombre_dataset}': {len(extintos)} municipios extintos/fusionados detectados.")
     
     if len(extintos) > 0:
-        # Si hay más de 0, mostrar el detalle
         nombres_extintos = df_origen[df_origen[col_id].isin(extintos)]
         col_nombre = next((c for c in ['Nombre_Muni', 'nombre', 'NOMBRE', 'nombre_muni'] if c in nombres_extintos.columns), None)
         
         for idx_ext in sorted(list(extintos)):
             nombre = ""
             if col_nombre:
-                # Obtenemos el nombre asociado a ese ID
                 nombres = nombres_extintos[nombres_extintos[col_id] == idx_ext][col_nombre].values
                 nombre = f"({nombres[0]})" if len(nombres) > 0 else ""
             print(f"    - Descartado ID: {idx_ext} {nombre}")
@@ -39,7 +36,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     """
     anyo_str = str(anyo)
     
-    # 1. Cargar configuración de rutas
     with open('config_path.json', 'r', encoding='utf-8') as f:
         config_total = json.load(f)
     
@@ -50,17 +46,13 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     folder_path = config["data_end"]
     file_path = os.path.join(folder_path, f"datos_unificados_{anyo_str}.csv")
 
-    # 2. Si el archivo ya existe, lo cargamos y devolvemos
     if os.path.exists(file_path):
         print(f"Cargando datos unificados existentes desde: {file_path}")
         print("Nota: Si quieres volver a ver la auditoría de extintos, borra este archivo CSV.")
         return pd.read_csv(file_path, sep=';', dtype={'municipio': str})
 
-    print(f"\n" + "="*60)
-    print(f"INICIANDO UNIFICACIÓN Y AUDITORÍA DE INTEGRIDAD ({anyo_str})")
-    print("="*60)
 
-    # 3. Cargar mapeo de provincias desde el JSON
+    print(f"INICIANDO UNIFICACIÓN Y AUDITORÍA DE INTEGRIDAD ({anyo_str})")
     with open(config["poblacion_json"], 'r', encoding='utf-8') as f:
         data_json = json.load(f)
     
@@ -69,33 +61,23 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         for cp, info in data_json.get('provincias', {}).items()
     }
 
-    # 4. Carga de datos base (Población y Geografía) - FUENTE DE VERDAD
     df_pob = pd.read_csv(config["poblacion_csv"], sep=';')
     df_sup = pd.read_csv(config["geografia"], sep=';')
     
-    # Asegurar IDs a 5 dígitos
     df_pob['id_municipio'] = df_pob['id_municipio'].astype(str).str.zfill(5)
     df_sup['id_municipio'] = df_sup['id_municipio'].astype(str).str.zfill(5)
-
-    # --- PROCESO DE UNIFICACIÓN (MERGE) ---
     
-    # Unión Base: Población + Geografía (Inner join asegura que solo trabajamos con municipios del padrón)
     df_final = pd.merge(df_pob, df_sup.drop(columns=['nombre_municipio'], errors='ignore'), on='id_municipio', how='inner')
     
-    # Añadir nombre de provincia usando el JSON
     df_final['id_provincia_temp'] = df_final['id_municipio'].str[:2]
     df_final['nombre_provincia'] = df_final['id_provincia_temp'].map(map_prov)
 
-    # 5. Carga y AUDITORÍA de datos de Renta y Desigualdad
     print("\nAuditoría de municipios extintos/fusionados contra el padrón:")
     
-    # Pre-cargar datasets para auditar
     df_gini = pd.read_csv(config["GINI_P80P20"], sep=';')
     df_ind = pd.read_csv(config["renta_disponible"], sep=';')
     df_fuentes = pd.read_csv(config["fuente_ingresos"], sep=';')
     df_navarra = pd.read_csv(config["renta_navarra"], sep=';')
-
-    # Normalización y Auditoría
     for df_name, df_obj in [("Gini/P80P20", df_gini), ("Renta Disponible", df_ind), 
                            ("Fuente Ingresos", df_fuentes), ("Renta Navarra", df_navarra)]:
         col_id = next((c for c in ['Cod_Muni', 'id_municipio', 'Código', 'ID_MUNICIPIO'] if c in df_obj.columns), None)
@@ -104,7 +86,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
             df_obj['Cod_Muni'] = df_obj['Cod_Muni'].astype(str).str.zfill(5)
             auditar_municipios_extintos(df_obj, df_pob, df_name, 'Cod_Muni')
 
-    # 6. Carga y Auditoría de Votos
     votos_path = os.path.join(config["carpeta_votos"], f"Votos_Granularidad_Total_{anyo_str}.csv")
     if not os.path.exists(votos_path):
          votos_path = os.path.join(config["carpeta_votos"], "Votos_Granularidad_Total_2019.csv")
@@ -115,13 +96,10 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     df_votos['id_municipio'] = df_votos['id_municipio'].astype(str).str.zfill(5)
     
     auditar_municipios_extintos(df_votos, df_pob, "Votos", 'id_municipio')
-    print("-" * 60 + "\n")
     
-    # Calcular votos totales
     cols_v = [c for c in df_votos.columns if c not in ['id_municipio', 'nombre_muni', 'fecha_eleccion', 'FECHA_ELECCION']]
     df_votos['votos totales'] = df_votos[cols_v].sum(axis=1)
 
-    # --- MERGES RESTANTES (How='left' asegura no añadir municipios extintos al df_final) ---
     df_final = pd.merge(df_final, df_gini[['Cod_Muni', f'Índice de Gini {anyo_str}', f'Distribución de la renta P80/P20 {anyo_str}']], 
                         left_on='id_municipio', right_on='Cod_Muni', how='left')
     
@@ -135,7 +113,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
                                              f'prestaciones por desempleo {anyo_str}']], 
                         left_on='id_municipio', right_on='Cod_Muni', how='left')
 
-    # Integración de Navarra
     df_final = pd.merge(df_final, df_navarra, left_on='id_municipio', right_on='Cod_Muni', how='left', suffixes=('', '_nav'))
     map_nav = {
         f'Índice de Gini {anyo_str}': 'Índice de Gini',
@@ -149,7 +126,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
 
     df_final = pd.merge(df_final, df_votos[['id_municipio', 'votos totales']], on='id_municipio', how='left')
 
-    # --- CÁLCULOS Y RENOMBRADO ---
     df_final['superficie_km2'] = pd.to_numeric(df_final['superficie_km2'].astype(str).str.replace(',', '.'), errors='coerce')
     df_final['densidad poblacional'] = df_final['poblacion_total'] / df_final['superficie_km2']
     df_final['rango tamaño población'] = df_final['poblacion_total'].apply(categorizar_municipios_tfm)
@@ -167,7 +143,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         f'prestaciones por desempleo {anyo_str}': 'desempleo'
     })
     
-    # Orden final
     columnas_ordenadas = [
         "municipio", "nombre", "provincia", "superficie", "latitud", "longitud", "altitud",
         "rango tamaño población", "poblacion", "poblacion hombres", "poblacion mujeres",
@@ -195,26 +170,17 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
     anyo_str = str(anyo)
     df_imputado = df.copy()
     
-    # 1. Normalización de IDs y Trazabilidad
     df_imputado['municipio'] = df_imputado['municipio'].astype(str).str.zfill(5)
     df_imputado['imputado'] = False
     
-    # Definición de Grupos de Indicadores
     grupo_a = ['indice gini', 'P80P20', 'Renta media hogar', 'renta media unidad consumo', 'renta media persona']
     grupo_b = ['salarios', 'pensiones', 'otros ingresos', 'otras prestaciones', 'desempleo']
     
-    # Definición de Estrato Rural (< 2000 hab)
     df_imputado['es_rural'] = df_imputado['poblacion'] < 2000
     
-    print(f"\n" + "*"*60)
     print(f"INICIANDO PROCESO DE IMPUTACIÓN SOCIOECONÓMICA ({anyo_str})")
-    print("*"*60)
 
-    # Establecer índice temporal para búsquedas espaciales eficientes
     df_imputado = df_imputado.set_index('municipio')
-
-    # 2. Pre-calcular medianas provinciales por estrato para optimizar rendimiento (O(1) lookup)
-    # Esto evita calcular la mediana en cada iteración del bucle
     medias_dict = df_imputado.groupby(['provincia', 'es_rural'])[grupo_a + grupo_b].median().to_dict('index')
 
     def get_fallback_value(municipio_idx, col):
@@ -222,27 +188,21 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
         rural = df_imputado.at[municipio_idx, 'es_rural']
         return medias_dict.get((prov, rural), {}).get(col, np.nan)
 
-    # 3. PROCESAMIENTO GRUPO B (Imputación Directa Provincial Rural)
-    print(" -> Imputando Grupo B (Fuentes volátiles) mediante mediana provincial rural...")
+    print(" -> Imputando Grupo B (Fuentes volátiles) mediante mediana provincial rural")
     for col in grupo_b:
-        # Solo imputamos si el municipio es rural y el dato es NaN
         mask_b = df_imputado[col].isna() & (df_imputado['es_rural'] == True)
         if mask_b.any():
-            # Aplicamos el fallback provincial para su estrato
             df_imputado.loc[mask_b, col] = [get_fallback_value(idx, col) for idx in df_imputado.index[mask_b]]
             df_imputado.loc[mask_b, 'imputado'] = True
 
-    # 4. PROCESAMIENTO GRUPO A (Imputación Espacial con Vecinos < 2000)
     print(" -> Imputando Grupo A (Indicadores estables) mediante adyacencia física...")
     for col in grupo_a:
         indices_nan = df_imputado.index[df_imputado[col].isna()]
         
         for idx in indices_nan:
-            # Buscar vecinos en el grafo
             if idx in w.neighbors:
                 vecinos_ids = w.neighbors[idx]
                 
-                # Filtro: Vecinos que existan en el DF y tengan < 2.000 habitantes
                 vecinos_filtrados = df_imputado.loc[
                     (df_imputado.index.isin(vecinos_ids)) & 
                     (df_imputado['es_rural'] == True) &
@@ -250,23 +210,18 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
                 ]
                 
                 if not vecinos_filtrados.empty:
-                    # Imputamos la media de los vecinos válidos
                     df_imputado.at[idx, col] = vecinos_filtrados[col].mean()
                     df_imputado.at[idx, 'imputado'] = True
                 else:
-                    # Fallback si no hay vecinos rurales válidos
                     df_imputado.at[idx, col] = get_fallback_value(idx, col)
                     df_imputado.at[idx, 'imputado'] = True
             else:
-                # Fallback para municipios aislados (islas en el grafo)
                 df_imputado.at[idx, col] = get_fallback_value(idx, col)
                 df_imputado.at[idx, 'imputado'] = True
 
-    # 5. Finalización y Gestión de Archivos
     df_imputado = df_imputado.reset_index()
-    df_imputado = df_imputado.drop(columns=['es_rural']) # Limpiar columna auxiliar
+    df_imputado = df_imputado.drop(columns=['es_rural'])
     
-    # Asegurar ruta de salida
     folder_path = f"data_processed/data_end/{anyo_str}/"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path, exist_ok=True)
@@ -274,7 +229,6 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
     file_path = os.path.join(folder_path, f"datos_unificados_imputados_{anyo_str}.csv")
     df_imputado.to_csv(file_path, sep=';', index=False, encoding='utf-8-sig')
 
-    # 6. Reporte de Trazabilidad
     print(f"\nResultados de Imputación por Provincia:")
     conteo_prov = df_imputado[df_imputado['imputado']].groupby('provincia').size()
     if not conteo_prov.empty:
@@ -295,24 +249,19 @@ def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
     """
     from EDA.visuals import plot_correlation_heatmap
     
-    # 1. Definir columnas a excluir (identificadores y geolocalización pura)
     cols_excluir = ['municipio', 'nombre', 'provincia', 'latitud', 'longitud', 'altitud', 'imputado']
-    
-    # 2. Seleccionar solo columnas numéricas que no estén en la lista de exclusión
     df_numeric = df.select_dtypes(include=[np.number]).drop(columns=[c for c in cols_excluir if c in df.columns], errors='ignore')
     
-    # 3. Eliminar filas que contengan NaN para asegurar que la matriz se calcule sobre datos completos
     df_clean = df_numeric.dropna()
     
     if df_clean.empty:
         print(f"Aviso: No hay suficientes datos limpios para calcular correlaciones en el año {anyo}.")
         return
 
-    print(f"\n--- ANALIZANDO CORRELACIONES ({anyo}) ---")
+    print(f"\nANALIZANDO CORRELACIONES ({anyo})")
     print(f"Variables analizadas: {list(df_clean.columns)}")
     print(f"Registros completos utilizados: {len(df_clean)}")
     
-    # 4. Llamar a la visualización
     plot_correlation_heatmap(
         df_clean, 
         title=f"Mapa de Correlaciones Socioeconómicas - Año {anyo}",

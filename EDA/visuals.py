@@ -349,7 +349,6 @@ def plot_missing_demographics(df_nulls: pd.DataFrame, df_pob: pd.DataFrame, anyo
     df_nulls_temp = df_nulls.copy()
     df_nulls_temp['Cod_Muni'] = df_nulls_temp['Cod_Muni'].astype(str).str.zfill(5)
     
-    # Verificamos qué columnas existen realmente para evitar KeyError
     cols_a_cruzar = [col_id_pob]
     if 'tamano_municipio' in df_pob_temp.columns:
         cols_a_cruzar.append('tamano_municipio')
@@ -394,8 +393,6 @@ def plot_adjacency_graph(gdf, w, title: str = "Mapa de Adyacencia Municipal (Gra
     import geopandas as gpd
     import matplotlib.pyplot as plt
     
-    # Asegurar que el GeoDataFrame tiene el código de municipio como índice
-    # libpysal.W.plot() requiere que el índice de 'gdf' coincida con los IDs de 'w'
     if 'municipio' in gdf.columns:
         gdf_to_plot = gdf.set_index('municipio')
     else:
@@ -403,10 +400,8 @@ def plot_adjacency_graph(gdf, w, title: str = "Mapa de Adyacencia Municipal (Gra
 
     fig, ax = plt.subplots(figsize=(14, 12))
     
-    # 1. Dibujar el mapa de fondo
     gdf_to_plot.plot(ax=ax, color='#f0f0f0', edgecolor='#bdbdbd', linewidth=0.3)
     
-    # 2. Dibujar las conexiones del grafo
     w.plot(gdf_to_plot, ax=ax, 
            edge_kws=dict(color='#e31a1c', linewidth=0.5, alpha=0.4),
            node_kws=dict(marker='', color='#e31a1c'))

@@ -14,7 +14,6 @@ def _resolver_identificadores_renta(df: pd.DataFrame) -> Tuple[str, str]:
     """
     Detecta las columnas de ID y Nombre del municipio de forma robusta.
     """
-    # Resolver ID
     col_id = None
     for posible_id in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'id']:
         if posible_id in df.columns:
@@ -22,13 +21,11 @@ def _resolver_identificadores_renta(df: pd.DataFrame) -> Tuple[str, str]:
             break
     
     if col_id is None:
-        # Búsqueda por palabra clave
         for c in df.columns:
             if any(key in c.lower() for key in ['cod', 'muni', 'id']):
                 col_id = c
                 break
     
-    # Resolver Nombre
     col_nombre = None
     prioritarios_nombre = ['Nombre_Muni', 'Nombre', 'Municipio', 'Nombre del municipio', 'nombre_muni']
     for n in prioritarios_nombre:
@@ -53,24 +50,18 @@ def filtrar_columnas_por_anyo(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
     anyo_str = str(anyo)
     col_id, col_nombre = _resolver_identificadores_renta(df)
     
-    # Buscar columnas que terminan en el año
     cols_anyo = [col for col in df.columns if col.endswith(anyo_str)]
     
-    # Si no hay ninguna que termine en el año, asumimos que el DF ya es del año 
-    # y cogemos todas las numéricas excepto ID/Nombre
     if not cols_anyo:
         cols_anyo = [c for c in df.columns if c not in [col_id, col_nombre]]
     
-    # Construir el DataFrame final normalizado
     df_result = df[[col_id, col_nombre] + cols_anyo].copy()
     
-    # Normalizar nombres de columnas base
     df_result.rename(columns={
         col_id: 'Cod_Muni',
         col_nombre: 'Nombre_Muni'
     }, inplace=True)
     
-    # Asegurar PK de 5 dígitos y LIMPIEZA profunda
     df_result['Cod_Muni'] = df_result['Cod_Muni'].astype(str).str.strip().str.zfill(5)
     
     return df_result
@@ -80,33 +71,25 @@ def eda_indicadores_renta(df_renta_completo: pd.DataFrame, df_pob: pd.DataFrame,
     Función principal para el análisis exploratorio de los indicadores de renta.
     """
     anyo_str = str(anyo)
-    print(f"\n--- INICIANDO ANÁLISIS DE INDICADORES DE RENTA ({anyo_str}) ---")
+    print(f"\nINICIANDO ANÁLISIS DE INDICADORES DE RENTA ({anyo_str})")
 
-    # 1. Normalizar y filtrar
     df_anyo = filtrar_columnas_por_anyo(df_renta_completo, anyo_str)
 
-    # 2. ASEGURAR NOMBRES (Fuente de verdad: df_pob)
     if df_anyo['Nombre_Muni'].isna().any() or df_anyo['Nombre_Muni'].dtype != 'object':
-        # Detectar ID y Nombre en df_pob de forma segura
         col_id_pob, col_nom_pob = _resolver_identificadores_renta(df_pob)
 
-        # Preparamos mapeo desde población
         df_pob_map = df_pob[[col_id_pob, col_nom_pob]].copy()
         df_pob_map[col_id_pob] = df_pob_map[col_id_pob].astype(str).str.zfill(5)
         nombres_map = dict(zip(df_pob_map[col_id_pob], df_pob_map[col_nom_pob]))
-
-        # Solo rellenamos lo que falte o sobreescribimos si es numérico
         if df_anyo['Nombre_Muni'].dtype != 'object':
              df_anyo['Nombre_Muni'] = df_anyo['Cod_Muni'].map(nombres_map)
         else:
              df_anyo['Nombre_Muni'] = df_anyo['Nombre_Muni'].fillna(df_anyo['Cod_Muni'].map(nombres_map))
-    # 3. AUDITORÍA
+
     print(f"\nAUDITORÍA DE DATOS FALTANTES INDICADORES RENTA ({anyo_str})")
-    # ... resto del código igual ...
 
     total_municipios = len(df_anyo)
     
-    # Identificar la columna principal de renta para el diagnóstico de nulos
     posibles_renta = [col for col in df_anyo.columns if 'Renta neta media por persona' in col]
     
     if posibles_renta:
@@ -132,7 +115,6 @@ def visualizar_histogramas_renta(df_anyo: pd.DataFrame, anyo: str):
     anyo_str = str(anyo)
     print(f"\nGENERANDO VISUALIZACIONES DE DISTRIBUCIÓN PARA {anyo_str}")
     
-    # Seleccionar columnas numéricas (excluyendo identificadores)
     cols_num = [c for c in df_anyo.columns if c not in ['Cod_Muni', 'Nombre_Muni']]
     
     for col in cols_num:

@@ -30,9 +30,7 @@ def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, an
     """
     cols_fuentes = ['salario', 'pensiones', 'desempleo', 'otras_prestaciones', 'otros_ingresos']
     
-    # 1. Preparar copias para no afectar a los originales
     df_renta_copy = df_clean.copy()
-    # Asegurar que Cod_Muni es string de 5 dígitos para el cruce
     df_renta_copy['Cod_Muni'] = df_renta_copy['Cod_Muni'].astype(str).str.zfill(5)
     
     col_id_pob = 'id_municipio' if 'id_municipio' in df_pob.columns else df_pob.columns[0]
@@ -41,10 +39,8 @@ def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, an
     df_pob_copy = df_pob[[col_id_pob, col_pob_val]].copy()
     df_pob_copy[col_id_pob] = df_pob_copy[col_id_pob].astype(str).str.zfill(5)
     
-    # 2. Cruce (Merge) - Ahora ambos son str de 5 dígitos
     df_merge = pd.merge(df_renta_copy, df_pob_copy, left_on='Cod_Muni', right_on=col_id_pob, how='inner')
     
-    # 3. Categorización
     df_merge['rango_poblacion'] = df_merge[col_pob_val].apply(categorizar_municipios_tfm)
     
     orden_categorias = [
@@ -56,7 +52,6 @@ def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, an
 
     print(f"\nANÁLISIS ESTRUCTURAL: Fuentes de Ingresos por Tamaño de Municipio ({anyo})")
     
-    # 4. Generación de gráficos (Melt para Seaborn)
     df_melted = df_merge.melt(
         id_vars=['rango_poblacion'], 
         value_vars=cols_fuentes, 
@@ -64,7 +59,6 @@ def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, an
         value_name='Porcentaje'
     )
 
-    # Gráfico de facetas - Usamos col_wrap para que no sea una línea infinita
     g = sns.FacetGrid(df_melted, col="rango_poblacion", col_wrap=3, height=4, aspect=1.2, sharey=True)
     g.map_dataframe(sns.boxplot, x="Fuente", y="Porcentaje", palette="muted", hue="Fuente", legend=False)
     
@@ -103,7 +97,6 @@ def graficar_peso_total_fuentes(df_clean: pd.DataFrame, anyo: str) -> None:
     """
     cols_fuentes = ['salario', 'pensiones', 'desempleo', 'otras_prestaciones', 'otros_ingresos']
     
-    # Calculamos la media de cada columna
     peso_medio = df_clean[cols_fuentes].mean().reset_index()
     peso_medio.columns = ['Fuente', 'Peso_Medio']
     peso_medio = peso_medio.sort_values('Peso_Medio', ascending=False)

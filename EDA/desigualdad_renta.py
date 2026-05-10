@@ -21,22 +21,18 @@ def _resolver_cols_desigualdad(df: pd.DataFrame, anyo: str) -> tuple[str, str, s
     col_gini = col_gini_anyo if col_gini_anyo in df.columns else 'Índice de Gini'
     col_p80p20 = col_p80p20_anyo if col_p80p20_anyo in df.columns else 'Distribución de la renta P80/P20'
     
-    # Resolver ID del municipio (Detección agresiva)
     col_id = None
-    # 1. Nombres estándar (Añadido 'Código' y 'cod_Muni')
     for posible_id in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'CPROCMUN', 'id']:
         if posible_id in df.columns:
             col_id = posible_id
             break
             
-    # 2. Búsqueda por palabras clave si no se encontró
     if col_id is None:
         for c in df.columns:
             if any(key in c.lower() for key in ['cod', 'muni', 'id']):
                 col_id = c
                 break
                 
-    # 3. Fallback: primera columna que no sea de datos
     if col_id is None:
         posibles = [c for c in df.columns if c not in [col_gini, col_p80p20]]
         if posibles:
@@ -81,12 +77,10 @@ def municipios_nulos(df_gini: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> 
     df_gini_nulos = df_gini[df_gini[col_gini].isna()].copy()
     
     if not df_gini_nulos.empty:
-        # ASEGURAR COLUMNA Cod_Muni para visuals.py (Crucial)
         if 'Cod_Muni' not in df_gini_nulos.columns:
             if col_id:
                 df_gini_nulos['Cod_Muni'] = df_gini_nulos[col_id]
             else:
-                # Si llegamos aquí sin ID, usamos el índice
                 df_gini_nulos = df_gini_nulos.reset_index().rename(columns={'index': 'Cod_Muni'})
             
         plot_missing_demographics(df_gini_nulos, df_pob, anyo, title_suffix="Desigualdad")
@@ -105,10 +99,8 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
     if col_gini not in df_gini.columns:
         return
 
-    # Preparar datos
     df_gini_temp = df_gini.copy()
     
-    # Asegurar Cod_Muni
     if col_id:
         df_gini_temp['Cod_Muni'] = df_gini_temp[col_id].astype(str).str.zfill(5)
     else:
@@ -119,10 +111,8 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
     df_pob_temp = df_pob.copy()
     df_pob_temp[col_id_pob] = df_pob_temp[col_id_pob].astype(str).str.zfill(5)
 
-    # Filtrar municipios pequeños y cruzar
     pequenos = df_pob_temp[df_pob_temp[col_pob] <= 100].copy()
     
-    # Asegurar que existe Nombre_Muni o similar
     col_nombre = 'Nombre_Muni' if 'Nombre_Muni' in df_gini_temp.columns else (df_gini_temp.columns[1] if len(df_gini_temp.columns) > 1 else col_id)
 
     df_merge = pd.merge(
@@ -133,7 +123,6 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
         how='inner'
     )
     
-    # Filtrar los que TIENEN datos
     con_datos = df_merge[df_merge[col_gini].notna()].copy()
 
     print(f"\nANÁLISIS DE EXCEPCIONES AL SECRETO ESTADÍSTICO (<= 100 hab. en {anyo})")
@@ -173,25 +162,21 @@ def procesar_desigualdad_anyo(df_gini: pd.DataFrame, anyo: str) -> pd.DataFrame:
         print("Columnas disponibles:", df_gini.columns.tolist())
         return pd.DataFrame()
         
-    # Identificar columna de nombre (Excluyendo ID y datos)
     col_nombre = None
     prioritarios_nombre = ['Nombre_Muni', 'Nombre', 'Municipio', 'Nombre del municipio', 'nombre_muni']
     
-    # 1. Buscar por nombres comunes
     for n in prioritarios_nombre:
         if n in df_gini.columns and n != col_id:
             col_nombre = n
             break
             
-    # 2. Si no se encuentra, buscar cualquier columna string que no sea el ID o Datos
     if col_nombre is None:
         posibles = [c for c in df_gini.columns if c not in [col_id, col_gini, col_p80p20]]
         if posibles:
             col_nombre = posibles[0]
         else:
-            col_nombre = col_id # Fallback extremo
+            col_nombre = col_id 
             
-    # Crear el DataFrame filtrado asegurando que no haya duplicados si col_id == col_nombre
     if col_id == col_nombre:
         df_filtrado = df_gini[[col_id, col_gini, col_p80p20]].copy()
         df_filtrado.insert(1, 'Nombre_Temp', df_filtrado[col_id]) # Duplicamos la columna para tener nombre
@@ -202,7 +187,6 @@ def procesar_desigualdad_anyo(df_gini: pd.DataFrame, anyo: str) -> pd.DataFrame:
 
     df_filtrado.rename(columns=mapping, inplace=True)
 
-    # Asegurar formato de 5 dígitos para Cod_Muni
     df_filtrado['Cod_Muni'] = df_filtrado['Cod_Muni'].astype(str).str.zfill(5)
     
     nulos_iniciales = df_filtrado['gini'].isna().sum()
@@ -230,7 +214,6 @@ def mostrar_extremos_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
     for i, (_, row) in enumerate(top_igualitarios.iterrows(), 1):
         nombre = row['Nombre_Muni']
         print(f"{i:2d}. {nombre:<25} | Gini: {row['gini']:.1f} | Los ricos ganan {row['p80_p20']:.1f}x más que los pobres")
-    print("-" * 50)
 
 
 def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
@@ -238,7 +221,6 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
     Genera un histograma de la distribución del Gini y un scatter plot 
     para ver la relación Gini vs P80/P20.
     """
-    # 1. Histograma detallado de Gini
     plot_histogram(
         df=df_clean,
         num_col='gini',
@@ -249,7 +231,6 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
         color='indigo'
     )
 
-    # 2. Análisis combinado (Boxplot + Histograma)
     plot_distribution_analysis(
         df=df_clean,
         num_col='gini',
@@ -257,7 +238,6 @@ def graficar_desigualdad(df_clean: pd.DataFrame, anyo: str) -> None:
         color='purple'
     )
     
-    # 3. Correlación y Dispersión 
     plot_scatter_regression(
         df=df_clean,
         x_col='gini',
@@ -276,34 +256,26 @@ def analizar_similitud_vecinal_economica(df: pd.DataFrame, w, anyo: str):
     from libpysal.weights import w_subset
     from libpysal.weights import lag_spatial
     
-    print(f"\n--- ANÁLISIS DE COHESIÓN VECINAL FILTRADO ({anyo}) ---")
+    print(f"\nANÁLISIS DE COHESIÓN VECINAL FILTRADO ({anyo})")
     
-    # 1. Preparar indicadores clave
     cols_estudio = {
         'renta media persona': 'Renta Persona',
         'indice gini': 'Índice Gini',
         'salarios': '% Salarios'
     }
     
-    # Asegurar municipio como índice y 5 dígitos
     df_sp = df.copy()
     if 'municipio' in df_sp.columns:
         df_sp['municipio'] = df_sp['municipio'].astype(str).str.zfill(5)
         df_sp = df_sp.set_index('municipio')
 
-    # 2. FILTRADO ESTRICTO DE MUNICIPIOS CON DATOS
-    # Solo nos quedan los IDs que tienen datos de renta Y están en el grafo original
     ids_con_datos = df_sp[df_sp['renta media persona'].notna()].index.tolist()
     ids_validos = [m for m in ids_con_datos if m in w.id_order]
     
     print(f"Municipios con datos económicos encontrados en el grafo: {len(ids_validos)}")
-
-    # 3. CREAR SUBGRAFO (Esto elimina a los vecinos sin datos del cálculo)
-    # Al hacer subset, libpysal recalcula las conexiones solo entre los municipios válidos
     w_sub = w_subset(w, ids_validos, silence_warnings=True)
-    w_sub.transform = 'r' # Normalización por filas para obtener la media aritmética
+    w_sub.transform = 'r' 
     
-    # Sincronizar dataframe con el nuevo orden del subgrafo
     df_analisis = df_sp.loc[w_sub.id_order].copy()
     
     col_plot_names = []
@@ -314,27 +286,18 @@ def analizar_similitud_vecinal_economica(df: pd.DataFrame, w, anyo: str):
         
         y = df_analisis[col].values
         
-        # Calcular el valor medio de los vecinos (Spatial Lag)
-        # Como usamos el subgrafo, los vecinos sin datos ya no existen aquí
         lag = lag_spatial(w_sub, y)
         
-        # Calcular la "Diferencia Porcentual de Vecindad"
         diff_col = f'Similitud {alias}'
-        # Evitamos división por cero y calculamos la diferencia absoluta
         df_analisis[diff_col] = np.where(y != 0, (abs(y - lag) / y) * 100, 0)
         col_plot_names.append(diff_col)
 
-    # 4. ELIMINAR NUEVAS ISLAS
-    # Municipios que tenían vecinos, pero todos sus vecinos han sido eliminados por no tener datos
     islas_finales = w_sub.islands
     df_analisis = df_analisis[~df_analisis.index.isin(islas_finales)].copy()
     
     print(f"Municipios finales analizados (excluyendo islas resultantes): {len(df_analisis)}")
-
-    # 5. Agrupar por tamaño de población
     resumen = df_analisis.groupby('rango tamaño población', observed=False)[col_plot_names].mean().reset_index()
     
-    # 6. Visualización
     df_melted = resumen.melt(id_vars='rango tamaño población', value_vars=col_plot_names, 
                              var_name='Indicador', value_name='Diferencia %')
     
@@ -369,6 +332,5 @@ def eda_gini_p80p20(df_gini_completo: pd.DataFrame, anyo: str) -> pd.DataFrame:
     mostrar_extremos_desigualdad(df_clean, anyo)
     graficar_desigualdad(df_clean, anyo)
     
-    print("="*50 + "\n")
     return df_clean
 

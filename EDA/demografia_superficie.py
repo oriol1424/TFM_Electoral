@@ -48,7 +48,6 @@ def mostrar_extremos_poblacion(df_csv: pd.DataFrame) -> None:
     print("\n10 MUNICIPIOS MENOS POBLADOS")
     for i, row in enumerate(bottom_10.itertuples(), 1):
         print(f"{i:2d}. {row.nombre_municipio:<30} | {row.poblacion_total:>10,.0f} habs.")
-    print("-" * 50 + "\n")
 
 
 def procesar_superficie_y_densidad(df_pob: pd.DataFrame, df_sup: pd.DataFrame) -> pd.DataFrame:
