@@ -2,14 +2,40 @@ import os
 import json
 import pandas as pd
 import numpy as np
-from typing import Optional
+from typing import Optional, List
 from EDA.fuente_ingresos_renta import categorizar_municipios_tfm
+
+def auditar_municipios_extintos(df_origen: pd.DataFrame, df_maestro: pd.DataFrame, nombre_dataset: str, col_id: str = 'Cod_Muni') -> None:
+    """
+    Compara los municipios de un dataset contra el maestro de población.
+    Detecta e informa de aquellos que existen en el dataset pero no en el maestro.
+    """
+    ids_maestro = set(df_maestro['id_municipio'].unique())
+    ids_origen = set(df_origen[col_id].unique())
+    
+    extintos = ids_origen - ids_maestro
+    
+    # Imprimir siempre el resultado para conocimiento del usuario
+    print(f" -> Dataset '{nombre_dataset}': {len(extintos)} municipios extintos/fusionados detectados.")
+    
+    if len(extintos) > 0:
+        # Si hay más de 0, mostrar el detalle
+        nombres_extintos = df_origen[df_origen[col_id].isin(extintos)]
+        col_nombre = next((c for c in ['Nombre_Muni', 'nombre', 'NOMBRE', 'nombre_muni'] if c in nombres_extintos.columns), None)
+        
+        for idx_ext in sorted(list(extintos)):
+            nombre = ""
+            if col_nombre:
+                # Obtenemos el nombre asociado a ese ID
+                nombres = nombres_extintos[nombres_extintos[col_id] == idx_ext][col_nombre].values
+                nombre = f"({nombres[0]})" if len(nombres) > 0 else ""
+            print(f"    - Descartado ID: {idx_ext} {nombre}")
 
 def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     """
     Unifica todos los datos procesados (demografía, superficie, renta, ingresos y votos)
     en un único DataFrame usando las rutas de config_path.json.
-    Crea un CSV en data_processed/data_end/<anyo>/ y devuelve el DataFrame.
+    Detecta y excluye automáticamente municipios que ya no existen en el padrón.
     """
     anyo_str = str(anyo)
     
@@ -27,51 +53,58 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     # 2. Si el archivo ya existe, lo cargamos y devolvemos
     if os.path.exists(file_path):
         print(f"Cargando datos unificados existentes desde: {file_path}")
+        print("Nota: Si quieres volver a ver la auditoría de extintos, borra este archivo CSV.")
         return pd.read_csv(file_path, sep=';', dtype={'municipio': str})
 
-    print(f"Iniciando proceso de unificación para el año {anyo_str}...")
+    print(f"\n" + "="*60)
+    print(f"INICIANDO UNIFICACIÓN Y AUDITORÍA DE INTEGRIDAD ({anyo_str})")
+    print("="*60)
 
-    # 3. Cargar mapeo de provincias desde el JSON (para asegurar el nombre de la provincia)
+    # 3. Cargar mapeo de provincias desde el JSON
     with open(config["poblacion_json"], 'r', encoding='utf-8') as f:
         data_json = json.load(f)
     
-    # Diccionario { "01": "Araba/Álava", ... }
     map_prov = {
         str(cp).zfill(2): info.get('nombre_provincia') 
         for cp, info in data_json.get('provincias', {}).items()
     }
 
-    # 4. Carga de datos base (Población y Geografía)
+    # 4. Carga de datos base (Población y Geografía) - FUENTE DE VERDAD
     df_pob = pd.read_csv(config["poblacion_csv"], sep=';')
     df_sup = pd.read_csv(config["geografia"], sep=';')
     
-    # Asegurar IDs a 5 dígitos para cruces limpios
+    # Asegurar IDs a 5 dígitos
     df_pob['id_municipio'] = df_pob['id_municipio'].astype(str).str.zfill(5)
     df_sup['id_municipio'] = df_sup['id_municipio'].astype(str).str.zfill(5)
 
     # --- PROCESO DE UNIFICACIÓN (MERGE) ---
     
-    # Unión Base: Población + Geografía
+    # Unión Base: Población + Geografía (Inner join asegura que solo trabajamos con municipios del padrón)
     df_final = pd.merge(df_pob, df_sup.drop(columns=['nombre_municipio'], errors='ignore'), on='id_municipio', how='inner')
     
     # Añadir nombre de provincia usando el JSON
     df_final['id_provincia_temp'] = df_final['id_municipio'].str[:2]
     df_final['nombre_provincia'] = df_final['id_provincia_temp'].map(map_prov)
 
-    # 5. Carga de datos de Renta y Desigualdad (INE + Navarra)
+    # 5. Carga y AUDITORÍA de datos de Renta y Desigualdad
+    print("\nAuditoría de municipios extintos/fusionados contra el padrón:")
+    
+    # Pre-cargar datasets para auditar
     df_gini = pd.read_csv(config["GINI_P80P20"], sep=';')
     df_ind = pd.read_csv(config["renta_disponible"], sep=';')
     df_fuentes = pd.read_csv(config["fuente_ingresos"], sep=';')
     df_navarra = pd.read_csv(config["renta_navarra"], sep=';')
 
-    # Normalización de IDs en renta
-    for df in [df_gini, df_ind, df_fuentes, df_navarra]:
-        col_id = next((c for c in ['Cod_Muni', 'id_municipio', 'Código', 'ID_MUNICIPIO'] if c in df.columns), None)
+    # Normalización y Auditoría
+    for df_name, df_obj in [("Gini/P80P20", df_gini), ("Renta Disponible", df_ind), 
+                           ("Fuente Ingresos", df_fuentes), ("Renta Navarra", df_navarra)]:
+        col_id = next((c for c in ['Cod_Muni', 'id_municipio', 'Código', 'ID_MUNICIPIO'] if c in df_obj.columns), None)
         if col_id:
-            df.rename(columns={col_id: 'Cod_Muni'}, inplace=True)
-            df['Cod_Muni'] = df['Cod_Muni'].astype(str).str.zfill(5)
+            df_obj.rename(columns={col_id: 'Cod_Muni'}, inplace=True)
+            df_obj['Cod_Muni'] = df_obj['Cod_Muni'].astype(str).str.zfill(5)
+            auditar_municipios_extintos(df_obj, df_pob, df_name, 'Cod_Muni')
 
-    # 6. Carga de Votos
+    # 6. Carga y Auditoría de Votos
     votos_path = os.path.join(config["carpeta_votos"], f"Votos_Granularidad_Total_{anyo_str}.csv")
     if not os.path.exists(votos_path):
          votos_path = os.path.join(config["carpeta_votos"], "Votos_Granularidad_Total_2019.csv")
@@ -81,11 +114,14 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     df_votos.rename(columns={col_id_v: 'id_municipio'}, inplace=True)
     df_votos['id_municipio'] = df_votos['id_municipio'].astype(str).str.zfill(5)
     
+    auditar_municipios_extintos(df_votos, df_pob, "Votos", 'id_municipio')
+    print("-" * 60 + "\n")
+    
     # Calcular votos totales
     cols_v = [c for c in df_votos.columns if c not in ['id_municipio', 'nombre_muni', 'fecha_eleccion', 'FECHA_ELECCION']]
     df_votos['votos totales'] = df_votos[cols_v].sum(axis=1)
 
-    # --- MERGES RESTANTES ---
+    # --- MERGES RESTANTES (How='left' asegura no añadir municipios extintos al df_final) ---
     df_final = pd.merge(df_final, df_gini[['Cod_Muni', f'Índice de Gini {anyo_str}', f'Distribución de la renta P80/P20 {anyo_str}']], 
                         left_on='id_municipio', right_on='Cod_Muni', how='left')
     
