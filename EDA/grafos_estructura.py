@@ -10,12 +10,20 @@ import warnings
 # Silenciar warnings de geometría si es necesario
 warnings.filterwarnings('ignore')
 
+def visualizar_grafo_maestro(gdf, w):
+    """
+    Función independiente para visualizar el grafo de adyacencia.
+    Requiere el GeoDataFrame (gdf) y el objeto de pesos (w).
+    """
+    from EDA.visuals import plot_adjacency_graph
+    print("Iniciando visualización del grafo...")
+    plot_adjacency_graph(gdf, w)
+
 def generar_grafo_adyacencia(anyo: int = 2019, force: bool = False):
     """
     Carga, unifica y calcula la adyacencia física de los municipios españoles.
     Filtra los resultados para que coincidan exactamente con el padrón de población del año indicado.
     Si los archivos ya existen en data_processed, los carga directamente (a menos que force=True).
-    Al finalizar, llama a la visualización en EDA/visuals.py.
     """
     # Rutas de salida
     output_dir = os.path.join('data_processed', 'geografia')
@@ -105,11 +113,6 @@ def generar_grafo_adyacencia(anyo: int = 2019, force: bool = False):
         print(f"Nota: No se pudo guardar el archivo GAL (error no crítico): {e}")
         
     print(f"Proceso de creación completado. Grafo final con {len(gdf_clean)} municipios.")
-
-    # 4. Llamada automática a la visualización
-    print("7. Generando visualización del grafo...")
-    from EDA.visuals import plot_adjacency_graph
-    plot_adjacency_graph(gdf_clean, w)
 
     return gdf_clean, w
 
