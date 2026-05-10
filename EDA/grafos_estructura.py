@@ -10,10 +10,11 @@ import warnings
 # Silenciar warnings de geometría si es necesario
 warnings.filterwarnings('ignore')
 
-def generar_grafo_adyacencia():
+def generar_grafo_adyacencia(anyo: int = 2019, force: bool = False):
     """
     Carga, unifica y calcula la adyacencia física de los municipios españoles.
-    Si los archivos ya existen en data_processed, los carga directamente.
+    Filtra los resultados para que coincidan exactamente con el padrón de población del año indicado.
+    Si los archivos ya existen en data_processed, los carga directamente (a menos que force=True).
     Al finalizar, llama a la visualización en EDA/visuals.py.
     """
     # Rutas de salida
@@ -25,59 +26,88 @@ def generar_grafo_adyacencia():
     out_gal = os.path.join(output_dir, 'mapa_adyacencia.gal')
 
     # 1. Comprobar si ya existen los archivos procesados
-    if os.path.exists(out_parquet) and os.path.exists(out_weights):
+    if not force and os.path.exists(out_parquet) and os.path.exists(out_weights):
         print("Cargando grafo de adyacencia existente desde caché...")
         gdf_clean = gpd.read_parquet(out_parquet)
         with open(out_weights, 'rb') as f:
             w = pickle.load(f)
         
         print(f"Grafo cargado con {len(gdf_clean)} municipios.")
-    else:
-        # 2. Proceso de creación si no existen
-        path_peninbal = r'data_raw/lineas_limite/recintos_municipales_inspire_peninbal_etrs89/recintos_municipales_inspire_peninbal_etrs89.shp'
-        path_canarias = r'data_raw/lineas_limite/recintos_municipales_inspire_canarias_regcan95/recintos_municipales_inspire_canarias_regcan95.shp'
-        
-        if not os.path.exists(path_peninbal) or not os.path.exists(path_canarias):
-            print("Error: No se encuentran los archivos Shapefile originales en data_raw/lineas_limite/")
-            return
+        return gdf_clean, w
 
-        print("1. Cargando y unificando capas geográficas (EPSG:4326)...")
-        gdf_peninbal = gpd.read_file(path_peninbal).to_crs(epsg=4326)
-        gdf_canarias = gpd.read_file(path_canarias).to_crs(epsg=4326)
+    # 2. Obtener lista maestra de municipios desde el padrón (Fuente de Verdad)
+    print(f"Iniciando creación del grafo filtrado por el padrón de {anyo}...")
+    try:
+        with open('config_path.json', 'r', encoding='utf-8') as f:
+            config = json.load(f)
         
-        gdf = pd.concat([gdf_peninbal, gdf_canarias], ignore_index=True)
+        path_pob = config[str(anyo)]["processed"]["poblacion_csv"]
+        df_pob = pd.read_csv(path_pob, sep=';')
         
-        print("2. Limpiando códigos municipales (ID INE 5 dígitos)...")
-        # Aseguramos que es string y rellenamos a 5 dígitos
-        gdf['municipio'] = gdf['NATCODE'].str[-5:].str.zfill(5)
-        
-        print("3. Disolviendo geometrías multiparte...")
-        gdf_clean = gdf.dissolve(by='municipio').reset_index()
-        gdf_clean = gdf_clean[['municipio', 'NAMEUNIT', 'geometry']]
-        gdf_clean.rename(columns={'NAMEUNIT': 'nombre_oficial'}, inplace=True)
+        # Aseguramos IDs a 5 dígitos para el filtrado
+        ids_validos = set(df_pob['id_municipio'].astype(str).str.zfill(5).unique())
+        print(f"-> Cargada lista maestra: {len(ids_validos)} municipios oficiales.")
+    except Exception as e:
+        print(f"Error al cargar el padrón para filtrar el grafo: {e}")
+        return None, None
 
-        print("4. Calculando matriz de contigüidad Queen...")
-        # Queen considera adyacencia por bordes y vértices
-        w = Queen.from_dataframe(gdf_clean, idVariable='municipio')
-        
-        # Guardado
-        print(f"5. Guardando resultados en {output_dir}...")
-        gdf_clean.to_parquet(out_parquet)
-        
-        # Guardar como Pickle (para Python)
-        with open(out_weights, 'wb') as f:
-            pickle.dump(w, f)
+    # 3. Proceso de creación a partir de Shapefiles
+    path_peninbal = r'data_raw/lineas_limite/recintos_municipales_inspire_peninbal_etrs89/recintos_municipales_inspire_peninbal_etrs89.shp'
+    path_canarias = r'data_raw/lineas_limite/recintos_municipales_inspire_canarias_regcan95/recintos_municipales_inspire_canarias_regcan95.shp'
+    
+    if not os.path.exists(path_peninbal) or not os.path.exists(path_canarias):
+        print("Error: No se encuentran los archivos Shapefile originales en data_raw/lineas_limite/")
+        return None, None
+
+    print("1. Cargando y unificando capas geográficas (EPSG:4326)...")
+    gdf_peninbal = gpd.read_file(path_peninbal).to_crs(epsg=4326)
+    gdf_canarias = gpd.read_file(path_canarias).to_crs(epsg=4326)
+    
+    gdf = pd.concat([gdf_peninbal, gdf_canarias], ignore_index=True)
+    
+    print("2. Limpiando códigos municipales (ID INE 5 dígitos)...")
+    # Aseguramos que es string y rellenamos a 5 dígitos
+    gdf['municipio'] = gdf['NATCODE'].str[-5:].str.zfill(5)
+    
+    print("3. Disolviendo geometrías (gestión de enclaves y multipartes)...")
+    # Dissolve agrupa por ID, convirtiendo enclaves en un solo MultiPolygon
+    gdf_clean = gdf.dissolve(by='municipio').reset_index()
+    gdf_clean = gdf_clean[['municipio', 'NAMEUNIT', 'geometry']]
+    gdf_clean.rename(columns={'NAMEUNIT': 'nombre_oficial'}, inplace=True)
+
+    print(f"4. Filtrando mapa: Eliminando recintos no oficiales o desaparecidos en {anyo}...")
+    # Filtrado estricto por el padrón de población
+    total_antes = len(gdf_clean)
+    gdf_clean = gdf_clean[gdf_clean['municipio'].isin(ids_validos)].copy()
+    print(f"   - Se han eliminado {total_antes - len(gdf_clean)} registros de la cartografía.")
+    
+    # Verificación de cobertura
+    faltantes = ids_validos - set(gdf_clean['municipio'])
+    if faltantes:
+        print(f"   - Nota: {len(faltantes)} municipios del padrón no tienen geometría en los Shapefiles (ej. {list(faltantes)[:5]}...)")
+
+    print("5. Calculando matriz de contigüidad Queen (vecindad física)...")
+    # Queen considera adyacencia por bordes y vértices, funciona sobre MultiPolygons
+    w = Queen.from_dataframe(gdf_clean, idVariable='municipio')
+    
+    # Guardado
+    print(f"6. Guardando resultados en {output_dir}...")
+    gdf_clean.to_parquet(out_parquet)
+    
+    # Guardar como Pickle (para Python)
+    with open(out_weights, 'wb') as f:
+        pickle.dump(w, f)
             
-        # Guardar como GAL (Formato estándar usando el IO de libpysal)
-        try:
-            libpysal.io.open(out_gal, 'w').write(w)
-        except Exception as e:
-            print(f"Nota: No se pudo guardar el archivo GAL (error no crítico): {e}")
-            
-        print("Proceso de creación completado.")
+    # Guardar como GAL (Formato estándar usando el IO de libpysal)
+    try:
+        libpysal.io.open(out_gal, 'w').write(w)
+    except Exception as e:
+        print(f"Nota: No se pudo guardar el archivo GAL (error no crítico): {e}")
+        
+    print(f"Proceso de creación completado. Grafo final con {len(gdf_clean)} municipios.")
 
-    # 3. Llamada automática a la visualización
-    print("6. Generando visualización del grafo...")
+    # 4. Llamada automática a la visualización
+    print("7. Generando visualización del grafo...")
     from EDA.visuals import plot_adjacency_graph
     plot_adjacency_graph(gdf_clean, w)
 
