@@ -287,3 +287,34 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
     print(f"Total municipios imputados: {df_imputado['imputado'].sum()} de {len(df_imputado)}.")
     
     return df_imputado
+
+def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
+    """
+    Filtra variables numéricas relevantes y genera un mapa de calor de correlaciones.
+    Excluye identificadores, nombres y coordenadas.
+    """
+    from EDA.visuals import plot_correlation_heatmap
+    
+    # 1. Definir columnas a excluir (identificadores y geolocalización pura)
+    cols_excluir = ['municipio', 'nombre', 'provincia', 'latitud', 'longitud', 'altitud', 'imputado']
+    
+    # 2. Seleccionar solo columnas numéricas que no estén en la lista de exclusión
+    df_numeric = df.select_dtypes(include=[np.number]).drop(columns=[c for c in cols_excluir if c in df.columns], errors='ignore')
+    
+    # 3. Eliminar filas que contengan NaN para asegurar que la matriz se calcule sobre datos completos
+    df_clean = df_numeric.dropna()
+    
+    if df_clean.empty:
+        print(f"Aviso: No hay suficientes datos limpios para calcular correlaciones en el año {anyo}.")
+        return
+
+    print(f"\n--- ANALIZANDO CORRELACIONES ({anyo}) ---")
+    print(f"Variables analizadas: {list(df_clean.columns)}")
+    print(f"Registros completos utilizados: {len(df_clean)}")
+    
+    # 4. Llamar a la visualización
+    plot_correlation_heatmap(
+        df_clean, 
+        title=f"Mapa de Correlaciones Socioeconómicas - Año {anyo}",
+        figsize=(12, 10)
+    )
