@@ -44,11 +44,11 @@
         ]
     },
     "000009": {
-        "siglas_generales": "AxS�",
+        "siglas_generales": "AxSÍ",
         "vinculadas": [
             {
                 "codigo": "000009",
-                "sigla": "AxS�"
+                "sigla": "AxSÍ"
             }
         ]
     },
@@ -303,32 +303,32 @@
         ]
     },
     "000043": {
-        "siglas_generales": "M�S PA�S",
+        "siglas_generales": "MÁS PAÍS",
         "vinculadas": [
             {
                 "codigo": "000043",
-                "sigla": "M�S PA�S"
+                "sigla": "MÁS PAÍS"
             },
             {
                 "codigo": "000050",
-                "sigla": "M PA�S"
+                "sigla": "M PAÍS"
             }
         ]
     },
     "000046": {
-        "siglas_generales": "M�S PA�S-EQ",
+        "siglas_generales": "MÁS PAÍS-EQ",
         "vinculadas": [
             {
                 "codigo": "000044",
-                "sigla": "M�S PA�S-AN"
+                "sigla": "MÁS PAÍS-AN"
             },
             {
                 "codigo": "000045",
-                "sigla": "M�S PA�S-CA"
+                "sigla": "MÁS PAÍS-CA"
             },
             {
                 "codigo": "000046",
-                "sigla": "M�S PA�S-EQ"
+                "sigla": "MÁS PAÍS-EQ"
             }
         ]
     },
@@ -342,29 +342,29 @@
         ]
     },
     "000048": {
-        "siglas_generales": "M�S COMPROM",
+        "siglas_generales": "MÉS COMPROM",
         "vinculadas": [
             {
                 "codigo": "000048",
-                "sigla": "M�S COMPROM"
+                "sigla": "MÉS COMPROM"
             }
         ]
     },
     "000049": {
-        "siglas_generales": "M�S-ESQUERR",
+        "siglas_generales": "MÉS-ESQUERR",
         "vinculadas": [
             {
                 "codigo": "000049",
-                "sigla": "M�S-ESQUERR"
+                "sigla": "MÉS-ESQUERR"
             }
         ]
     },
     "000051": {
-        "siglas_generales": "M PA�S-CHA-",
+        "siglas_generales": "M PAÍS-CHA-",
         "vinculadas": [
             {
                 "codigo": "000051",
-                "sigla": "M PA�S-CHA-"
+                "sigla": "M PAÍS-CHA-"
             }
         ]
     },
@@ -665,20 +665,20 @@
         ]
     },
     "000106": {
-        "siglas_generales": "SOMOS REGI�",
+        "siglas_generales": "SOMOS REGIÓ",
         "vinculadas": [
             {
                 "codigo": "000106",
-                "sigla": "SOMOS REGI�"
+                "sigla": "SOMOS REGIÓ"
             }
         ]
     },
     "000108": {
-        "siglas_generales": "�TERUEL EXI",
+        "siglas_generales": "¡TERUEL EXI",
         "vinculadas": [
             {
                 "codigo": "000108",
-                "sigla": "�TERUEL EXI"
+                "sigla": "¡TERUEL EXI"
             }
         ]
     },
@@ -701,20 +701,20 @@
         ]
     },
     "000111": {
-        "siglas_generales": "UNIDOS S�-A",
+        "siglas_generales": "UNIDOS SÍ-A",
         "vinculadas": [
             {
                 "codigo": "000111",
-                "sigla": "UNIDOS S�-A"
+                "sigla": "UNIDOS SÍ-A"
             }
         ]
     },
     "000112": {
-        "siglas_generales": "UNI�N REGIO",
+        "siglas_generales": "UNIÓN REGIO",
         "vinculadas": [
             {
                 "codigo": "000112",
-                "sigla": "UNI�N REGIO"
+                "sigla": "UNIÓN REGIO"
             }
         ]
     },

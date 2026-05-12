@@ -70,8 +70,15 @@ def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.
     """
     try:
         engine = 'xlrd' if path_entrada.endswith('.xls') else 'openpyxl'
+        print(f"DEBUG: Abriendo archivo con motor {engine}: {path_entrada}")
+        
+        if not os.path.exists(path_entrada):
+            print(f"ERROR: No se encuentra el archivo de entrada: {path_entrada}")
+            return None
+
         xls = pd.ExcelFile(path_entrada, engine=engine)
         sheets = xls.sheet_names
+        print(f"DEBUG: Hojas encontradas: {len(sheets)}")
 
         pares_a_procesar = []
         i = 0
@@ -89,6 +96,7 @@ def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.
                     pares_a_procesar.append((s_paro, s_cont))
             i += 1
 
+        print(f"DEBUG: Pares (PARO/CONTRATOS) detectados para procesar: {len(pares_a_procesar)}")
         all_data = []
 
         for s_paro, s_cont in pares_a_procesar:
@@ -108,15 +116,17 @@ def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.
             all_data.append(merged)
         
         if not all_data:
+            print("WARNING: No se pudo extraer ningún dato de las hojas encontradas.")
             return None
         
         df_ml = pd.concat(all_data, ignore_index=True)
         cols_numericas = df_ml.columns.drop(['id_municipio', 'nombre_municipio'])
         df_ml[cols_numericas] = df_ml[cols_numericas].fillna(0).astype(float).astype(int)
         
+        print(f"DEBUG: Exportando {len(df_ml)} filas a {path_salida}")
         guardar_dataframe_csv(df_ml, path_salida)
         return df_ml
     
     except Exception as e:
-        print(f"\nError crítico: {e}")
+        print(f"\nError crítico en limpieza_sepe: {e}")
         return None

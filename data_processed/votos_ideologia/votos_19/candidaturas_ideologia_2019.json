@@ -52,13 +52,13 @@
         ]
     },
     "000009": {
-        "nombre_unificado": "AxS�",
+        "nombre_unificado": "AxSÍ",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000009",
-                "sigla": "AxS�"
+                "sigla": "AxSÍ"
             }
         ]
     },
@@ -365,36 +365,36 @@
         ]
     },
     "000043": {
-        "nombre_unificado": "M�S PA�S",
+        "nombre_unificado": "MÁS PAÍS",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000043",
-                "sigla": "M�S PA�S"
+                "sigla": "MÁS PAÍS"
             },
             {
                 "codigo": "000050",
-                "sigla": "M PA�S"
+                "sigla": "M PAÍS"
             }
         ]
     },
     "000046": {
-        "nombre_unificado": "M�S PA�S-EQ",
+        "nombre_unificado": "MÁS PAÍS-EQ",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000044",
-                "sigla": "M�S PA�S-AN"
+                "sigla": "MÁS PAÍS-AN"
             },
             {
                 "codigo": "000045",
-                "sigla": "M�S PA�S-CA"
+                "sigla": "MÁS PAÍS-CA"
             },
             {
                 "codigo": "000046",
-                "sigla": "M�S PA�S-EQ"
+                "sigla": "MÁS PAÍS-EQ"
             }
         ]
     },
@@ -410,35 +410,35 @@
         ]
     },
     "000048": {
-        "nombre_unificado": "M�S COMPROM",
+        "nombre_unificado": "MÉS COMPROM",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000048",
-                "sigla": "M�S COMPROM"
+                "sigla": "MÉS COMPROM"
             }
         ]
     },
     "000049": {
-        "nombre_unificado": "M�S-ESQUERR",
+        "nombre_unificado": "MÉS-ESQUERR",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000049",
-                "sigla": "M�S-ESQUERR"
+                "sigla": "MÉS-ESQUERR"
             }
         ]
     },
     "000051": {
-        "nombre_unificado": "M PA�S-CHA-",
+        "nombre_unificado": "M PAÍS-CHA-",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000051",
-                "sigla": "M PA�S-CHA-"
+                "sigla": "M PAÍS-CHA-"
             }
         ]
     },
@@ -779,24 +779,24 @@
         ]
     },
     "000106": {
-        "nombre_unificado": "SOMOS REGI�",
+        "nombre_unificado": "SOMOS REGIÓ",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000106",
-                "sigla": "SOMOS REGI�"
+                "sigla": "SOMOS REGIÓ"
             }
         ]
     },
     "000108": {
-        "nombre_unificado": "�TERUEL EXI",
+        "nombre_unificado": "¡TERUEL EXI",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000108",
-                "sigla": "�TERUEL EXI"
+                "sigla": "¡TERUEL EXI"
             }
         ]
     },
@@ -823,24 +823,24 @@
         ]
     },
     "000111": {
-        "nombre_unificado": "UNIDOS S�-A",
+        "nombre_unificado": "UNIDOS SÍ-A",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000111",
-                "sigla": "UNIDOS S�-A"
+                "sigla": "UNIDOS SÍ-A"
             }
         ]
     },
     "000112": {
-        "nombre_unificado": "UNI�N REGIO",
+        "nombre_unificado": "UNIÓN REGIO",
         "ideologia": -1.0,
         "voto_retrospectivo_id": "desconocido",
         "vinculadas": [
             {
                 "codigo": "000112",
-                "sigla": "UNI�N REGIO"
+                "sigla": "UNIÓN REGIO"
             }
         ]
     },

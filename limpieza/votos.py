@@ -71,7 +71,7 @@ def leer_fichero_candidaturas(fichero_03: str) -> pd.DataFrame:
     colspecs = [(8, 14), (14, 64), (226, 232)]
     names = ['COD_CANDIDATURA', 'SIGLAS', 'COD_NACIONAL']
     
-    df = pd.read_fwf(fichero_03, colspecs=colspecs, names=names, dtype=str, encoding='utf-8', encoding_errors='replace')
+    df = pd.read_fwf(fichero_03, colspecs=colspecs, names=names, dtype=str, encoding='latin-1')
     for col in df.columns:
         df[col] = df[col].astype(str).str.strip()
     return df
