@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  12 MAY 2026 23:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  13 MAY 2026 00:24
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -494,34 +494,75 @@ Package pdftex.def Info: imagenes_EDA/temporalidad por genero.png  used on input
 <imagenes_EDA/NA_gini_P80P20.png, id=400, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/NA_gini_P80P20.png Graphic file (type png)
 <use imagenes_EDA/NA_gini_P80P20.png>
-Package pdftex.def Info: imagenes_EDA/NA_gini_P80P20.png  used on input line 115.
+Package pdftex.def Info: imagenes_EDA/NA_gini_P80P20.png  used on input line 116.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
-<imagenes_EDA/histogramaBoxplot_gini.png, id=401, 711.1368pt x 421.3341pt>
+ [17 <./imagenes_EDA/NA_gini_P80P20.png>]
+<imagenes_EDA/histogramaBoxplot_gini.png, id=406, 711.1368pt x 421.3341pt>
 File: imagenes_EDA/histogramaBoxplot_gini.png Graphic file (type png)
 <use imagenes_EDA/histogramaBoxplot_gini.png>
-Package pdftex.def Info: imagenes_EDA/histogramaBoxplot_gini.png  used on input line 124.
+Package pdftex.def Info: imagenes_EDA/histogramaBoxplot_gini.png  used on input line 125.
 (pdftex.def)             Requested size: 364.19667pt x 215.7776pt.
- [17 <./imagenes_EDA/NA_gini_P80P20.png>]
 <imagenes_EDA/correlación_GINI_P80P20.png, id=407, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/correlación_GINI_P80P20.png Graphic file (type png)
 <use imagenes_EDA/correlación_GINI_P80P20.png>
-Package pdftex.def Info: imagenes_EDA/correlación_GINI_P80P20.png  used on input line 134.
+Package pdftex.def Info: imagenes_EDA/correlación_GINI_P80P20.png  used on input line 135.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [18 <./imagenes_EDA/histogramaBoxplot_gini.png> <./imagenes_EDA/correlación_GINI_P80P20.png>]) (05_analisis.tex [19]
+ [18 <./imagenes_EDA/histogramaBoxplot_gini.png>] [19 <./imagenes_EDA/correlación_GINI_P80P20.png>]
+<imagenes_EDA/indicadores_renta_NA.png, id=419, 716.1957pt x 422.0568pt>
+File: imagenes_EDA/indicadores_renta_NA.png Graphic file (type png)
+<use imagenes_EDA/indicadores_renta_NA.png>
+Package pdftex.def Info: imagenes_EDA/indicadores_renta_NA.png  used on input line 147.
+(pdftex.def)             Requested size: 218.51521pt x 128.76898pt.
+<imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png, id=420, 711.1368pt x 422.0568pt>
+File: imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png Graphic file (type png)
+<use imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png>
+Package pdftex.def Info: imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png  used on input line 148.
+(pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
+<imagenes_EDA/renta_bruta_media_persona.png, id=421, 711.1368pt x 422.0568pt>
+File: imagenes_EDA/renta_bruta_media_persona.png Graphic file (type png)
+<use imagenes_EDA/renta_bruta_media_persona.png>
+Package pdftex.def Info: imagenes_EDA/renta_bruta_media_persona.png  used on input line 155.
+(pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
+<imagenes_EDA/renta_neta_media_persona.png, id=422, 711.1368pt x 422.0568pt>
+File: imagenes_EDA/renta_neta_media_persona.png Graphic file (type png)
+<use imagenes_EDA/renta_neta_media_persona.png>
+Package pdftex.def Info: imagenes_EDA/renta_neta_media_persona.png  used on input line 156.
+(pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
+<imagenes_EDA/bruta_hogar.png, id=423, 709.6914pt x 422.0568pt>
+File: imagenes_EDA/bruta_hogar.png Graphic file (type png)
+<use imagenes_EDA/bruta_hogar.png>
+Package pdftex.def Info: imagenes_EDA/bruta_hogar.png  used on input line 158.
+(pdftex.def)             Requested size: 218.51521pt x 129.94753pt.
+<imagenes_EDA/neta_hogar.png, id=424, 711.1368pt x 422.0568pt>
+File: imagenes_EDA/neta_hogar.png Graphic file (type png)
+<use imagenes_EDA/neta_hogar.png>
+Package pdftex.def Info: imagenes_EDA/neta_hogar.png  used on input line 159.
+(pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
+ [20 <./imagenes_EDA/indicadores_renta_NA.png> <./imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png>]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 162.
+ (C:\Program Files\MiKTeX\tex/latex/psnfss\ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+<imagenes_EDA/unidad_consumo.png, id=431, 711.1368pt x 422.0568pt>
+File: imagenes_EDA/unidad_consumo.png Graphic file (type png)
+<use imagenes_EDA/unidad_consumo.png>
+Package pdftex.def Info: imagenes_EDA/unidad_consumo.png  used on input line 166.
+(pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
+ [21 <./imagenes_EDA/renta_bruta_media_persona.png> <./imagenes_EDA/renta_neta_media_persona.png> <./imagenes_EDA/bruta_hogar.png> <./imagenes_EDA/neta_hogar.png> <./imagenes_EDA/unidad_consumo.png>]) (05_analisis.tex [22]
 Cap\'{\i }tulo 4.
-) (06_puesta_en_marcha.tex [20
+) (06_puesta_en_marcha.tex [23
 
 ]
 Cap\'{\i }tulo 5.
-) (07_etica.tex [21
+) (07_etica.tex [24
 
 ]
 Cap\'{\i }tulo 6.
-) (08_conclusiones.tex [22
+) (08_conclusiones.tex [25
 
 ]
 Cap\'{\i }tulo 7.
-) [23
+) [26
 
 ] (09_bibliografia.tex
 Underfull \hbox (badness 2591) in paragraph at lines 13--14
@@ -563,11 +604,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--20
 \T1/pcr/m/n/12 / / centrodedescargas . cnig . es / CentroDescargas / detalleArchivo ?
  []
 
-[24
+[27
 
-] [25]) (10_anexos.tex [26]
+] [28]) (10_anexos.tex [29]
 Ap\'{e}ndice A.
-) [27
+) [30
 
 ] (main.aux
 LaTeX Info: Redefining \. on input line 11.
@@ -581,17 +622,17 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 383B5201F705BDCBD1A177F5BB1F4773;10847.
  ) 
 Here is how much of TeX's memory you used:
- 12276 strings out of 467691
- 191703 string characters out of 5425054
+ 12354 strings out of 467691
+ 194241 string characters out of 5425054
  625492 words of memory out of 5000000
- 41031 multiletter control sequences out of 15000+600000
- 684720 words of font info for 92 fonts, out of 8000000 for 9000
+ 41102 multiletter control sequences out of 15000+600000
+ 685034 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,1283b,824s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (33 pages, 776850 bytes).
+Output written on main.pdf (36 pages, 1023885 bytes).
 PDF statistics:
- 539 PDF objects out of 1000 (max. 8388607)
- 108 named destinations out of 1000 (max. 500000)
- 402 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 567 PDF objects out of 1000 (max. 8388607)
+ 111 named destinations out of 1000 (max. 500000)
+ 437 words of extra memory for PDF output out of 10000 (max. 10000000)
 

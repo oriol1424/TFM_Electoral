@@ -108,6 +108,7 @@ La tasa media de temporalidad nacional en el periodo de referencia se sitúa en 
 El análisis de la temporalidad por sectores revela dinámicas heterogéneas. Mientras que la construcción presenta una baja dispersión, indicando un comportamiento homogéneo en todo el territorio, la industria muestra una variabilidad significativa. Es especialmente reseñable el comportamiento del sector servicios, que acumula la mayor cantidad de outliers. Esta dispersión evidencia realidades laborales polarizadas, condicionadas por la especialización turística o la capacidad comercial de cada entidad municipal.
 
 \subsection{Renta e igualdad}
+\subsubsection{CDesigualdad}
 A partir de este epígrafe, el análisis se ve condicionado por el secreto estadístico. El INE restringe la publicación de datos en municipios de baja densidad (habitualmente menores de 100 habitantes) para garantizar el anonimato de los ciudadanos. Asimismo, la gestión de los datos de la Comunidad Foral de Navarra se ha realizado a través del Instituto de Estadística de Navarra (Nastat). Debido a su régimen foral, los indicadores publicados no siempre presentan una equivalencia directa con el sistema común, lo que ha derivado en una reducción de la muestra final. En total, se han identificado 1.421 municipios con ausencia de datos (NA), lo que representa el 17,5\% del territorio nacional.
 
 \begin{figure}[H]
@@ -137,4 +138,34 @@ Se ha realizado un análisis de la relación entre el Índice de Gini y el ratio
 Se ha obtenido un coeficiente de correlación de Pearson de $r = 0,790$. Este valor indica una correlación positiva fuerte, confirmando que la desigualdad en España se manifiesta predominantemente como una polarización de los extremos. Matemáticamente, este resultado valida que en los municipios donde el Índice de Gini se eleva, la brecha social se ensancha de forma predecible: el incremento de la renta en el bloque superior ocurre de forma simultánea al estancamiento del bloque inferior. Localidades como Villarluengo, con un ratio de 4,6x, tipifican este fenómeno.
 
 Desde la perspectiva de esta investigación, la consistencia estadística observada adquiere una relevancia teórica fundamental. Mientras que los modelos clásicos de ciencia política vinculaban de forma lineal el voto a la clase social, autores como Piketty (2019) argumentan que esta relación se ha transformado: el eje de conflicto ya no se divide estrictamente entre capital y trabajo, sino entre diferentes élites (la élite intelectual o 'izquierda brahmán' y la élite económica o 'derecha comerciante'). Por lo tanto, la inclusión de estas variables de desigualdad en el modelo permitirá contrastar si, en el contexto español, la polarización de rentas mantiene su capacidad predictiva tradicional o si, por el contrario, la reconfiguración de los electorados en torno a nuevos clivajes de élite ha mitigado el impacto de la desigualdad económica local como determinante directo del voto.
+
+\subsubsection{Fuentes de ingresos}
+Tras analizar la desigualdad, es necesario evaluar el comportamiento de los indicadores de renta a nivel municipal. En este punto, persiste la presencia de valores ausentes por secreto estadístico, aunque con una ligera variación en el volumen de nulos respecto a los índices de desigualdad. La representatividad oscila entre un 16,9\% y un 20,8\% de municipios sin datos, debido a que el Instituto de Estadística de Navarra (Nastat) sí proporciona ciertas métricas de renta que no estaban disponibles para los indicadores de polarización.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/indicadores_renta_NA.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png}
+\end{figure}
+
+La práctica totalidad de los valores faltantes se concentra en municipios de menos de 500 habitantes. La única excepción es el municipio de Arraia-Maeztu (726 habitantes); su ausencia de datos se atribuye a las particularidades en la captación y publicación de estadísticas en el marco del concierto económico del País Vasco, que, al igual que el régimen foral navarro, gestiona su propia información tributaria y estadística.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/renta_bruta_media_persona.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/renta_neta_media_persona.png}\\
+    \vspace{0.5cm}
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/bruta_hogar.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/neta_hogar.png}
+\end{figure}
+
+Al contrastar la renta bruta frente a la renta neta, se evidencia el impacto del sistema redistributivo. Estadísticamente, la transición hacia valores netos produce un desplazamiento de la curva de densidad hacia la izquierda y una marcada compresión de la varianza, lo que reduce la dispersión en los deciles de ingresos más altos. Mientras que la renta bruta media por hogar se sitúa en el entorno de los 30.000€, la distribución neta se estrecha alrededor de los 25.000€, minorando las distancias relativas entre municipios.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/unidad_consumo.png}
+\end{figure}
+
+No obstante, desde una óptica metodológica, el uso de la Renta por Unidad de Consumo (cuyo pico modal se sitúa en los 16.000€) resulta ser la métrica más robusta. Este indicador permite corregir las economías de escala dentro de los hogares, ofreciendo una visión más fidedigna de los niveles de vida reales y presentando una mayor homogeneidad en gran parte del territorio nacional.
+
 
