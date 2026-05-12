@@ -63,6 +63,8 @@ INPUT C:\Program Files\MiKTeX\tex\generic\iftex\iftex.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\geometry\geometry.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\geometry\geometry.cfg
 INPUT C:\Program Files\MiKTeX\tex\latex\geometry\geometry.cfg
+INPUT C:\Program Files\MiKTeX\tex\latex\float\float.sty
+INPUT C:\Program Files\MiKTeX\tex\latex\float\float.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\hyperref.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\hyperref\hyperref.sty
 INPUT C:\Program Files\MiKTeX\tex\latex\kvsetkeys\kvsetkeys.sty
@@ -272,6 +274,34 @@ INPUT .\imagenes_EDA\desequilibrio_provincial.png
 INPUT .\imagenes_EDA\desequilibrio_provincial.png
 INPUT .\imagenes_EDA\desequilibrio_provincial.png
 INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\mercado_laboral_contratos.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\sector_laboral_predominancia.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\boxplot_temporalidad.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
+INPUT .\imagenes_EDA\temporalidad por genero.png
 INPUT .\05_analisis.tex
 INPUT .\05_analisis.tex
 INPUT 05_analisis.tex

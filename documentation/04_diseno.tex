@@ -35,7 +35,7 @@ Tras examinar el estado del arte y el flujo de procesamiento de datos, es impera
 \subsubsection{Estructura y Densidad Municipal}
 En primer lugar, se analiza la tipología de los municipios y su densidad poblacional. Tomando como referencia el Padrón Continuo de 2019, España contaba con una población de 47.026.208 habitantes.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{imagenes_EDA/histograma_población_total_log.png}
 \end{figure}
@@ -44,7 +44,7 @@ Como se observa en el histograma de distribución de frecuencias, la mayor conce
 
 Para profundizar en esta estructura, se ha replicado la categorización oficial del INE, que segmenta los municipios en 11 grupos según su volumen demográfico. El análisis permite contrastar el peso relativo de cada categoría sobre el total de ayuntamientos frente a su contribución real a la población nacional.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{imagenes_EDA/Barras_distribución_municipios.png}\\
     \vspace{0.5cm}
@@ -53,7 +53,7 @@ Para profundizar en esta estructura, se ha replicado la categorización oficial 
 
 Los resultados revelan un marcado contraste demográfico: los municipios con menos de 500 habitantes representan el 49,1\% de las entidades locales, pero albergan únicamente al 1,6\% de la población. En el extremo opuesto, las grandes urbes (más de 100.000 habitantes) constituyen apenas el 0,8\% de los ayuntamientos, pero concentran el 40\% del total nacional. Destaca que la mayor acumulación demográfica reside en ciudades de tamaño medio-alto (entre 100.000 y 500.000 habitantes), que agrupan al 23,8\% de la población. Asimismo, la densidad media nacional se sitúa en 93,17 hab/km$^2$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{imagenes_EDA/número_habitantes_extremos.png}
 \end{figure}
@@ -69,7 +69,7 @@ Al elevar el nivel de agregación al plano provincial, Madrid y Barcelona se con
     \item \textbf{Identificación de Desequilibrios:} Las provincias situadas significativamente por debajo de la bisectriz (como Soria o Teruel) evidencian un desequilibrio territorial crítico: poseen una vasta superficie pero una reducida carga demográfica. Debido al sistema electoral español, que garantiza un mínimo de dos escaños por provincia, estos territorios presentan una sobrerrepresentación electoral en relación con su censo.
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.48\textwidth]{imagenes_EDA/pobacion_provincia.png}\hfill
     \includegraphics[width=0.48\textwidth]{imagenes_EDA/desequilibrio_provincial.png}
@@ -80,4 +80,29 @@ Nota aclaratoria: Se ha optado por excluir a las ciudades autónomas de Ceuta y 
 Por el contrario, las provincias situadas por encima de la línea de equilibrio, aquellas con alta densidad habitacional, experimentan una subrepresentación relativa. A pesar de elegir un mayor número de diputados en términos absolutos, el "coste en votos" por escaño es superior al de las provincias despobladas, alejándose de un reparto estrictamente proporcional.
 
 \subsection{Mercado laboral}
-Una vez caracterizada la distribución física y demográfica, se procede a evaluar las variables relativas al mercado laboral
+Una vez caracterizada la distribución demográfica, se procede a evaluar las variables relativas al mercado laboral, las cuales constituyen predictores fundamentales en la modelización del voto.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/mercado_laboral_contratos.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/sector_laboral_predominancia.png}
+\end{figure}
+
+Los datos analizados corresponden a noviembre de 2019, coincidiendo con el marco temporal de las elecciones generales de dicho año. En lo que respecta a la especialización productiva, el sector servicios actúa como el motor principal de la economía española, representando el 70,2\% de la contratación nacional y consolidándose como la actividad mayoritaria en más de 7.000 municipios.
+
+A gran distancia le sigue el sector agrícola, que agrupa el 14,3\% de los contratos y se mantiene como la principal fuente de empleo en 749 municipios, evidenciando su relevancia en la vertebración del voto rural. Por su parte, el sector industrial representa el 10\% de las firmas contratantes, liderando el mercado laboral en 199 localidades. Finalmente, la construcción, con un volumen de contratación del 5,4\%, es el sector dominante en apenas 179 municipios, mostrando una dispersión territorial similar a la industria pero con menor peso relativo en el cómputo total de contratos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/boxplot_temporalidad.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/temporalidad por genero.png}
+\end{figure}
+
+La tasa media de temporalidad nacional en el periodo de referencia se sitúa en un 90,3\%, una cifra que refleja la precariedad estructural del mercado laboral español en dicha etapa. Este porcentaje, si bien es elevado, responde a dos factores clave del contexto socioeconómico:
+
+\begin{itemize}
+    \item \textbf{Coyuntura Estacional:} Noviembre marca el inicio de las campañas de contratación masiva vinculadas al Black Friday y el periodo navideño, concentradas mayoritariamente en el sector servicios.
+    \item \textbf{Marco Regulatorio:} El mercado operaba bajo la normativa previa a la reforma laboral de 2021. Por tanto, los datos capturan de forma fidedigna la alta volatilidad contractual previa a las restricciones legales impuestas posteriormente a la contratación eventual.
+\end{itemize}
+
+El análisis de la temporalidad por sectores revela dinámicas heterogéneas. Mientras que la construcción presenta una baja dispersión ---indicando un comportamiento homogéneo en todo el territorio---, la industria muestra una variabilidad significativa. Es especialmente reseñable el comportamiento del sector servicios, que acumula la mayor cantidad de outliers. Esta dispersión evidencia realidades laborales polarizadas, condicionadas por la especialización turística o la capacidad comercial de cada entidad municipal.
