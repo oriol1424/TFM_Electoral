@@ -210,6 +210,48 @@ def plot_smart_bar(
     plt.tight_layout()
     plt.show()
 
+def plot_boxplot(
+    df: pd.DataFrame, 
+    cat_col: str, 
+    num_col: str, 
+    title: str = "Boxplot",
+    xlabel: Optional[str] = None,
+    ylabel: Optional[str] = None,
+    figsize: tuple = (12, 6),
+    palette: str = "Set2",
+    rotation: int = 45
+) -> None:
+    """
+    Genera un boxplot para comparar una variable numérica a través de categorías.
+    """
+    sns.set_theme(style="whitegrid")
+    plt.figure(figsize=figsize)
+    
+    # En Seaborn 0.13+, si se usa palette se debe asignar hue.
+    # En algunas versiones 0.13.x, legend=False en boxplot puede dar UnboundLocalError: 'boxprops'
+    # Por ello, lo generamos y lo quitamos manualmente si existe.
+    ax = sns.boxplot(
+        data=df, 
+        x=cat_col, 
+        y=num_col, 
+        palette=palette,
+        hue=cat_col, # Si lo mantienes, asegúrate de que no haya legend=False dentro
+        legend=False # A veces, ponerlo explícitamente como True y luego borrarlo funciona
+    )
+    
+    if ax.get_legend() is not None:
+        ax.get_legend().remove()
+    
+    ax.set_title(title, pad=15)
+    ax.set_xlabel(xlabel if xlabel else cat_col)
+    ax.set_ylabel(ylabel if ylabel else num_col)
+    
+    if rotation != 0:
+        plt.xticks(rotation=rotation, ha='right')
+        
+    plt.tight_layout()
+    plt.show()
+
 def plot_distribution_analysis(
     df: pd.DataFrame, 
     num_col: str, 

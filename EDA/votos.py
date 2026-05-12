@@ -2,7 +2,122 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from EDA.visuals import mapear_nombres_provincias
+from EDA.visuals import mapear_nombres_provincias, plot_histogram, plot_boxplot
+
+def participacion_electoral(df: pd.DataFrame, anyo: str = ""):
+    """
+    Analiza la participación y los votos en blanco.
+    Muestra histogramas y boxplots por rango de municipio.
+    Usa las columnas: 'participacion', 'votos blancos', 'votos totales' y 'rango tamaño población'.
+    """
+    title_suffix = f" ({anyo})" if anyo else ""
+    print(f"\n--- Análisis de Participación y Votos en Blanco{title_suffix} ---")
+    
+    # 1. Histograma de participación
+    plot_histogram(
+        df, 'participacion', 
+        title=f"Distribución de la Participación Electoral{title_suffix}",
+        xlabel="Participación (%)",
+        ylabel="Número de Municipios",
+        color="mediumseagreen"
+    )
+    
+    # 2. Boxplot de participación por rango de municipio
+    orden_rangos = [
+        "<100", "101-500", "501-1000", "1001-2000", "2001-5000", 
+        "5001-10000", "10001-20000", "20001-50000", "50000-100000", 
+        "100001-500000", ">500000"
+    ]
+    
+    col_rango = 'rango tamaño población'
+    if col_rango in df.columns:
+        # Preparamos los datos para el boxplot asegurando el orden lógico
+        df_plot = df.copy()
+        present_rangos = [r for r in orden_rangos if r in df_plot[col_rango].unique()]
+        df_plot[col_rango] = pd.Categorical(df_plot[col_rango], categories=present_rangos, ordered=True)
+
+        plot_boxplot(
+            df_plot, col_rango, 'participacion',
+            title=f"Participación por Tamaño de Municipio{title_suffix}",
+            xlabel="Rango de Población",
+            ylabel="Participación (%)",
+            palette="Greens"
+        )
+    
+    # 3. Votos en blanco (Calculamos el % ya que vienen en valor absoluto)
+    if 'votos blancos' in df.columns and 'votos totales' in df.columns:
+        # Creamos una columna temporal de porcentaje para la visualización
+        df_temp = df.copy()
+        df_temp['votos blancos %'] = (df_temp['votos blancos'] / df_temp['votos totales']) * 100
+        
+        plot_histogram(
+            df_temp, 'votos blancos %', 
+            title=f"Distribución de Votos en Blanco (%){title_suffix}",
+            xlabel="Votos en Blanco (%)",
+            ylabel="Número de Municipios",
+            color="lightgray"
+        )
+        
+        if col_rango in df_temp.columns:
+            # Re-ordenar categorías para el segundo boxplot
+            df_temp[col_rango] = pd.Categorical(df_temp[col_rango], categories=present_rangos, ordered=True)
+            
+            plot_boxplot(
+                df_temp, col_rango, 'votos blancos %',
+                title=f"Votos en Blanco por Tamaño de Municipio{title_suffix}",
+                xlabel="Rango de Población",
+                ylabel="Votos en Blanco (%)",
+                palette="Greys"
+            )
+    else:
+        print("Aviso: Faltan columnas 'votos blancos' o 'votos totales' para calcular porcentajes.")
+
+def participacion_electoral_100(df: pd.DataFrame, anyo: str = ""):
+    """
+    Analiza los votos en blanco específicamente para municipios de menos de 100 habitantes (<100).
+    Muestra histograma y boxplot para este subconjunto.
+    """
+    title_suffix = f" ({anyo})" if anyo else ""
+    col_rango = 'rango tamaño población'
+    
+    if col_rango not in df.columns:
+        print(f"Error: No se encontró la columna '{col_rango}'")
+        return
+        
+    # Filtrar municipios de menos de 100 habitantes
+    df_100 = df[df[col_rango] == "<100"].copy()
+    
+    if df_100.empty:
+        print(f"Aviso: No hay municipios con menos de 100 habitantes para el análisis{title_suffix}.")
+        return
+
+    # Calcular % de votos en blanco
+    if 'votos blancos' in df_100.columns and 'votos totales' in df_100.columns:
+        df_100['votos blancos %'] = (df_100['votos blancos'] / df_100['votos totales']) * 100
+    else:
+        print(f"Error: Faltan columnas 'votos blancos' o 'votos totales' para el análisis{title_suffix}.")
+        return
+
+    print(f"\n--- Análisis de Votos en Blanco: Municipios < 100 hab.{title_suffix} ---")
+    print(f"Total de municipios analizados: {len(df_100)}")
+
+    # 1. Histograma de votos en blanco para este grupo
+    plot_histogram(
+        df_100, 'votos blancos %',
+        title=f"Distribución de Votos en Blanco en Municipios < 100 hab.{title_suffix}",
+        xlabel="Votos en Blanco (%)",
+        ylabel="Número de Municipios",
+        color="lightgray"
+    )
+
+    # 2. Boxplot de votos en blanco para este grupo
+    plot_boxplot(
+        df_100, col_rango, 'votos blancos %',
+        title=f"Dispersión de Votos en Blanco en Municipios < 100 hab.{title_suffix}",
+        xlabel="Rango Poblacional (< 100 hab.)",
+        ylabel="Votos en Blanco (%)",
+        palette="Greys"
+    )
 
 def limpieza_columnas_votos(df: pd.DataFrame) -> pd.DataFrame:
     """
