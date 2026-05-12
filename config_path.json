@@ -3,6 +3,7 @@
         "raw": {
             "votos_candidaturas": "data_raw/votos/01_julio_2023/03022307.DAT",
             "Votos_candidaturas_agrupados": "data_raw/votos/01_julio_2023/06022307.DAT",
+            "votos_municipios_totales": "data_raw/votos/01_julio_2023/05022307.DAT",
             "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
             "renta_disponible": "data_raw/renta/30824.csv",
             "GINI_P80P20": "data_raw/renta/37677.csv",
@@ -29,6 +30,7 @@
         "raw": {
             "votos_candidaturas": "data_raw/votos/02_noviembre_2019/03021911.DAT",
             "Votos_candidaturas_agrupados": "data_raw/votos/02_noviembre_2019/06021911.DAT",
+            "votos_municipios_totales": "data_raw/votos/02_noviembre_2019/05021911.DAT",
             "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
             "renta_disponible": "data_raw/renta/30824.csv",
             "GINI_P80P20": "data_raw/renta/37677.csv",

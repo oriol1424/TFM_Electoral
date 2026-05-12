@@ -289,38 +289,101 @@ def procesar_votos_agrupados_por_padre(file_path_06: str, json_path: str, year_s
     return df_pivot
 
 
+def procesar_participacion_municipios(file_path_05: str, anio: str, output_file: str) -> pd.DataFrame:
+    """
+    Lee el fichero de totales municipales (05), extrae votos en blanco y calcula la participación.
+    Args:
+        file_path_05 (str): Ruta al archivo .DAT de totales municipales.
+        anio (str): Año de las elecciones para sufijos.
+        output_file (str): Ruta donde guardar el CSV.
+    Returns:
+        pd.DataFrame: DataFrame con ID_MUNICIPIO, VOTOS_BLANCO y PARTICIPACION.
+    """
+    # Especificaciones según formato MIR para el fichero tipo 05 (Totales de Municipio)
+    col_specs = [
+        (11, 13),   # Código I.N.E. de la provincia (Pos 12-13)
+        (13, 16),   # Código I.N.E. del municipio (Pos 14-16)
+        (16, 18),   # Número de distrito municipal (Pos 17-18)
+        (149, 157), # Censo de escrutinio (Pos 150-157)
+        (189, 197), # Votos en blanco (Pos 190-197)
+        (197, 205), # Votos nulos (Pos 198-205)
+        (205, 213)  # Votos a candidaturas (Pos 206-213)
+    ]
+    col_names = [
+        'PROVINCIA', 'MUNICIPIO', 'DISTRITO', 'CENSO', 
+        'VOTOS_BLANCO', 'VOTOS_NULOS', 'VOTOS_CANDIDATURAS'
+    ]
+
+    df = pd.read_fwf(file_path_05, colspecs=col_specs, names=col_names, dtype=str, encoding='latin-1')
+
+    # Filtrar por total municipal
+    df = df[df['DISTRITO'] == '99'].copy()
+
+    # Crear ID_MUNICIPIO
+    df['ID_MUNICIPIO'] = df['PROVINCIA'].str.zfill(2) + df['MUNICIPIO'].str.zfill(3)
+
+    # Convertir a numérico
+    for col in ['CENSO', 'VOTOS_BLANCO', 'VOTOS_NULOS', 'VOTOS_CANDIDATURAS']:
+        df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
+
+    # Calcular participación
+    # Votos emitidos = Blancos + Nulos + Candidaturas
+    df['VOTOS_EMITIDOS'] = df['VOTOS_BLANCO'] + df['VOTOS_NULOS'] + df['VOTOS_CANDIDATURAS']
+
+    # Evitar división por cero
+    df['PARTICIPACION'] = 0.0
+    mask = df['CENSO'] > 0
+    df.loc[mask, 'PARTICIPACION'] = (df.loc[mask, 'VOTOS_EMITIDOS'] / df.loc[mask, 'CENSO']) * 100
+
+    # Renombrar columnas con el año para consistencia con el resto del pipeline
+    df = df.rename(columns={
+        'VOTOS_BLANCO': f'V_BLANCOS_{anio}',
+        'PARTICIPACION': f'PARTICIPACION_{anio}'
+    })
+
+    df_result = df[['ID_MUNICIPIO', f'V_BLANCOS_{anio}', f'PARTICIPACION_{anio}']]
+
+    guardar_dataframe_csv(df_result, output_file)
+
+    return df_result
+
+
 # =============================================================================
 # 3. FUNCIÓN MAESTRA
 # =============================================================================
 
-def limpieza_votos_partidos(fichero_cis: str, fichero_03: str, fichero_06: str, ruta_guardado: str, anio: str = "2023") -> Tuple[pd.DataFrame, pd.DataFrame]:
+def limpieza_votos_partidos(fichero_cis: str, fichero_03: str, fichero_05: str, fichero_06: str, ruta_guardado: str, anio: str = "2023") -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Función orquestadora que ejecuta el pipeline completo de limpieza, agrupación y exportación.
     Args:
         fichero_cis (str): Ruta al archivo Excel del CIS.
         fichero_03 (str): Ruta al archivo de candidaturas (.DAT).
+        fichero_05 (str): Ruta al archivo de totales municipales (.DAT).
         fichero_06 (str): Ruta al archivo de votos municipales (.DAT).
         ruta_guardado (str): Directorio destino para guardar todos los artefactos.
         anio (str, optional): Año electoral para sufijos. Por defecto es "2023".
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: Tupla que contiene los DataFrames granular y agrupado.
+        Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]: DataFrames granular, agrupado y de participación.
     """
-    
+
     archivo_maestro_ideologia = os.path.join(ruta_guardado, f"maestro_ideologia_{anio}.json")
     archivo_arbol = os.path.join(ruta_guardado, f"arbol_candidaturas_{anio}.json")
     archivo_fusionado = os.path.join(ruta_guardado, f"candidaturas_ideologia_{anio}.json")
     archivo_csv_granular = os.path.join(ruta_guardado, f"Votos_Granularidad_Total_{anio}.csv")
     archivo_csv_padres = os.path.join(ruta_guardado, f"Votos_Agrupados_Padres_{anio}.csv")
-    
+    archivo_csv_participacion = os.path.join(ruta_guardado, f"participación_electoral_{anio}.csv")
+
     generar_json_desde_cis(fichero_cis, output_json=archivo_maestro_ideologia)
     exportar_a_json(fichero_03, output_file=archivo_arbol)
-    
+
     fusionar_ideologia_y_arbol(archivo_maestro_ideologia, archivo_arbol, output_file=archivo_fusionado)
-    
+
     df_votos_base = leer_votos_municipales(fichero_06)
     mapa_diccionario = extraer_mapa_siglas_del_json(archivo_fusionado)
     df_granular = generar_csv_alta_granularidad(df_votos_base, mapa_diccionario, anio, output_file=archivo_csv_granular)
-    
+
     df_padres = procesar_votos_agrupados_por_padre(fichero_06, archivo_fusionado, anio, output_file=archivo_csv_padres)
-    
-    return df_granular, df_padres
+
+    df_participacion = procesar_participacion_municipios(fichero_05, anio, output_file=archivo_csv_participacion)
+
+    return df_granular, df_padres, df_participacion

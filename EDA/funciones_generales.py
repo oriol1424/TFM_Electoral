@@ -86,6 +86,7 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
             df_obj['Cod_Muni'] = df_obj['Cod_Muni'].astype(str).str.zfill(5)
             auditar_municipios_extintos(df_obj, df_pob, df_name, 'Cod_Muni')
 
+    # --- CARGA DE VOTOS Y PARTICIPACIÓN ---
     votos_path = os.path.join(config["carpeta_votos"], f"Votos_Granularidad_Total_{anyo_str}.csv")
     if not os.path.exists(votos_path):
          votos_path = os.path.join(config["carpeta_votos"], "Votos_Granularidad_Total_2019.csv")
@@ -100,6 +101,15 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     cols_v = [c for c in df_votos.columns if c not in ['id_municipio', 'nombre_muni', 'fecha_eleccion', 'FECHA_ELECCION']]
     df_votos['votos totales'] = df_votos[cols_v].sum(axis=1)
 
+    # Carga de participación
+    participacion_path = os.path.join(config["carpeta_votos"], f"participación_electoral_{anyo_str}.csv")
+    if os.path.exists(participacion_path):
+        df_part = pd.read_csv(participacion_path, sep=';')
+        df_part['ID_MUNICIPIO'] = df_part['ID_MUNICIPIO'].astype(str).str.zfill(5)
+    else:
+        df_part = pd.DataFrame(columns=['ID_MUNICIPIO', f'V_BLANCOS_{anyo_str}', f'PARTICIPACION_{anyo_str}'])
+
+    # --- MERGES FINALES ---
     df_final = pd.merge(df_final, df_gini[['Cod_Muni', f'Índice de Gini {anyo_str}', f'Distribución de la renta P80/P20 {anyo_str}']], 
                         left_on='id_municipio', right_on='Cod_Muni', how='left')
     
@@ -125,6 +135,9 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
             df_final[col_ine] = df_final[col_ine].fillna(df_final[col_nav])
 
     df_final = pd.merge(df_final, df_votos[['id_municipio', 'votos totales']], on='id_municipio', how='left')
+    
+    # Merge de participación
+    df_final = pd.merge(df_final, df_part, left_on='id_municipio', right_on='ID_MUNICIPIO', how='left')
 
     df_final['superficie_km2'] = pd.to_numeric(df_final['superficie_km2'].astype(str).str.replace(',', '.'), errors='coerce')
     df_final['densidad poblacional'] = df_final['poblacion_total'] / df_final['superficie_km2']
@@ -140,7 +153,9 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         f'Renta neta media por persona {anyo_str}': 'renta media persona',
         f'salario {anyo_str}': 'salarios', f'pensiones {anyo_str}': 'pensiones',
         f'otros ingresos {anyo_str}': 'otros ingresos', f'otras prestaciones {anyo_str}': 'otras prestaciones',
-        f'prestaciones por desempleo {anyo_str}': 'desempleo'
+        f'prestaciones por desempleo {anyo_str}': 'desempleo',
+        f'V_BLANCOS_{anyo_str}': 'votos blancos',
+        f'PARTICIPACION_{anyo_str}': 'participacion'
     })
     
     columnas_ordenadas = [
@@ -148,7 +163,8 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         "rango tamaño población", "poblacion", "poblacion hombres", "poblacion mujeres",
         "densidad poblacional", "indice gini", "P80P20", "Renta media hogar",
         "renta media unidad consumo", "renta media persona", "salarios", "pensiones",
-        "otros ingresos", "otras prestaciones", "desempleo", "votos totales"
+        "otros ingresos", "otras prestaciones", "desempleo", "votos totales",
+        "votos blancos", "participacion"
     ]
     df_final = df_final[columnas_ordenadas]
 
