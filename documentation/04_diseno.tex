@@ -26,3 +26,58 @@ El proyecto se organiza en cuatro capas de datos y tres módulos lógicos de eje
 
 \subsection{Procedimientos Técnicos y Pipeline}
 El procedimiento operativo comienza con la ejecución de la función orquestadora \texttt{ETL\_limpieza} dentro de \texttt{main.ipynb}, la cual invoca secuencialmente los módulos de la carpeta \texttt{limpieza/}. Una vez consolidado el dataset maestro en memoria, el sistema procede al Análisis Exploratorio de Datos para validar correlaciones. Posteriormente, el motor de inferencia alimenta el módulo de simulación electoral, el cual traduce los votos predichos en escaños reales aplicando la normativa electoral vigente. Toda esta arquitectura se gestiona mediante el archivo \texttt{config\_path.json}, que centraliza las rutas y parámetros de configuración para garantizar la portabilidad del proyecto.
+
+\section{Análisis Exploratorio de Datos}
+
+\subsection{Distribución Demográfica y Desequilibrio Territorial}
+Tras examinar el estado del arte y el flujo de procesamiento de datos, es imperativo analizar los hallazgos derivados del análisis exploratorio. Este paso es fundamental para comprender la naturaleza de las variables que integrarán los modelos predictivos y para caracterizar el comportamiento electoral en las elecciones al Congreso de los Diputados, desplazando el foco de análisis hacia la unidad municipal ($n > 8.000$).
+
+\subsubsection{Estructura y Densidad Municipal}
+En primer lugar, se analiza la tipología de los municipios y su densidad poblacional. Tomando como referencia el Padrón Continuo de 2019, España contaba con una población de 47.026.208 habitantes.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/histograma_población_total_log.png}
+\end{figure}
+
+Como se observa en el histograma de distribución de frecuencias, la mayor concentración de municipios se sitúa en el intervalo comprendido entre $10^2$ y $10^3$ habitantes. En una escala lineal, esta variable presenta una fuerte asimetría con un marcado sesgo positivo, consecuencia de la existencia de un reducido número de grandes áreas metropolitanas frente a una vasta cantidad de pequeños núcleos rurales. No obstante, al aplicar una transformación logarítmica, la distribución adopta una morfología gaussiana, lo que confirma que la población municipal en España sigue una distribución log-normal.
+
+Para profundizar en esta estructura, se ha replicado la categorización oficial del INE, que segmenta los municipios en 11 grupos según su volumen demográfico. El análisis permite contrastar el peso relativo de cada categoría sobre el total de ayuntamientos frente a su contribución real a la población nacional.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/Barras_distribución_municipios.png}\\
+    \vspace{0.5cm}
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/barras_distribución_población.png}
+\end{figure}
+
+Los resultados revelan un marcado contraste demográfico: los municipios con menos de 500 habitantes representan el 49,1\% de las entidades locales, pero albergan únicamente al 1,6\% de la población. En el extremo opuesto, las grandes urbes (más de 100.000 habitantes) constituyen apenas el 0,8\% de los ayuntamientos, pero concentran el 40\% del total nacional. Destaca que la mayor acumulación demográfica reside en ciudades de tamaño medio-alto (entre 100.000 y 500.000 habitantes), que agrupan al 23,8\% de la población. Asimismo, la densidad media nacional se sitúa en 93,17 hab/km$^2$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/número_habitantes_extremos.png}
+\end{figure}
+
+Esta polarización se hace evidente al observar los valores extremos: mientras las dos principales metrópolis superan el millón de habitantes, los municipios más pequeños de la muestra no alcanzan los 10 residentes.
+
+\subsubsection{Análisis Provincial y Desequilibrio Representativo}
+Al elevar el nivel de agregación al plano provincial, Madrid y Barcelona se consolidan como los polos demográficos dominantes, acumulando el 26,2\% de la población total. El siguiente diagrama de dispersión analiza este fenómeno mediante tres dimensiones clave:
+
+\begin{itemize}
+    \item \textbf{Densidad Poblacional:} Representada por el tamaño de las esferas, permite identificar visualmente la saturación de habitantes por kilómetro cuadrado.
+    \item \textbf{Línea de Equilibrio (Bisectriz):} Esta línea discontinua proyecta una distribución teórica de proporcionalidad perfecta, donde el peso demográfico de una provincia es equivalente a su peso territorial.
+    \item \textbf{Identificación de Desequilibrios:} Las provincias situadas significativamente por debajo de la bisectriz (como Soria o Teruel) evidencian un desequilibrio territorial crítico: poseen una vasta superficie pero una reducida carga demográfica. Debido al sistema electoral español, que garantiza un mínimo de dos escaños por provincia, estos territorios presentan una sobrerrepresentación electoral en relación con su censo.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/pobacion_provincia.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/desequilibrio_provincial.png}
+\end{figure}
+
+Nota aclaratoria: Se ha optado por excluir a las ciudades autónomas de Ceuta y Melilla de la visualización del scatterplot. Debido a su naturaleza estrictamente urbana y su reducida extensión geográfica, sus densidades extremas distorsionaban la escala visual del análisis; no obstante, su peso estadístico ha sido computado de forma independiente, obteniendo Ceuta una densidad de 4.266,58 hab/km$^2$ y Melilla 6.072,33 hab/km$^2$.
+
+Por el contrario, las provincias situadas por encima de la línea de equilibrio, aquellas con alta densidad habitacional, experimentan una subrepresentación relativa. A pesar de elegir un mayor número de diputados en términos absolutos, el "coste en votos" por escaño es superior al de las provincias despobladas, alejándose de un reparto estrictamente proporcional.
+
+\subsection{Mercado laboral}
+Una vez caracterizada la distribución física y demográfica, se procede a evaluar las variables relativas al mercado laboral

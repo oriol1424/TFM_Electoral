@@ -26,14 +26,19 @@
 \contentsline {section}{\numberline {3.2}Arquitectura del Proyecto y Ciclo de Vida del Dato}{10}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Estructura de Almacenamiento y Repositorio}{10}{subsection.3.2.1}%
 \contentsline {subsection}{\numberline {3.2.2}Procedimientos Técnicos y Pipeline}{10}{subsection.3.2.2}%
-\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{12}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{12}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{12}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Puesta en Marcha}{13}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{14}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{15}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Conclusiones}{15}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Estudio Económico}{15}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Líneas de Futuro}{15}{section.7.3}%
-\contentsline {chapter}{Bibliografía}{16}{section.7.3}%
-\contentsline {chapter}{\numberline {A}Anexos}{19}{appendix.Alph1}%
+\contentsline {section}{\numberline {3.3}Análisis Exploratorio de Datos}{11}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Distribución Demográfica y Desequilibrio Territorial}{11}{subsection.3.3.1}%
+\contentsline {subsubsection}{Estructura y Densidad Municipal}{11}{subsection.3.3.1}%
+\contentsline {subsubsection}{Análisis Provincial y Desequilibrio Representativo}{13}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Mercado laboral}{15}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{16}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{16}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{16}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Puesta en Marcha}{17}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{18}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{19}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusiones}{19}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Estudio Económico}{19}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Líneas de Futuro}{19}{section.7.3}%
+\contentsline {chapter}{Bibliografía}{20}{section.7.3}%
+\contentsline {chapter}{\numberline {A}Anexos}{23}{appendix.Alph1}%

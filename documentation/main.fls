@@ -226,13 +226,55 @@ INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1pcr.fd
 INPUT C:\Program Files\MiKTeX\tex\latex\psnfss\t1pcr.fd
 INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrb8t.tfm
 INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8t.tfm
-INPUT .\05_analisis.tex
-INPUT .\05_analisis.tex
-INPUT 05_analisis.tex
 INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrb8t.vf
 INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrb8r.tfm
 INPUT C:\Program Files\MiKTeX\fonts\vf\adobe\courier\pcrr8t.vf
 INPUT C:\Program Files\MiKTeX\fonts\tfm\adobe\courier\pcrr8r.tfm
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\histograma_población_total_log.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\Barras_distribución_municipios.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\barras_distribución_población.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\número_habitantes_extremos.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\pobacion_provincia.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\imagenes_EDA\desequilibrio_provincial.png
+INPUT .\05_analisis.tex
+INPUT .\05_analisis.tex
+INPUT 05_analisis.tex
 INPUT .\06_puesta_en_marcha.tex
 INPUT .\06_puesta_en_marcha.tex
 INPUT 06_puesta_en_marcha.tex
@@ -257,6 +299,8 @@ INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi8.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmmi8.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr12.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr8.pfb
+INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmr8.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\public\amsfonts\cm\cmsy10.pfb
 INPUT C:\Program Files\MiKTeX\fonts\type1\urw\courier\ucrb8a.pfb
