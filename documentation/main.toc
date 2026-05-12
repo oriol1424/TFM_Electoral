@@ -31,14 +31,16 @@
 \contentsline {subsubsection}{Estructura y Densidad Municipal}{11}{subsection.3.3.1}%
 \contentsline {subsubsection}{Análisis Provincial y Desequilibrio Representativo}{14}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.3.2}Mercado laboral}{15}{subsection.3.3.2}%
-\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{17}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{17}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{17}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Puesta en Marcha}{18}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{19}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{20}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Conclusiones}{20}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Estudio Económico}{20}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Líneas de Futuro}{20}{section.7.3}%
-\contentsline {chapter}{Bibliografía}{21}{section.7.3}%
-\contentsline {chapter}{\numberline {A}Anexos}{24}{appendix.Alph1}%
+\contentsline {subsection}{\numberline {3.3.3}Renta e igualdad}{16}{subsection.3.3.3}%
+\contentsline {subsubsection}{Correlación y Validación de Métricas}{18}{subsection.3.3.3}%
+\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{20}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{20}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{20}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Puesta en Marcha}{21}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{22}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{23}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusiones}{23}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Estudio Económico}{23}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Líneas de Futuro}{23}{section.7.3}%
+\contentsline {chapter}{Bibliografía}{24}{section.7.3}%
+\contentsline {chapter}{\numberline {A}Anexos}{27}{appendix.Alph1}%

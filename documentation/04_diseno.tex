@@ -105,4 +105,36 @@ La tasa media de temporalidad nacional en el periodo de referencia se sitúa en 
     \item \textbf{Marco Regulatorio:} El mercado operaba bajo la normativa previa a la reforma laboral de 2021. Por tanto, los datos capturan de forma fidedigna la alta volatilidad contractual previa a las restricciones legales impuestas posteriormente a la contratación eventual.
 \end{itemize}
 
-El análisis de la temporalidad por sectores revela dinámicas heterogéneas. Mientras que la construcción presenta una baja dispersión ---indicando un comportamiento homogéneo en todo el territorio---, la industria muestra una variabilidad significativa. Es especialmente reseñable el comportamiento del sector servicios, que acumula la mayor cantidad de outliers. Esta dispersión evidencia realidades laborales polarizadas, condicionadas por la especialización turística o la capacidad comercial de cada entidad municipal.
+El análisis de la temporalidad por sectores revela dinámicas heterogéneas. Mientras que la construcción presenta una baja dispersión, indicando un comportamiento homogéneo en todo el territorio, la industria muestra una variabilidad significativa. Es especialmente reseñable el comportamiento del sector servicios, que acumula la mayor cantidad de outliers. Esta dispersión evidencia realidades laborales polarizadas, condicionadas por la especialización turística o la capacidad comercial de cada entidad municipal.
+
+\subsection{Renta e igualdad}
+A partir de este epígrafe, el análisis se ve condicionado por el secreto estadístico. El INE restringe la publicación de datos en municipios de baja densidad (habitualmente menores de 100 habitantes) para garantizar el anonimato de los ciudadanos. Asimismo, la gestión de los datos de la Comunidad Foral de Navarra se ha realizado a través del Instituto de Estadística de Navarra (Nastat). Debido a su régimen foral, los indicadores publicados no siempre presentan una equivalencia directa con el sistema común, lo que ha derivado en una reducción de la muestra final. En total, se han identificado 1.421 municipios con ausencia de datos (NA), lo que representa el 17,5\% del territorio nacional.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/NA_gini_P80P20.png}
+\end{figure}
+
+Para la interpretación de la desigualdad, se emplea el Índice de Gini, una medida que oscila entre 0 (igualdad total) y 100 (desigualdad máxima). Los resultados muestran que los municipios con mayor polarización presentan índices de Gini de entre 44 y 45,2, donde la población con mayores ingresos percibe hasta 4,6 veces más que el estrato más humilde. En el extremo opuesto, los municipios con mayor cohesión social muestran valores cercanos a 20,3, con una diferencia de ingresos reducida a un ratio de entre 1,8 y 1,9.
+
+Nota Metodológica: Para el cálculo de la diferencia de ingresos, se ha excluido a Navarra del indicador P80/P20 (ratio entre el percentil 80 y el 20), dado que el Nastat emplea el indicador S80/S20 (ratio de quintiles de renta). Aunque conceptualmente similares, su cálculo matemático difiere, impidiendo una comparación directa; no obstante, el Índice de Gini sí ha sido homogeneizado para todo el Estado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/histogramaBoxplot_gini.png}
+\end{figure}
+
+En el contexto español, un Gini inferior a 25 denota una igualdad muy alta, mientras que el rango 28-32 representa el estándar medio nacional. Valores superiores a 40 indican una fractura social severa. El histograma de distribución confirma una morfología de campana con una fuerte concentración en el intervalo de 25 a 30 puntos, lo que define la normalidad estadística de una desigualdad moderada en la mayoría del territorio.
+
+\subsubsection{Correlación y Validación de Métricas}
+Se ha realizado un análisis de la relación entre el Índice de Gini y el ratio $P80/P20$ para validar la consistencia de los datos de desigualdad.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/correlación_GINI_P80P20.png}
+\end{figure}
+
+Se ha obtenido un coeficiente de correlación de Pearson de $r = 0,790$. Este valor indica una correlación positiva fuerte, confirmando que la desigualdad en España se manifiesta predominantemente como una polarización de los extremos. Matemáticamente, este resultado valida que en los municipios donde el Índice de Gini se eleva, la brecha social se ensancha de forma predecible: el incremento de la renta en el bloque superior ocurre de forma simultánea al estancamiento del bloque inferior. Localidades como Villarluengo, con un ratio de 4,6x, tipifican este fenómeno.
+
+Desde la perspectiva de esta investigación, la consistencia estadística observada adquiere una relevancia teórica fundamental. Mientras que los modelos clásicos de ciencia política vinculaban de forma lineal el voto a la clase social, autores como Piketty (2019) argumentan que esta relación se ha transformado: el eje de conflicto ya no se divide estrictamente entre capital y trabajo, sino entre diferentes élites (la élite intelectual o 'izquierda brahmán' y la élite económica o 'derecha comerciante'). Por lo tanto, la inclusión de estas variables de desigualdad en el modelo permitirá contrastar si, en el contexto español, la polarización de rentas mantiene su capacidad predictiva tradicional o si, por el contrario, la reconfiguración de los electorados en torno a nuevos clivajes de élite ha mitigado el impacto de la desigualdad económica local como determinante directo del voto.
+
