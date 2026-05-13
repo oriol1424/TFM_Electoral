@@ -108,7 +108,7 @@ La tasa media de temporalidad nacional en el periodo de referencia se sitúa en 
 El análisis de la temporalidad por sectores revela dinámicas heterogéneas. Mientras que la construcción presenta una baja dispersión, indicando un comportamiento homogéneo en todo el territorio, la industria muestra una variabilidad significativa. Es especialmente reseñable el comportamiento del sector servicios, que acumula la mayor cantidad de outliers. Esta dispersión evidencia realidades laborales polarizadas, condicionadas por la especialización turística o la capacidad comercial de cada entidad municipal.
 
 \subsection{Renta e igualdad}
-\subsubsection{CDesigualdad}
+\subsubsection{Desigualdad}
 A partir de este epígrafe, el análisis se ve condicionado por el secreto estadístico. El INE restringe la publicación de datos en municipios de baja densidad (habitualmente menores de 100 habitantes) para garantizar el anonimato de los ciudadanos. Asimismo, la gestión de los datos de la Comunidad Foral de Navarra se ha realizado a través del Instituto de Estadística de Navarra (Nastat). Debido a su régimen foral, los indicadores publicados no siempre presentan una equivalencia directa con el sistema común, lo que ha derivado en una reducción de la muestra final. En total, se han identificado 1.421 municipios con ausencia de datos (NA), lo que representa el 17,5\% del territorio nacional.
 
 \begin{figure}[H]
@@ -167,5 +167,45 @@ Al contrastar la renta bruta frente a la renta neta, se evidencia el impacto del
 \end{figure}
 
 No obstante, desde una óptica metodológica, el uso de la Renta por Unidad de Consumo (cuyo pico modal se sitúa en los 16.000€) resulta ser la métrica más robusta. Este indicador permite corregir las economías de escala dentro de los hogares, ofreciendo una visión más fidedigna de los niveles de vida reales y presentando una mayor homogeneidad en gran parte del territorio nacional.
+
+\subsubsection{Composición de las Fuentes de Renta y su Dimensión Política}
+
+Para concluir el bloque de indicadores condicionados por el secreto estadístico, se analizan las fuentes de ingresos municipales. Esta desagregación es fundamental, ya que la prevalencia de pensiones frente a salarios puede señalar clivajes electorales profundos: desde un voto orientado a la estabilidad del sistema público de previsión social hasta uno más sensible a las dinámicas del mercado laboral y la competitividad económica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/Barras_tipos_ingresos.png}\hfill
+    \includegraphics[width=0.48\textwidth]{imagenes_EDA/Boxplot_tipos_ingresos.png}
+\end{figure}
+
+La distribución del \textbf{Porcentaje Medio de Ingresos} actúa como un indicador del promedio nacional y revela una jerarquía clara: España es, eminentemente, una economía basada en el trabajo. Los salarios constituyen el 52,6\% de los ingresos medios, seguidos por las pensiones con un 26,9\%. Otras fuentes, como las prestaciones por desempleo o las ayudas sociales, aparecen como componentes residuales que no alcanzan el 5\% del peso total.
+
+Sin embargo, el \textit{boxplot} revela que esta uniformidad es solo aparente. Aunque la mediana del salario es mayoritaria, presenta una \textbf{volatilidad intermunicipal} extrema. Es especialmente significativo el comportamiento de las pensiones y otras rentas: a pesar de tener medianas bajas, el gráfico muestra una alta densidad de \textit{outliers} en el decil superior. Esto confirma la existencia de municipios con naturalezas económicas opuestas; verdaderas "islas" demográficas donde la dependencia de la prestación pública o de las rentas patrimoniales anula la relevancia del mercado laboral privado.
+
+\subsubsection{Segmentación según Tamaño del Municipio}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/tipos_ingresos_municipios.png}
+\end{figure}
+
+Al analizar la estructura de ingresos por rango poblacional, se observa una tendencia clara: el crecimiento del municipio correlaciona con una estructura económica más predecible y centrada en el salario.
+
+\begin{itemize}
+    \item \textbf{Municipios de baja densidad (<100 a 1.000 hab.):} Es donde reside la mayor volatilidad económica. La cuota salarial es sensiblemente inferior y la dependencia de las pensiones es mucho más elevada. En los núcleos de menos de 100 habitantes, la brecha entre salario y pensiones se estrecha críticamente, reflejando el envejecimiento demográfico de la "España vaciada".
+    \item \textbf{Áreas Metropolitanas (>100.000 a >500.000 hab.):} El escenario se invierte. El salario se dispara por encima del 60\% y la dispersión se reduce drásticamente. Son entornos de ingresos homogéneos, estrechamente vinculados a la actividad profesional y al sector servicios avanzado.
+\end{itemize}
+
+\subsubsection{Posibles Implicaciones para la Modelización Electoral}
+
+Esta segmentación por tamaños sugiere dos frentes de batalla electoral muy distintos:
+
+\begin{itemize}
+    \item \textbf{El "Voto Senior" y la Seguridad Social:} En municipios pequeños, donde las pensiones representan el eje vital (con medianas que rozan el 40\%), el electorado muestra una sensibilidad extrema a los mensajes sobre la sostenibilidad del sistema público de previsión. La supervivencia económica depende directamente del Estado, lo que suele traducirse en un voto que prima la seguridad y la aversión al riesgo institucional.
+    \item \textbf{El "Voto Activo" Urbano:} En las metrópolis, el motor es el salario. Este electorado es más receptivo a políticas de presión fiscal (IRPF), coste de la vida y dinamismo empresarial. En estas zonas, los programas centrados exclusivamente en las pensiones pueden percibirse como secundarios frente a la gestión de la economía productiva.
+    \item \textbf{Transversalidad de las Rentas de Capital:} Resulta notable que la categoría de "otros ingresos" (rentas y capital) mantenga valores atípicos constantes independientemente del tamaño del municipio. Esto sugiere un perfil de votante con alto patrimonio distribuido de forma ubicua, cuya motivación de voto podría estar ligada a la fiscalidad patrimonial, con independencia de su entorno geográfico.
+\end{itemize}
+
+En conclusión, los datos sugieren que una estrategia electoral unidimensional ignora la realidad económica del territorio: los incentivos que movilizan a una urbe de 500.000 habitantes (salario) son diametralmente opuestos a los que rigen en un municipio de 500 residentes (pensiones).
 
 

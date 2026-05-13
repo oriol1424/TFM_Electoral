@@ -1,9 +1,9 @@
 # Fdb version 4
-["pdflatex"] 1778624644.04577 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778624647.46048 0
+["pdflatex"] 1778660959.01385 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778660962.50926 0
   "01_resumen.tex" 1778235445 2479 2607d25b43a37487d406de78634ec4b9 ""
   "02_introduccion.tex" 1778236980 3631 b39b278fff81a4af55cedc66835fe5f6 ""
   "03_marco_teorico.tex" 1778520353 10104 0229b218adb47b2d7b957d8b7b87f0e0 ""
-  "04_diseno.tex" 1778624639 19909 16d9734319a0b9070551b204792bc4ef ""
+  "04_diseno.tex" 1778660954 24596 ee53135e52668f37ab5eb98a7c56a52d ""
   "05_analisis.tex" 1778232404 331 af03fe70ec0edf17ec91ac198579073c ""
   "06_puesta_en_marcha.tex" 1778232404 161 db3d52b41fef0aba450b7cd0de46dea8 ""
   "07_etica.tex" 1778232404 162 99ff17972b10ad2ff066d5454043736f ""
@@ -124,6 +124,8 @@
   "C:/Users/oriol/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1776630362 13340205 08a86eb87b26f7f7d190d3ff1b9529ff ""
   "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" 1778616977 1352 0af065ac2d27dc205894db694ca752e6 ""
   "imagenes_EDA/Barras_distribución_municipios.png" 1778604126 49286 530b6cbc68b591dfc8999c41edc5126f ""
+  "imagenes_EDA/Barras_tipos_ingresos.png" 1778657428 29535 d7392836d258f876cfb9b243207741e7 ""
+  "imagenes_EDA/Boxplot_tipos_ingresos.png" 1778657456 30044 ef402c06f7850aa9fa48113b2afddacb ""
   "imagenes_EDA/NA_gini_P80P20.png" 1778618130 40021 9089dbb3b36c58a11732a2d4be495f64 ""
   "imagenes_EDA/barras_distribución_población.png" 1778604157 48240 41691a3d408980e828bb9387d9a73aa2 ""
   "imagenes_EDA/boxplot_temporalidad.png" 1778615728 34388 2de42c9ba3d44e0273ce1f2233db40a9 ""
@@ -142,11 +144,12 @@
   "imagenes_EDA/renta_neta_media_persona.png" 1778623117 39612 d6a342dbe6c4f54b944aa776fa0e4744 ""
   "imagenes_EDA/sector_laboral_predominancia.png" 1778615616 30379 55c62df850f6daa62bbf9e9b08ecf60d ""
   "imagenes_EDA/temporalidad por genero.png" 1778615740 19719 47cd78dd39798c8c11576b867fd60500 ""
+  "imagenes_EDA/tipos_ingresos_municipios.png" 1778658092 127650 eb1bf99715ed6586b21dfcd3fe4fbe46 ""
   "imagenes_EDA/unidad_consumo.png" 1778623540 35813 5dae1b8d73ba40a014dc445e34cdcf07 ""
-  "main.aux" 1778624647 8906 706229c098ce4083a060dcccb7460e6e "pdflatex"
-  "main.out" 1778624647 10847 383b5201f705bdcbd1a177f5bb1f4773 "pdflatex"
+  "main.aux" 1778660962 9351 ac75d3d534667660eb1a833f3886ee23 "pdflatex"
+  "main.out" 1778660962 10847 383b5201f705bdcbd1a177f5bb1f4773 "pdflatex"
   "main.tex" 1778616977 1352 0af065ac2d27dc205894db694ca752e6 ""
-  "main.toc" 1778624647 4744 3a87874af4d6533084232e5c34439cb0 "pdflatex"
+  "main.toc" 1778660962 5066 0d11cefefcf71140bf8529681104027e "pdflatex"
   (generated)
   "main.aux"
   "main.log"
