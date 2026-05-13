@@ -208,4 +208,49 @@ Esta segmentación por tamaños sugiere dos frentes de batalla electoral muy dis
 
 En conclusión, los datos sugieren que una estrategia electoral unidimensional ignora la realidad económica del territorio: los incentivos que movilizan a una urbe de 500.000 habitantes (salario) son diametralmente opuestos a los que rigen en un municipio de 500 residentes (pensiones).
 
+\subsection{Análisis de la Variable Objetivo: Comportamiento Electoral}
+
+Una vez examinados los factores socioeconómicos, se procede a analizar la \textbf{variable objetivo} de la investigación: el voto. Este análisis comienza por la \textbf{participación electoral}, factor determinante que modula el impacto de las variables predictoras en el resultado final.
+
+\subsubsection{Dinámicas de Participación Electoral}
+
+La distribución de la participación electoral en los comicios de noviembre de 2019 sigue una morfología de campana de Gauss, lo que refleja una notable homogeneidad en el comportamiento del electorado español.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/histograma_participación_electoral.png}
+\end{figure}
+
+El grueso de los municipios se concentra en el intervalo del 70-75\%, alcanzando su frecuencia máxima en torno al 72\%. Aunque se identifican casos atípicos en los extremos (40\% y 100\%), su peso numérico es marginal, confirmando una tendencia central sólida y una baja dispersión generalizada en el territorio.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/participación_municipios.png}
+\end{figure}
+
+Al desglosar la participación por rango poblacional, se observa que la mediana permanece constante —cercana al 70\%— en todos los estratos. No obstante, la variabilidad disminuye a medida que aumenta el tamaño poblacional: en las grandes ciudades (>500.000 habitantes), el comportamiento es extremadamente homogéneo y carece de valores atípicos. Por el contrario, en los municipios de menor tamaño, la dispersión es máxima y los \textit{outliers} tienden a ser descendentes. Esto indica que los fenómenos de desmovilización extrema son una particularidad de los núcleos rurales pequeños, con la única excepción del segmento inferior a los 100 habitantes, donde el comportamiento es más errático.
+
+\subsubsection{El Fenómeno del Voto en Blanco y sus Implicaciones Legales}
+
+Es necesario precisar que una alta participación no se traduce íntegramente en apoyo a formaciones políticas. El \textbf{voto en blanco} (voto válido que no respalda ninguna candidatura) juega un rol técnico crucial en el sistema electoral español.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/distribución_voto_blanco.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagenes_EDA/distribución_voto_blanco_municipios.png}
+\end{figure}
+
+El histograma del voto en blanco presenta un \textbf{sesgo positivo extremo}, donde la inmensa mayoría de las localidades registran valores inferiores al 2-3\%. Esto confirma que se trata de una opción minoritaria en el conjunto nacional.
+
+Sin embargo, el análisis mediante \textit{boxplots} revela matices demográficos críticos. En los municipios de menos de 100 habitantes se registran anomalías estadísticas donde el voto en blanco llega a superar el 60\%. Este fenómeno no suele responder a una movilización política coordinada, sino a un \textbf{efecto de escala} en censos reducidos o a situaciones de vacío político por la ausencia de candidaturas locales. Esta realidad contrasta con la estabilidad urbana: a partir de los 1.000 habitantes, las desviaciones desaparecen y el porcentaje de voto en blanco se estabiliza, sugiriendo que su uso como herramienta de protesta no es una práctica extendida en las grandes urbes.
+
+\textbf{Impacto en la Ley D'Hondt}
+
+Desde una perspectiva jurídica y estadística, este comportamiento tiene una implicación profunda. Según la normativa electoral española, el voto en blanco computa como voto válido, lo que incrementa el denominador para el cálculo del \textbf{umbral del 3\%} necesario para acceder al reparto de escaños en la circunscripción provincial. En consecuencia, una concentración elevada de voto en blanco eleva la barrera electoral real, dificultando la entrada de partidos minoritarios y favoreciendo indirectamente a las formaciones mayoritarias mediante una concentración del voto útil.
+
+
 
