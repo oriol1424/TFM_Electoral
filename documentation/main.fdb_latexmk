@@ -1,8 +1,8 @@
 # Fdb version 4
-["pdflatex"] 1778667176.61102 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778667180.57335 0
+["pdflatex"] 1778668079.88506 "c:/Users/oriol/OneDrive/Escritorio/Master/TFM/TFM_Electoral/documentation/main.tex" "main.pdf" "main" 1778668083.54914 0
   "01_resumen.tex" 1778235445 2479 2607d25b43a37487d406de78634ec4b9 ""
   "02_introduccion.tex" 1778236980 3631 b39b278fff81a4af55cedc66835fe5f6 ""
-  "03_marco_teorico.tex" 1778520353 10104 0229b218adb47b2d7b957d8b7b87f0e0 ""
+  "03_marco_teorico.tex" 1778668071 10137 4c15b069abc2b0eaad16c53586d0d79d ""
   "04_diseno.tex" 1778667171 30791 05832780efc2ef2ef273f633ec81d5aa ""
   "05_analisis.tex" 1778232404 331 af03fe70ec0edf17ec91ac198579073c ""
   "06_puesta_en_marcha.tex" 1778232404 161 db3d52b41fef0aba450b7cd0de46dea8 ""
@@ -151,10 +151,10 @@
   "imagenes_EDA/tipos_ingresos_municipios.png" 1778658092 127650 eb1bf99715ed6586b21dfcd3fe4fbe46 ""
   "imagenes_EDA/top_candidaturas_votadas.png" 1778666288 66545 c5b748b50401e8476acd7859e39f302d ""
   "imagenes_EDA/unidad_consumo.png" 1778623540 35813 5dae1b8d73ba40a014dc445e34cdcf07 ""
-  "main.aux" 1778667180 9926 7752fb7634b121e69d6c33959d4f57d1 "pdflatex"
-  "main.out" 1778667180 11220 163f3b9981af3a21cd8dfd780841d12b "pdflatex"
+  "main.aux" 1778668083 9694 97c33e5f14426a03d685d95890c47812 "pdflatex"
+  "main.out" 1778668083 6825 5affecaba71f3c57a34a8e6f6dcaa7c4 "pdflatex"
   "main.tex" 1778616977 1352 0af065ac2d27dc205894db694ca752e6 ""
-  "main.toc" 1778667180 5477 9e38f64ceef01fa86decf9516537e64a "pdflatex"
+  "main.toc" 1778668083 5245 23907db4a6ff6f2183d1445f609254ed "pdflatex"
   (generated)
   "main.aux"
   "main.log"

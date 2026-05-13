@@ -2,43 +2,43 @@
 
 \section{Clivajes, Élites y la Teoría del Voto Económico}
 
-\subsection{La metamorfosis de los clivajes: Del modelo de clases al paradigma de Piketty}
+\subsubsection{La metamorfosis de los clivajes: Del modelo de clases al paradigma de Piketty}
 El estudio del comportamiento electoral ha transitado desde los modelos deterministas de la sociología clásica, que vinculaban el voto casi exclusivamente a identidades estables de clase y religión, como lo planteaba Lipset \cite{lipset1959}, hacia un marco donde la precisión predictiva depende de la integración de variables estructurales dinámicas, tal como exponen Alaminos-Fernández y Alaminos \cite{alaminos2023}. En este cambio de paradigma, la obra de Piketty \cite{piketty2018, piketty2021} resulta esencial al proponer que las democracias occidentales han evolucionado hacia un sistema de ``élites múltiples''.
 
 Bajo esta premisa, el conflicto político actual se articula en torno a dos ejes: la ``izquierda brahmán'' (clase intelectual con alta educación) y la ``derecha comerciante'' (élites con alta riqueza). Esta fragmentación se ve acentuada por la percepción de abandono de las clases trabajadoras, quienes, al sentirse traicionadas por la izquierda tradicional, oscilan entre la abstención y el apoyo a nuevos partidos populistas, como argumenta Piketty \cite{piketty2021}. En España, este fenómeno se traduce en una diversificación del voto donde la narrativa de ``crisis y victimización'' es capitalizada por formaciones emergentes para movilizar el resentimiento ciudadano (Alcaide Lara \cite{alcaide}).
 
-\subsection{El voto económico a la primacía de los \textit{fundamentals} estructurales}
+\subsubsection{El voto económico a la primacía de los \textit{fundamentals} estructurales}
 Si Piketty define a los sujetos, la teoría del voto económico explica el mecanismo de rendición de cuentas. Tradicionalmente, se postula que el elector premia o castiga al gobierno según la prosperidad material, un enfoque descrito por Lewis-Beck y Stegmaier \cite{lewisbeck2019}. No obstante, la investigación internacional sugiere que los indicadores económicos directos pueden ser predictores débiles si no se corrigen los sesgos de las encuestas, como indican Kennedy et al. \cite{kennedy2017}.
 
 Por ello, este TFM prioriza el uso de los \textit{fundamentals} o variables estructurales objetivas (renta, desempleo, educación) sobre la demoscopia tradicional. La viabilidad de este enfoque ha sido validada en el contexto español por Albaladejo \cite{albaladejo2025}, quien demuestra que es posible predecir el bloque ganador a nivel municipal con altísima precisión sin recurrir a sondeos, basándose únicamente en la ``huella dactilar'' socioeconómica del territorio.
 
 \section{El Factor Territorial: La Geografía del Descontento y la ``España Vaciada''}
 
-\subsection{El municipio como unidad de análisis: Heterogeneidad, INE y el archivo SEA}
+\subsubsection{El municipio como unidad de análisis: Heterogeneidad, INE y el archivo SEA}
 La mayoría de los modelos convencionales operan a nivel provincial, escala que diluye las profundas asimetrías internas del territorio. Esta investigación utiliza el municipio como unidad mínima ($n > 8.000$) para capturar dinámicas micropolíticas invisibles en análisis agregados. Este nivel de detalle es posible gracias al INE que publica los datos municipales, además estudios como \textit{Spanish Electoral Archive} (SEA), que ha homogeneizado los resultados históricos en España hasta el nivel de mesa electoral (Pavía y Cantarino \cite{pavia2021}), permitiendo una granularidad estadística sin precedentes, en caso de querer estudiar la muestra usando más años como referencia.
 
-\subsection{La ``venganza'' de los territorios olvidados y el sesgo de la despoblación}
+\subsubsection{La ``venganza'' de los territorios olvidados y el sesgo de la despoblación}
 El auge de nuevos comportamientos electorales responde a lo que Rodríguez-Pose \cite{rodriguezpose2018} denomina ``la venganza de los lugares que no importan'': una reacción de los territorios en declive demográfico contra las élites urbanas. En España, este fenómeno se manifiesta en la ``España vaciada'', donde la migración de los jóvenes hacia las urbes deja un censo envejecido y masculinizado que tiende a concentrar el voto en opciones conservadoras, fenómeno analizado por Sánchez-García y Rodon \cite{sanchez2023}. Integrar estas variables de vulnerabilidad y trayectoria histórica permite al modelo ir más allá de las métricas económicas clásicas, tal como sugiere Lastras Rodríguez \cite{lastras2024}. Por lo tanto es importante tener en cuenta la edad media de los municipios especialmente de los rurales.
 
 \section{Fronteras Metodológicas: Modelización Bayesiana vs. Gradient Boosting}
 
-\subsection{Inferencia Bayesiana y datos composicionales en sistemas multipartidistas}
+\subsubsection{Inferencia Bayesiana y datos composicionales en sistemas multipartidistas}
 Predecir resultados en sistemas multipartidistas requiere modelos capaces de gestionar la incertidumbre y la naturaleza composicional del voto (donde la suma de las partes siempre es 100\%). Los enfoques Bayesianos Dinámicos (Stoetzer et al. \cite{stoetzer2019}) y los modelos jerárquicos bayesianos (Deb et al. \cite{deb2024}) son fundamentales aquí, ya que permiten estabilizar estimaciones en municipios pequeños mediante el uso de \textit{priors} estructurales y secuencias multinomiales, incluso ante información parcial. Esta metodología es ideal para tratar el voto como un todo coherente, como exponen Aguilar López y Aquino López \cite{aguilar2015}.
 
-\subsection{Machine Learning y la captura de no-linealidad en el bienestar social}
+\subsubsection{Machine Learning y la captura de no-linealidad en el bienestar social}
 Como contraparte, algoritmos de Machine Learning como XGBoost o Random Forest destacan por su capacidad para detectar interacciones no lineales entre variables socioeconómicas, tal y como señalan Alaminos-Fernández y Alaminos \cite{alaminos2023}. Experiencias internacionales recientes han demostrado que combinar estos algoritmos con transformaciones matemáticas de datos composicionales permite mapear con éxito el espectro ideológico izquierda-derecha a nivel local (Leal Varón et al. \cite{leal2025}). Mientras el enfoque Bayesiano garantiza robustez teórica y gestión de la incertidumbre, el Gradient Boosting ofrece una precisión superior en la captura de patrones complejos de bienestar y comportamiento electoral urbano (Lastras Rodríguez \cite{lastras2024}).
 
 \section{Arquitectura Institucional y Simulación de Escaños}
 
-\subsection{La Ley D'Hondt y la Geografía de la Representación: El Doble Filtro Electoral}
+\subsubsection{La Ley D'Hondt y la Geografía de la Representación: El Doble Filtro Electoral}
 El sistema electoral para el Congreso de los Diputados, regulado por la LOREG, opera bajo un modelo de proporcionalidad corregida que transforma la realidad socioeconómica municipal en poder legislativo a través de 52 distritos independientes. Para que la simulación de escaños de este TFM sea robusta, el modelo debe gestionar la interacción entre la barrera legal mínima y la magnitud de las circunscripciones.
 
-\subsection{El reparto inicial y la desigualdad del voto}
+\subsubsection{El reparto inicial y la desigualdad del voto}
 De los 350 escaños totales, la asignación no es puramente poblacional. El sistema otorga un mínimo inicial de dos escaños a cada provincia, mientras que las ciudades autónomas de Ceuta y Melilla disponen de un único escaño cada una (que opera de facto como un sistema mayoritario uninominal). Los 248 escaños restantes se distribuyen proporcionalmente según la población.
 
 Esta regla genera una sobrerrepresentación de las provincias pequeñas: mientras que en Madrid o Barcelona se necesitan aproximadamente 130.000 votos para obtener un diputado, en provincias como Teruel o Soria la cifra desciende por debajo de los 40.000. Para un modelo de Machine Learning, esto implica que el error de predicción en municipios de provincias pequeñas tiene un impacto proporcionalmente mayor en la composición final del Congreso que en las grandes urbes.
 
-\subsection{La Barrera Electoral Legal del 3\%}
+\subsubsection{La Barrera Electoral Legal del 3\%}
 El artículo 163 de la LOREG estipula que solo se consideran para el reparto aquellas candidaturas que alcancen, al menos, el 3\% de los votos válidos en la circunscripción provincial, cualquier partido que tras la agregación municipal no alcance este 3\% provincial es excluido automáticamente del proceso, y sus votos se consideran ``perdidos'' a efectos de representación. En este punto, el voto en blanco adquiere una relevancia crítica para las fuerzas minoritarias: al ser considerado voto válido, se incluye en el denominador del cálculo del porcentaje.
 
 Efecto Matemático: Un incremento en el voto en blanco eleva el número absoluto de votos necesarios para superar el umbral del 3\%. Si $V_{c}$ son los votos a candidaturas y $V_{b}$ los votos en blanco, la barrera legal $B_{l}$ se define como:
@@ -47,12 +47,12 @@ B_{l} = 0.03 \times (V_{c} + V_{b})
 \end{equation}
 Por tanto, una elevada participación de voto en blanco perjudica directamente a los partidos pequeños que orbitan cerca del margen de exclusión, impidiendo su entrada en el reparto de D'Hondt.
 
-\subsection{El Algoritmo D'Hondt y el ``Umbral Natural''}
+\subsubsection{El Algoritmo D'Hondt y el ``Umbral Natural''}
 Una vez superado el filtro del 3\%, los escaños se distribuyen mediante la Ley D'Hondt, utilizando la fórmula de divisores sucesivos:
 \begin{equation}
 \text{Cociente} = \frac{V_{i}}{s_{i} + 1}
 \end{equation}
 En provincias de magnitud baja (que reparten entre 2 y 5 escaños), el umbral natural, el porcentaje real de votos necesarios para obtener el último escaño disponible, suele oscilar entre el 15\% y el 25\% (Montero y Riera \cite{montero2009}). En estos casos, la barrera legal del 3\% es una anécdota estadística, ya que un partido puede triplicar ese porcentaje y aun así quedar fuera del Parlamento.
 
-\subsection{La ``España Vaciada'' y el Sesgo de Concentración}
+\subsubsection{La ``España Vaciada'' y el Sesgo de Concentración}
 El impacto de la despoblación es determinante: el sistema penaliza a la tercera y cuarta fuerza política nacional si su voto está disperso, beneficiando a partidos que logran concentrar sus apoyos en zonas rurales o a partidos regionalistas con bases sólidas en provincias específicas (Lago y Martínez \cite{lago2013}). Como indican Sánchez-García y Rodon \cite{sanchez2023}, este diseño tiende a sobrerrepresentar a las opciones conservadoras que dominan el ámbito rural, donde los escaños son ``más baratos'' en términos de votos absolutos.

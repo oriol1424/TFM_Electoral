@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  13 MAY 2026 12:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  13 MAY 2026 12:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -395,11 +395,11 @@ LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
  [3
 
-] [4])
+])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [5] (02_introduccion.tex
+ [4] (02_introduccion.tex
 Cap\'{\i }tulo 1.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
@@ -412,14 +412,14 @@ l.15
 Cap\'{\i }tulo 2.
 [3
 
-] [4]
+]
 Overfull \hbox (18.09491pt too wide) in paragraph at lines 23--23
 |[]\T1/ptm/b/n/17.28 Fronteras Me-to-do-l�-gi-cas: Mo-de-li-za-ci�n Ba-ye-sia-na vs. Gra-
  []
 
-[5] [6]) (04_diseno.tex [7] [8]
+[4] [5] [6]) (04_diseno.tex [7]
 Cap\'{\i }tulo 3.
-[9
+[8
 
 ]
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 21.
@@ -435,178 +435,178 @@ Overfull \hbox (6.11755pt too wide) in paragraph at lines 28--29
 \T1/ptm/m/n/12 den-tro de \T1/pcr/m/n/12 main.ipynb\T1/ptm/m/n/12 , la cual in-vo-ca se-cuen-cial-men-te los m�-du-los de la car-pe-ta \T1/pcr/m/n/12 limpieza/\T1/ptm/m/n/12 .
  []
 
-[10]
-<imagenes_EDA/histograma_población_total_log.png, id=358, 711.1368pt x 422.0568pt>
+[9]
+<imagenes_EDA/histograma_población_total_log.png, id=292, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/histograma_población_total_log.png Graphic file (type png)
 <use imagenes_EDA/histograma_población_total_log.png>
 Package pdftex.def Info: imagenes_EDA/histograma_población_total_log.png  used on input line 40.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [11 <./imagenes_EDA/histograma_población_total_log.png>]
-<imagenes_EDA/Barras_distribución_municipios.png, id=366, 711.1368pt x 422.0568pt>
+ [10 <./imagenes_EDA/histograma_población_total_log.png>]
+<imagenes_EDA/Barras_distribución_municipios.png, id=300, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/Barras_distribución_municipios.png Graphic file (type png)
 <use imagenes_EDA/Barras_distribución_municipios.png>
 Package pdftex.def Info: imagenes_EDA/Barras_distribución_municipios.png  used on input line 49.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
-<imagenes_EDA/barras_distribución_población.png, id=367, 711.1368pt x 422.0568pt>
+<imagenes_EDA/barras_distribución_población.png, id=301, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/barras_distribución_población.png Graphic file (type png)
 <use imagenes_EDA/barras_distribución_población.png>
 Package pdftex.def Info: imagenes_EDA/barras_distribución_población.png  used on input line 51.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [12 <./imagenes_EDA/Barras_distribución_municipios.png> <./imagenes_EDA/barras_distribución_población.png>]
-<imagenes_EDA/número_habitantes_extremos.png, id=374, 313.67188pt x 336.25626pt>
+ [11 <./imagenes_EDA/Barras_distribución_municipios.png> <./imagenes_EDA/barras_distribución_población.png>]
+<imagenes_EDA/número_habitantes_extremos.png, id=308, 313.67188pt x 336.25626pt>
 File: imagenes_EDA/número_habitantes_extremos.png Graphic file (type png)
 <use imagenes_EDA/número_habitantes_extremos.png>
 Package pdftex.def Info: imagenes_EDA/número_habitantes_extremos.png  used on input line 58.
 (pdftex.def)             Requested size: 364.19667pt x 390.43721pt.
- [13 <./imagenes_EDA/número_habitantes_extremos.png>]
-<imagenes_EDA/pobacion_provincia.png, id=381, 711.1368pt x 422.0568pt>
+ [12 <./imagenes_EDA/número_habitantes_extremos.png>]
+<imagenes_EDA/pobacion_provincia.png, id=314, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/pobacion_provincia.png Graphic file (type png)
 <use imagenes_EDA/pobacion_provincia.png>
 Package pdftex.def Info: imagenes_EDA/pobacion_provincia.png  used on input line 74.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/desequilibrio_provincial.png, id=382, 711.1368pt x 566.5968pt>
+<imagenes_EDA/desequilibrio_provincial.png, id=315, 711.1368pt x 566.5968pt>
 File: imagenes_EDA/desequilibrio_provincial.png Graphic file (type png)
 <use imagenes_EDA/desequilibrio_provincial.png>
 Package pdftex.def Info: imagenes_EDA/desequilibrio_provincial.png  used on input line 75.
 (pdftex.def)             Requested size: 218.51521pt x 174.09563pt.
- [14 <./imagenes_EDA/pobacion_provincia.png> <./imagenes_EDA/desequilibrio_provincial.png>]
-<imagenes_EDA/mercado_laboral_contratos.png, id=389, 419.8887pt x 389.5353pt>
+ [13 <./imagenes_EDA/pobacion_provincia.png> <./imagenes_EDA/desequilibrio_provincial.png>]
+<imagenes_EDA/mercado_laboral_contratos.png, id=322, 419.8887pt x 389.5353pt>
 File: imagenes_EDA/mercado_laboral_contratos.png Graphic file (type png)
 <use imagenes_EDA/mercado_laboral_contratos.png>
 Package pdftex.def Info: imagenes_EDA/mercado_laboral_contratos.png  used on input line 87.
 (pdftex.def)             Requested size: 218.51521pt x 202.71999pt.
-<imagenes_EDA/sector_laboral_predominancia.png, id=390, 711.1368pt x 422.0568pt>
+<imagenes_EDA/sector_laboral_predominancia.png, id=323, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/sector_laboral_predominancia.png Graphic file (type png)
 <use imagenes_EDA/sector_laboral_predominancia.png>
 Package pdftex.def Info: imagenes_EDA/sector_laboral_predominancia.png  used on input line 88.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/boxplot_temporalidad.png, id=391, 711.1368pt x 422.0568pt>
+<imagenes_EDA/boxplot_temporalidad.png, id=324, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/boxplot_temporalidad.png Graphic file (type png)
 <use imagenes_EDA/boxplot_temporalidad.png>
 Package pdftex.def Info: imagenes_EDA/boxplot_temporalidad.png  used on input line 97.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/temporalidad por genero.png, id=392, 422.0568pt x 349.7868pt>
+<imagenes_EDA/temporalidad por genero.png, id=325, 422.0568pt x 349.7868pt>
 File: imagenes_EDA/temporalidad por genero.png Graphic file (type png)
 <use imagenes_EDA/temporalidad por genero.png>
 Package pdftex.def Info: imagenes_EDA/temporalidad por genero.png  used on input line 98.
 (pdftex.def)             Requested size: 218.51521pt x 181.10027pt.
- [15 <./imagenes_EDA/mercado_laboral_contratos.png> <./imagenes_EDA/sector_laboral_predominancia.png>] [16 <./imagenes_EDA/boxplot_temporalidad.png> <./imagenes_EDA/temporalidad por genero.png>]
-<imagenes_EDA/NA_gini_P80P20.png, id=405, 711.1368pt x 422.0568pt>
+ [14 <./imagenes_EDA/mercado_laboral_contratos.png> <./imagenes_EDA/sector_laboral_predominancia.png>] [15 <./imagenes_EDA/boxplot_temporalidad.png> <./imagenes_EDA/temporalidad por genero.png>]
+<imagenes_EDA/NA_gini_P80P20.png, id=339, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/NA_gini_P80P20.png Graphic file (type png)
 <use imagenes_EDA/NA_gini_P80P20.png>
 Package pdftex.def Info: imagenes_EDA/NA_gini_P80P20.png  used on input line 116.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [17 <./imagenes_EDA/NA_gini_P80P20.png>]
-<imagenes_EDA/histogramaBoxplot_gini.png, id=411, 711.1368pt x 421.3341pt>
+ [16 <./imagenes_EDA/NA_gini_P80P20.png>]
+<imagenes_EDA/histogramaBoxplot_gini.png, id=345, 711.1368pt x 421.3341pt>
 File: imagenes_EDA/histogramaBoxplot_gini.png Graphic file (type png)
 <use imagenes_EDA/histogramaBoxplot_gini.png>
 Package pdftex.def Info: imagenes_EDA/histogramaBoxplot_gini.png  used on input line 125.
 (pdftex.def)             Requested size: 364.19667pt x 215.7776pt.
-<imagenes_EDA/correlación_GINI_P80P20.png, id=412, 711.1368pt x 422.0568pt>
+<imagenes_EDA/correlación_GINI_P80P20.png, id=346, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/correlación_GINI_P80P20.png Graphic file (type png)
 <use imagenes_EDA/correlación_GINI_P80P20.png>
 Package pdftex.def Info: imagenes_EDA/correlación_GINI_P80P20.png  used on input line 135.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [18 <./imagenes_EDA/histogramaBoxplot_gini.png>] [19 <./imagenes_EDA/correlación_GINI_P80P20.png>]
-<imagenes_EDA/indicadores_renta_NA.png, id=424, 716.1957pt x 422.0568pt>
+ [17 <./imagenes_EDA/histogramaBoxplot_gini.png>] [18 <./imagenes_EDA/correlación_GINI_P80P20.png>]
+<imagenes_EDA/indicadores_renta_NA.png, id=357, 716.1957pt x 422.0568pt>
 File: imagenes_EDA/indicadores_renta_NA.png Graphic file (type png)
 <use imagenes_EDA/indicadores_renta_NA.png>
 Package pdftex.def Info: imagenes_EDA/indicadores_renta_NA.png  used on input line 147.
 (pdftex.def)             Requested size: 218.51521pt x 128.76898pt.
-<imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png, id=425, 711.1368pt x 422.0568pt>
+<imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png, id=358, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png Graphic file (type png)
 <use imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png>
 Package pdftex.def Info: imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png  used on input line 148.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/renta_bruta_media_persona.png, id=426, 711.1368pt x 422.0568pt>
+<imagenes_EDA/renta_bruta_media_persona.png, id=359, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/renta_bruta_media_persona.png Graphic file (type png)
 <use imagenes_EDA/renta_bruta_media_persona.png>
 Package pdftex.def Info: imagenes_EDA/renta_bruta_media_persona.png  used on input line 155.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/renta_neta_media_persona.png, id=427, 711.1368pt x 422.0568pt>
+<imagenes_EDA/renta_neta_media_persona.png, id=360, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/renta_neta_media_persona.png Graphic file (type png)
 <use imagenes_EDA/renta_neta_media_persona.png>
 Package pdftex.def Info: imagenes_EDA/renta_neta_media_persona.png  used on input line 156.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/bruta_hogar.png, id=428, 709.6914pt x 422.0568pt>
+<imagenes_EDA/bruta_hogar.png, id=361, 709.6914pt x 422.0568pt>
 File: imagenes_EDA/bruta_hogar.png Graphic file (type png)
 <use imagenes_EDA/bruta_hogar.png>
 Package pdftex.def Info: imagenes_EDA/bruta_hogar.png  used on input line 158.
 (pdftex.def)             Requested size: 218.51521pt x 129.94753pt.
-<imagenes_EDA/neta_hogar.png, id=429, 711.1368pt x 422.0568pt>
+<imagenes_EDA/neta_hogar.png, id=362, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/neta_hogar.png Graphic file (type png)
 <use imagenes_EDA/neta_hogar.png>
 Package pdftex.def Info: imagenes_EDA/neta_hogar.png  used on input line 159.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
- [20 <./imagenes_EDA/indicadores_renta_NA.png> <./imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png>]
+ [19 <./imagenes_EDA/indicadores_renta_NA.png> <./imagenes_EDA/indicadores_renta_NA_rangoMunicipio.png>]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 162.
  (C:\Program Files\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-<imagenes_EDA/unidad_consumo.png, id=436, 711.1368pt x 422.0568pt>
+<imagenes_EDA/unidad_consumo.png, id=369, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/unidad_consumo.png Graphic file (type png)
 <use imagenes_EDA/unidad_consumo.png>
 Package pdftex.def Info: imagenes_EDA/unidad_consumo.png  used on input line 166.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
- [21 <./imagenes_EDA/renta_bruta_media_persona.png> <./imagenes_EDA/renta_neta_media_persona.png> <./imagenes_EDA/bruta_hogar.png> <./imagenes_EDA/neta_hogar.png> <./imagenes_EDA/unidad_consumo.png>]
-<imagenes_EDA/Barras_tipos_ingresos.png, id=446, 711.1368pt x 422.0568pt>
+ [20 <./imagenes_EDA/renta_bruta_media_persona.png> <./imagenes_EDA/renta_neta_media_persona.png> <./imagenes_EDA/bruta_hogar.png> <./imagenes_EDA/neta_hogar.png> <./imagenes_EDA/unidad_consumo.png>]
+<imagenes_EDA/Barras_tipos_ingresos.png, id=380, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/Barras_tipos_ingresos.png Graphic file (type png)
 <use imagenes_EDA/Barras_tipos_ingresos.png>
 Package pdftex.def Info: imagenes_EDA/Barras_tipos_ingresos.png  used on input line 177.
 (pdftex.def)             Requested size: 218.51521pt x 129.68347pt.
-<imagenes_EDA/Boxplot_tipos_ingresos.png, id=447, 722.7pt x 397.485pt>
+<imagenes_EDA/Boxplot_tipos_ingresos.png, id=381, 722.7pt x 397.485pt>
 File: imagenes_EDA/Boxplot_tipos_ingresos.png Graphic file (type png)
 <use imagenes_EDA/Boxplot_tipos_ingresos.png>
 Package pdftex.def Info: imagenes_EDA/Boxplot_tipos_ingresos.png  used on input line 178.
 (pdftex.def)             Requested size: 218.51521pt x 120.18044pt.
-<imagenes_EDA/tipos_ingresos_municipios.png, id=448, 1021.8978pt x 1197.5139pt>
+<imagenes_EDA/tipos_ingresos_municipios.png, id=382, 1021.8978pt x 1197.5139pt>
 File: imagenes_EDA/tipos_ingresos_municipios.png Graphic file (type png)
 <use imagenes_EDA/tipos_ingresos_municipios.png>
 Package pdftex.def Info: imagenes_EDA/tipos_ingresos_municipios.png  used on input line 189.
 (pdftex.def)             Requested size: 364.19667pt x 426.79236pt.
- [22 <./imagenes_EDA/Barras_tipos_ingresos.png> <./imagenes_EDA/Boxplot_tipos_ingresos.png>] [23 <./imagenes_EDA/tipos_ingresos_municipios.png>] [24]
-<imagenes_EDA/histograma_participación_electoral.png, id=464, 711.1368pt x 422.0568pt>
+ [21 <./imagenes_EDA/Barras_tipos_ingresos.png> <./imagenes_EDA/Boxplot_tipos_ingresos.png>] [22 <./imagenes_EDA/tipos_ingresos_municipios.png>] [23]
+<imagenes_EDA/histograma_participación_electoral.png, id=398, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/histograma_participación_electoral.png Graphic file (type png)
 <use imagenes_EDA/histograma_participación_electoral.png>
 Package pdftex.def Info: imagenes_EDA/histograma_participación_electoral.png  used on input line 221.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
-<imagenes_EDA/participación_municipios.png, id=465, 855.6768pt x 422.0568pt>
+<imagenes_EDA/participación_municipios.png, id=399, 855.6768pt x 422.0568pt>
 File: imagenes_EDA/participación_municipios.png Graphic file (type png)
 <use imagenes_EDA/participación_municipios.png>
 Package pdftex.def Info: imagenes_EDA/participación_municipios.png  used on input line 228.
 (pdftex.def)             Requested size: 364.19667pt x 179.63902pt.
- [25 <./imagenes_EDA/histograma_participación_electoral.png> <./imagenes_EDA/participación_municipios.png>]
-<imagenes_EDA/distribución_voto_blanco.png, id=473, 711.1368pt x 422.0568pt>
+ [24 <./imagenes_EDA/histograma_participación_electoral.png> <./imagenes_EDA/participación_municipios.png>]
+<imagenes_EDA/distribución_voto_blanco.png, id=406, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/distribución_voto_blanco.png Graphic file (type png)
 <use imagenes_EDA/distribución_voto_blanco.png>
 Package pdftex.def Info: imagenes_EDA/distribución_voto_blanco.png  used on input line 239.
 (pdftex.def)             Requested size: 364.19667pt x 216.14772pt.
-<imagenes_EDA/distribución_voto_blanco_municipios.png, id=474, 855.6768pt x 422.0568pt>
+<imagenes_EDA/distribución_voto_blanco_municipios.png, id=407, 855.6768pt x 422.0568pt>
 File: imagenes_EDA/distribución_voto_blanco_municipios.png Graphic file (type png)
 <use imagenes_EDA/distribución_voto_blanco_municipios.png>
 Package pdftex.def Info: imagenes_EDA/distribución_voto_blanco_municipios.png  used on input line 244.
 (pdftex.def)             Requested size: 364.19667pt x 179.63902pt.
- [26 <./imagenes_EDA/distribución_voto_blanco.png>] [27 <./imagenes_EDA/distribución_voto_blanco_municipios.png>]
-<imagenes_EDA/top_candidaturas_votadas.png, id=485, 357.335pt x 191.71625pt>
+ [25 <./imagenes_EDA/distribución_voto_blanco.png>] [26 <./imagenes_EDA/distribución_voto_blanco_municipios.png>]
+<imagenes_EDA/top_candidaturas_votadas.png, id=419, 357.335pt x 191.71625pt>
 File: imagenes_EDA/top_candidaturas_votadas.png Graphic file (type png)
 <use imagenes_EDA/top_candidaturas_votadas.png>
 Package pdftex.def Info: imagenes_EDA/top_candidaturas_votadas.png  used on input line 263.
 (pdftex.def)             Requested size: 364.19667pt x 195.40756pt.
- [28 <./imagenes_EDA/top_candidaturas_votadas.png>]) (05_analisis.tex [29]
+ [27 <./imagenes_EDA/top_candidaturas_votadas.png>]) (05_analisis.tex [28]
 Cap\'{\i }tulo 4.
-) (06_puesta_en_marcha.tex [30
+) (06_puesta_en_marcha.tex [29
 
 ]
 Cap\'{\i }tulo 5.
-) (07_etica.tex [31
+) (07_etica.tex [30
 
 ]
 Cap\'{\i }tulo 6.
-) (08_conclusiones.tex [32
+) (08_conclusiones.tex [31
 
 ]
 Cap\'{\i }tulo 7.
-) [33
+) [32
 
 ] (09_bibliografia.tex
 Underfull \hbox (badness 2591) in paragraph at lines 13--14
@@ -648,11 +648,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 19--20
 \T1/pcr/m/n/12 / / centrodedescargas . cnig . es / CentroDescargas / detalleArchivo ?
  []
 
-[34
+[33
 
-] [35]) (10_anexos.tex [36]
+] [34]) (10_anexos.tex [35]
 Ap\'{e}ndice A.
-) [37
+) [36
 
 ] (main.aux
 LaTeX Info: Redefining \. on input line 11.
@@ -663,20 +663,20 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 163F3B9981AF3A21CD8DFD780841D12B;11220.
+(rerunfilecheck)             Checksum: 5AFFECABA71F3C57A34A8E6F6DCAA7C4;6825.
  ) 
 Here is how much of TeX's memory you used:
- 12430 strings out of 467691
- 197289 string characters out of 5425054
- 625492 words of memory out of 5000000
- 41168 multiletter control sequences out of 15000+600000
- 687190 words of font info for 95 fonts, out of 8000000 for 9000
+ 12401 strings out of 467691
+ 196819 string characters out of 5425054
+ 625479 words of memory out of 5000000
+ 41152 multiletter control sequences out of 15000+600000
+ 685826 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,6n,79p,1283b,824s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,6n,79p,1283b,795s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (43 pages, 1375586 bytes).
+Output written on main.pdf (41 pages, 1363235 bytes).
 PDF statistics:
- 621 PDF objects out of 1000 (max. 8388607)
- 119 named destinations out of 1000 (max. 500000)
- 485 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 551 PDF objects out of 1000 (max. 8388607)
+ 106 named destinations out of 1000 (max. 500000)
+ 397 words of extra memory for PDF output out of 10000 (max. 10000000)
 
