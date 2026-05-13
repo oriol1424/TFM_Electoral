@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  13 MAY 2026 12:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.2) (preloaded format=pdflatex 2026.4.19)  13 MAY 2026 13:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -425,17 +425,7 @@ Cap\'{\i }tulo 3.
 LaTeX Font Info:    Trying to load font information for T1+pcr on input line 21.
  (C:\Program Files\MiKTeX\tex/latex/psnfss\t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-Overfull \hbox (31.82684pt too wide) in paragraph at lines 28--29
-[]\T1/ptm/m/n/12 El pro-ce-di-mien-to ope-ra-ti-vo co-mien-za con la eje-cu-ción de la fun-ción or-ques-ta-do-ra \T1/pcr/m/n/12 ETL_limpieza
- []
-
-
-Overfull \hbox (6.11755pt too wide) in paragraph at lines 28--29
-\T1/ptm/m/n/12 den-tro de \T1/pcr/m/n/12 main.ipynb\T1/ptm/m/n/12 , la cual in-vo-ca se-cuen-cial-men-te los mó-du-los de la car-pe-ta \T1/pcr/m/n/12 limpieza/\T1/ptm/m/n/12 .
- []
-
-[9]
+) [9]
 <imagenes_EDA/histograma_poblaciÃ³n_total_log.png, id=292, 711.1368pt x 422.0568pt>
 File: imagenes_EDA/histograma_poblaciÃ³n_total_log.png Graphic file (type png)
 <use imagenes_EDA/histograma_poblaciÃ³n_total_log.png>
@@ -663,18 +653,18 @@ LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 5AFFECABA71F3C57A34A8E6F6DCAA7C4;6825.
+(rerunfilecheck)             Checksum: 179ECA0924E662A4BFBEBABE063A8195;6757.
  ) 
 Here is how much of TeX's memory you used:
- 12401 strings out of 467691
- 196819 string characters out of 5425054
+ 12400 strings out of 467691
+ 196804 string characters out of 5425054
  625479 words of memory out of 5000000
- 41152 multiletter control sequences out of 15000+600000
+ 41151 multiletter control sequences out of 15000+600000
  685826 words of font info for 90 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,1283b,795s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (41 pages, 1363235 bytes).
+Output written on main.pdf (41 pages, 1362755 bytes).
 PDF statistics:
  551 PDF objects out of 1000 (max. 8388607)
  106 named destinations out of 1000 (max. 500000)

@@ -12,20 +12,20 @@ Adicionalmente, se ha integrado la visión coyuntural del mercado laboral median
 
 \section{Arquitectura del Proyecto y Ciclo de Vida del Dato}
 
-La arquitectura del sistema se ha diseñado bajo un enfoque de ingeniería de datos modular, asegurando que cada etapa del proceso sea reproducible y escalable. El flujo de trabajo se organiza siguiendo una estructura de directorios que refleja el ciclo de vida de la información: de lo "sucio" (\textit{raw}) a lo "procesado".
+El sistema se ha diseñado bajo un enfoque de ingeniería de datos modular, asegurando que cada etapa sea reproducible y escalable. La arquitectura refleja el ciclo de vida del dato, desde la ingesta de archivos en bruto hasta la generación de predicciones.
 
 \subsection{Estructura de Almacenamiento y Repositorio}
 El proyecto se organiza en cuatro capas de datos y tres módulos lógicos de ejecución, lo que permite una clara separación de responsabilidades:
 
 \begin{itemize}
-    \item \textbf{Capa de Datos Brutos (\texttt{data\_raw/}):} Almacena la información original sin modificar, manteniendo la fidelidad a la fuente. Se organiza por categorías (renta, votos, mercado laboral, etc.).
-    \item \textbf{Capa de Procesamiento Lógico (\texttt{limpieza/}):} Contiene los scripts ETL (\textit{Extract, Transform, Load}) encargados de normalizar formatos, gestionar valores nulos y estandarizar las claves de unión (códigos INE municipales).
-    \item \textbf{Capa de Datos Limpios (\texttt{data\_processed/}):} Almacena los DataFrames resultantes tras la limpieza. Es la fuente de verdad para el análisis y el modelado.
-    \item \textbf{Capa de Análisis y Modelado (\texttt{EDA/} y \texttt{calculos\_electorales/}):} Donde se ejecutan los análisis estadísticos y el motor de la Ley D'Hondt.
+    \item \textbf{Capa de Ingesta (\texttt{data\_raw/}):} Repositorio de la información original en bruto (archivos .csv, .xlsx y ficheros de texto plano). Se mantiene la integridad de la fuente sin modificaciones manuales.
+    \item \textbf{Capa de Transformación (\texttt{limpieza/}):} Contiene los scripts ETL (\textit{Extract, Transform, Load}) encargados de normalizar formatos, gestionar valores nulos y la estandarización de las claves primarias basadas en los códigos de municipio del INE.
+    \item \textbf{Capa de Consolidación (\texttt{data\_processed/}):} Almacena los DataFrames resultantes tras la limpieza. Así como el dataset maestro.
+    \item \textbf{Capa de Explotación (\texttt{EDA/} y \texttt{calculos\_electorales/}):} Espacio de ejecución para el análisis estadístico, el entrenamiento de modelos de Machine Learning y el motor de simulación de la Ley D’Hondt.
 \end{itemize}
 
-\subsection{Procedimientos Técnicos y Pipeline}
-El procedimiento operativo comienza con la ejecución de la función orquestadora \texttt{ETL\_limpieza} dentro de \texttt{main.ipynb}, la cual invoca secuencialmente los módulos de la carpeta \texttt{limpieza/}. Una vez consolidado el dataset maestro en memoria, el sistema procede al Análisis Exploratorio de Datos para validar correlaciones. Posteriormente, el motor de inferencia alimenta el módulo de simulación electoral, el cual traduce los votos predichos en escaños reales aplicando la normativa electoral vigente. Toda esta arquitectura se gestiona mediante el archivo \texttt{config\_path.json}, que centraliza las rutas y parámetros de configuración para garantizar la portabilidad del proyecto.
+\subsection{Pipeline de Ejecución}
+El procedimiento operativo se centraliza en un orquestador \texttt{main.ipynb} que invoca secuencialmente los módulos de limpieza. La portabilidad del entorno está garantizada mediante un archivo de configuración \texttt{config\_path.json}, que gestiona las rutas locales y parámetros globales. Este flujo asegura que cualquier actualización en los datos del SEPE o el INE pueda integrarse en el modelo predictivo de forma automatizada, recalculando la distribución de escaños bajo la normativa electoral vigente.
 
 \section{Análisis Exploratorio de Datos}
 
