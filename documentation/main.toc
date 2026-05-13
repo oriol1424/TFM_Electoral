@@ -41,14 +41,15 @@
 \contentsline {subsection}{\numberline {3.3.4}Análisis de la Variable Objetivo: Comportamiento Electoral}{24}{subsection.3.3.4}%
 \contentsline {subsubsection}{Dinámicas de Participación Electoral}{25}{subsection.3.3.4}%
 \contentsline {subsubsection}{El Fenómeno del Voto en Blanco y sus Implicaciones Legales}{26}{subsection.3.3.4}%
-\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{28}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{28}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{28}{section.4.2}%
-\contentsline {chapter}{\numberline {5}Puesta en Marcha}{29}{chapter.5}%
-\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{30}{chapter.6}%
-\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{31}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Conclusiones}{31}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Estudio Económico}{31}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Líneas de Futuro}{31}{section.7.3}%
-\contentsline {chapter}{Bibliografía}{32}{section.7.3}%
-\contentsline {chapter}{\numberline {A}Anexos}{35}{appendix.Alph1}%
+\contentsline {subsubsection}{Partidos políticos}{28}{subsection.3.3.4}%
+\contentsline {chapter}{\numberline {4}Análisis de los Resultados}{30}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Relación con las Materias del Máster}{30}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Resultados Obtenidos}{30}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Puesta en Marcha}{31}{chapter.5}%
+\contentsline {chapter}{\numberline {6}Consideraciones Éticas y Sociales}{32}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Conclusiones, Estudio Económico y Futuro}{33}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conclusiones}{33}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Estudio Económico}{33}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Líneas de Futuro}{33}{section.7.3}%
+\contentsline {chapter}{Bibliografía}{34}{section.7.3}%
+\contentsline {chapter}{\numberline {A}Anexos}{37}{appendix.Alph1}%
