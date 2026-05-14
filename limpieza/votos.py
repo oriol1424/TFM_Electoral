@@ -197,40 +197,29 @@ def extraer_mapa_siglas_del_json(json_path: str) -> Dict[str, str]:
     return mapa_siglas
 
 
+def _pivotar_votos(df: pd.DataFrame, col_partido: str, year_suffix: str, output_file: str) -> pd.DataFrame:
+    """Pivota votos por municipio, prefija columnas con V_ y guarda el CSV."""
+    df_pivot = df.pivot_table(
+        index=['ID_MUNICIPIO', 'FECHA_ELECCION'],
+        columns=col_partido,
+        values='VOTOS',
+        aggfunc='sum',
+        fill_value=0
+    ).reset_index()
+    df_pivot.columns = [
+        col if col in ('ID_MUNICIPIO', 'FECHA_ELECCION') else f"V_{col}_{year_suffix}"
+        for col in df_pivot.columns
+    ]
+    guardar_dataframe_csv(df_pivot, output_file)
+    return df_pivot
+
+
 def generar_csv_alta_granularidad(df_votos: pd.DataFrame, mapa_siglas: Dict[str, str], year_suffix: str, output_file: str) -> pd.DataFrame:
-    """
-    Pivota el DataFrame de votos manteniendo todas las filiales como columnas separadas.
-    Args:
-        df_votos (pd.DataFrame): DataFrame con los votos municipales.
-        mapa_siglas (Dict[str, str]): Diccionario de mapeo de códigos a siglas.
-        year_suffix (str): Sufijo del año para nombrar las columnas.
-        output_file (str): Ruta para guardar el CSV resultante.
-    Returns:
-        pd.DataFrame: DataFrame pivotado con granularidad alta.
-    """
+    """Pivota el DataFrame de votos manteniendo todas las filiales como columnas separadas."""
     df = df_votos.copy()
     df['SIGLAS'] = df['ID_CANDIDATURA'].map(mapa_siglas).fillna(df['ID_CANDIDATURA'])
     df['SIGLAS'] = df['SIGLAS'].str.replace(' ', '_').str.replace('.', '')
-    
-    df_pivot = df.pivot_table(
-        index=['ID_MUNICIPIO', 'FECHA_ELECCION'],
-        columns='SIGLAS',
-        values='VOTOS',
-        aggfunc='sum', 
-        fill_value=0
-    ).reset_index()
-    
-    nuevas_cols = []
-    for col in df_pivot.columns:
-        if col in ['ID_MUNICIPIO', 'FECHA_ELECCION']:
-            nuevas_cols.append(col)
-        else:
-            nuevas_cols.append(f"V_{col}_{year_suffix}")
-            
-    df_pivot.columns = nuevas_cols
-    guardar_dataframe_csv(df_pivot, output_file)
-    
-    return df_pivot
+    return _pivotar_votos(df, 'SIGLAS', year_suffix, output_file)
 
 
 def obtener_diccionario_padres(json_path: str) -> Dict[str, str]:
@@ -252,41 +241,12 @@ def obtener_diccionario_padres(json_path: str) -> Dict[str, str]:
 
 
 def procesar_votos_agrupados_por_padre(file_path_06: str, json_path: str, year_suffix: str, output_file: str) -> pd.DataFrame:
-    """
-    Pivota el DataFrame agrupando los votos de filiales bajo la columna de su partido padre.
-    Args:
-        file_path_06 (str): Ruta al archivo de votos municipales.
-        json_path (str): Ruta al archivo JSON maestro.
-        year_suffix (str): Sufijo del año para nombrar las columnas.
-        output_file (str): Ruta para guardar el CSV resultante.
-    Returns:
-        pd.DataFrame: DataFrame pivotado con los votos agregados por partido unificado.
-    """
+    """Pivota el DataFrame agrupando los votos de filiales bajo la columna de su partido padre."""
     mapa_padres = obtener_diccionario_padres(json_path)
     df = leer_votos_municipales(file_path_06)
-    
     df['PARTIDO_UNIFICADO'] = df['ID_CANDIDATURA'].map(mapa_padres).fillna('OTROS')
     df['PARTIDO_UNIFICADO'] = df['PARTIDO_UNIFICADO'].str.replace(' ', '_').str.replace('.', '')
-    
-    df_pivot = df.pivot_table(
-        index=['ID_MUNICIPIO', 'FECHA_ELECCION'],
-        columns='PARTIDO_UNIFICADO',
-        values='VOTOS',
-        aggfunc='sum', 
-        fill_value=0
-    ).reset_index()
-    
-    nuevas_cols = []
-    for col in df_pivot.columns:
-        if col in ['ID_MUNICIPIO', 'FECHA_ELECCION']:
-            nuevas_cols.append(col)
-        else:
-            nuevas_cols.append(f"V_{col}_{year_suffix}")
-            
-    df_pivot.columns = nuevas_cols
-    guardar_dataframe_csv(df_pivot, output_file)
-    
-    return df_pivot
+    return _pivotar_votos(df, 'PARTIDO_UNIFICADO', year_suffix, output_file)
 
 
 def procesar_participacion_municipios(file_path_05: str, anio: str, output_file: str) -> pd.DataFrame:
