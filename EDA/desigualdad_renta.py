@@ -2,13 +2,14 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from EDA.visuals import (
-    plot_smart_bar, 
-    plot_distribution_analysis, 
+    plot_smart_bar,
+    plot_distribution_analysis,
     plot_scatter_regression,
     mapear_nombres_provincias,
     plot_missing_demographics,
     plot_histogram
 )
+from EDA.funciones_generales import resolver_col_id
 
 def _resolver_cols_desigualdad(df: pd.DataFrame, anyo: str) -> tuple[str, str, str]:
     """
@@ -21,23 +22,11 @@ def _resolver_cols_desigualdad(df: pd.DataFrame, anyo: str) -> tuple[str, str, s
     col_gini = col_gini_anyo if col_gini_anyo in df.columns else 'Índice de Gini'
     col_p80p20 = col_p80p20_anyo if col_p80p20_anyo in df.columns else 'Distribución de la renta P80/P20'
     
-    col_id = None
-    for posible_id in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'CPROCMUN', 'id']:
-        if posible_id in df.columns:
-            col_id = posible_id
-            break
-            
-    if col_id is None:
-        for c in df.columns:
-            if any(key in c.lower() for key in ['cod', 'muni', 'id']):
-                col_id = c
-                break
-                
+    col_id = resolver_col_id(df)
     if col_id is None:
         posibles = [c for c in df.columns if c not in [col_gini, col_p80p20]]
-        if posibles:
-            col_id = posibles[0]
-            
+        col_id = posibles[0] if posibles else None
+
     return col_gini, col_p80p20, col_id
 
 

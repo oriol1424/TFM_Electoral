@@ -9,37 +9,19 @@ from EDA.visuals import (
     check_missing_values,
     plot_distribution_analysis
 )
+from EDA.funciones_generales import resolver_col_id
 
 def _resolver_identificadores_renta(df: pd.DataFrame) -> Tuple[str, str]:
-    """
-    Detecta las columnas de ID y Nombre del municipio de forma robusta.
-    """
-    col_id = None
-    for posible_id in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'id']:
-        if posible_id in df.columns:
-            col_id = posible_id
-            break
-    
-    if col_id is None:
-        for c in df.columns:
-            if any(key in c.lower() for key in ['cod', 'muni', 'id']):
-                col_id = c
-                break
-    
+    """Detecta las columnas de ID y Nombre del municipio de forma robusta."""
+    col_id = resolver_col_id(df)
     col_nombre = None
-    prioritarios_nombre = ['Nombre_Muni', 'Nombre', 'Municipio', 'Nombre del municipio', 'nombre_muni']
-    for n in prioritarios_nombre:
+    for n in ['Nombre_Muni', 'Nombre', 'Municipio', 'Nombre del municipio', 'nombre_muni']:
         if n in df.columns and n != col_id:
             col_nombre = n
             break
-            
     if col_nombre is None:
-        posibles = [c for c in df.columns if c not in [col_id]]
-        if posibles:
-            col_nombre = posibles[0]
-        else:
-            col_nombre = col_id
-
+        posibles = [c for c in df.columns if c != col_id]
+        col_nombre = posibles[0] if posibles else col_id
     return col_id, col_nombre
 
 def filtrar_columnas_por_anyo(df: pd.DataFrame, anyo: str) -> pd.DataFrame:

@@ -3,7 +3,36 @@ import json
 import pandas as pd
 import numpy as np
 from typing import Optional, List
-from EDA.fuente_ingresos_renta import categorizar_municipios_tfm
+
+RANGOS_MUNICIPIO = [
+    "<100", "101-500", "501-1000", "1001-2000", "2001-5000",
+    "5001-10000", "10001-20000", "20001-50000", "50000-100000",
+    "100001-500000", ">500000"
+]
+
+def categorizar_municipios_tfm(pob: int) -> str:
+    """Categoriza un municipio según su población en los rangos estándar del TFM."""
+    if pob <= 100: return "<100"
+    elif pob <= 500: return "101-500"
+    elif pob <= 1000: return "501-1000"
+    elif pob <= 2000: return "1001-2000"
+    elif pob <= 5000: return "2001-5000"
+    elif pob <= 10000: return "5001-10000"
+    elif pob <= 20000: return "10001-20000"
+    elif pob <= 50000: return "20001-50000"
+    elif pob <= 100000: return "50000-100000"
+    elif pob <= 500000: return "100001-500000"
+    else: return ">500000"
+
+def resolver_col_id(df: pd.DataFrame) -> Optional[str]:
+    """Detecta la columna de código de municipio de forma robusta."""
+    for nombre in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'CPROCMUN', 'id']:
+        if nombre in df.columns:
+            return nombre
+    for c in df.columns:
+        if any(key in c.lower() for key in ['cod', 'muni', 'id']):
+            return c
+    return None
 
 def auditar_municipios_extintos(df_origen: pd.DataFrame, df_maestro: pd.DataFrame, nombre_dataset: str, col_id: str = 'Cod_Muni') -> None:
     """

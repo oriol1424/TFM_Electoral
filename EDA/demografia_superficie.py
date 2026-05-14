@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Dict, Any
 from EDA.visuals import plot_smart_bar
+from EDA.funciones_generales import categorizar_municipios_tfm, RANGOS_MUNICIPIO
 
 def mostrar_distribucion_poblacion(df_csv: pd.DataFrame, data_json: Dict[str, Any]) -> None:
     """
@@ -73,19 +74,8 @@ def procesar_superficie_y_densidad(df_pob: pd.DataFrame, df_sup: pd.DataFrame) -
         np.nan
     )
     
-    bins = [0, 101, 501, 1001, 2001, 5001, 10001, 20001, 50001, 100001, 500001, np.inf]
-    labels = [
-        '<101', '101-500', '501-1.000', '1.001-2.000', '2.001-5.000', 
-        '5.001-10.000', '10.001-20.000', '20.001-50.000', '50.001-100.000', 
-        '100.001-500.000', '>500.000'
-    ]
-    
-    df_merged['tamano_municipio'] = pd.cut(
-        df_merged['poblacion_total'], 
-        bins=bins, 
-        labels=labels, 
-        right=False
-    )
+    df_merged['tamano_municipio'] = df_merged['poblacion_total'].apply(categorizar_municipios_tfm)
+    df_merged['tamano_municipio'] = pd.Categorical(df_merged['tamano_municipio'], categories=RANGOS_MUNICIPIO, ordered=True)
     
     return df_merged
 

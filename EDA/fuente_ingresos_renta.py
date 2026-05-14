@@ -3,26 +3,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 from EDA.visuals import (
-    plot_smart_bar, 
-    plot_missing_demographics, 
+    plot_smart_bar,
+    plot_missing_demographics,
     check_missing_values
 )
-
-def categorizar_municipios_tfm(pob: int) -> str:
-    """
-    Categoriza los municipios según los rangos específicos solicitados.
-    """
-    if pob <= 100: return "<100"
-    elif pob <= 500: return "101-500"
-    elif pob <= 1000: return "501-1000"
-    elif pob <= 2000: return "1001-2000"
-    elif pob <= 5000: return "2001-5000"
-    elif pob <= 10000: return "5001-10000"
-    elif pob <= 20000: return "10001-20000"
-    elif pob <= 50000: return "20001-50000"
-    elif pob <= 100000: return "50000-100000"
-    elif pob <= 500000: return "100001-500000"
-    else: return ">500000"
+from EDA.funciones_generales import categorizar_municipios_tfm, RANGOS_MUNICIPIO
 
 def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> None:
     """
@@ -43,12 +28,7 @@ def graficar_fuentes_por_tamano(df_clean: pd.DataFrame, df_pob: pd.DataFrame, an
     
     df_merge['rango_poblacion'] = df_merge[col_pob_val].apply(categorizar_municipios_tfm)
     
-    orden_categorias = [
-        "<100", "101-500", "501-1000", "1001-2000", "2001-5000", 
-        "5001-10000", "10001-20000", "20001-50000", "50000-100000", 
-        "100001-500000", ">500000"
-    ]
-    df_merge['rango_poblacion'] = pd.Categorical(df_merge['rango_poblacion'], categories=orden_categorias, ordered=True)
+    df_merge['rango_poblacion'] = pd.Categorical(df_merge['rango_poblacion'], categories=RANGOS_MUNICIPIO, ordered=True)
 
     print(f"\nANÁLISIS ESTRUCTURAL: Fuentes de Ingresos por Tamaño de Municipio ({anyo})")
     
