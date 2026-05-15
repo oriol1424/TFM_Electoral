@@ -11,7 +11,9 @@
             "renta_navarra": "data_raw/renta/data_navarra_2023.xlsx",
             "paro_contratos": "data_raw/mercado_laboral/mercado_laboral_julio_2023.xls",
             "geografia": "data_raw/superficie/MUNICIPIOS.csv",
-            "poblacion": "data_raw/demografia/pobmun23.xlsx"
+            "poblacion": "data_raw/demografia/pobmun23.xlsx",
+            "edad_media_municipios": "data_raw/edad_media/30699.csv",
+            "edad_media_provincias": "data_raw/edad_media/3199.csv"
         },
         "processed": {
             "carpeta_votos": "data_processed/votos_ideologia/votos_0723",
@@ -23,6 +25,8 @@
             "geografia": "data_processed/superficie/superficie.csv",
             "poblacion_json": "data_processed/demografia/poblacion_2023.json",
             "poblacion_csv": "data_processed/demografia/poblacion_municipios_2023.csv",
+            "edad_media_municipios": "data_processed/edad_media/2023/edad_media_municipios_2023.csv",
+            "edad_media_provincias": "data_processed/edad_media/2023/edad_media_provincias_2023.csv",
             "data_end": "data_processed/data_end/2023"
         }
     },
@@ -38,7 +42,9 @@
             "renta_navarra": "data_raw/renta/data_navarra_2019.xlsx",
             "paro_contratos": "data_raw/mercado_laboral/mercado_laboral_noviembre_2019.xls",
             "geografia": "data_raw/superficie/MUNICIPIOS.csv",
-            "poblacion": "data_raw/demografia/pobmun19.xlsx"
+            "poblacion": "data_raw/demografia/pobmun19.xlsx",
+            "edad_media_municipios": "data_raw/edad_media/30699.csv",
+            "edad_media_provincias": "data_raw/edad_media/3199.csv"
         },
         "processed": {
             "carpeta_votos": "data_processed/votos_ideologia/votos_19",
@@ -50,6 +56,8 @@
             "geografia": "data_processed/superficie/superficie.csv",
             "poblacion_json": "data_processed/demografia/poblacion_2019.json",
             "poblacion_csv": "data_processed/demografia/poblacion_municipios_2019.csv",
+            "edad_media_municipios": "data_processed/edad_media/2019/edad_media_municipios_2019.csv",
+            "edad_media_provincias": "data_processed/edad_media/2019/edad_media_provincias_2019.csv",
             "data_end": "data_processed/data_end/2019"
         }
     }
