@@ -77,7 +77,7 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
 
     if os.path.exists(file_path):
         print(f"Cargando datos unificados existentes desde: {file_path}")
-        print("Nota: Si quieres volver a ver la auditoría de extintos, borra este archivo CSV.")
+        print("Nota: Si quieres regenerar (nueva columna o auditoría), borra este archivo CSV.")
         return pd.read_csv(file_path, sep=';', dtype={'municipio': str})
 
 
@@ -114,6 +114,11 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
             df_obj.rename(columns={col_id: 'Cod_Muni'}, inplace=True)
             df_obj['Cod_Muni'] = df_obj['Cod_Muni'].astype(str).str.zfill(5)
             auditar_municipios_extintos(df_obj, df_pob, df_name, 'Cod_Muni')
+
+    # --- CARGA EDAD MEDIA MUNICIPAL ---
+    df_edad = pd.read_csv(config["edad_media_municipios"], sep=';')
+    df_edad['id_municipio'] = df_edad['id_municipio'].astype(str).str.zfill(5)
+    auditar_municipios_extintos(df_edad.rename(columns={'id_municipio': 'Cod_Muni'}), df_pob, "Edad Media", 'Cod_Muni')
 
     # --- CARGA DE VOTOS Y PARTICIPACIÓN ---
     votos_path = os.path.join(config["carpeta_votos"], f"Votos_Granularidad_Total_{anyo_str}.csv")
@@ -163,6 +168,8 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         if col_nav in df_final.columns:
             df_final[col_ine] = df_final[col_ine].fillna(df_final[col_nav])
 
+    df_final = pd.merge(df_final, df_edad[['id_municipio', 'edad_media_ambos']], on='id_municipio', how='left')
+
     df_final = pd.merge(df_final, df_votos[['id_municipio', 'votos totales']], on='id_municipio', how='left')
     
     # Merge de participación
@@ -184,7 +191,8 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         f'otros ingresos {anyo_str}': 'otros ingresos', f'otras prestaciones {anyo_str}': 'otras prestaciones',
         f'prestaciones por desempleo {anyo_str}': 'desempleo',
         f'V_BLANCOS_{anyo_str}': 'votos blancos',
-        f'PARTICIPACION_{anyo_str}': 'participacion'
+        f'PARTICIPACION_{anyo_str}': 'participacion',
+        'edad_media_ambos': 'edad media',
     })
     
     columnas_ordenadas = [
@@ -192,8 +200,8 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         "rango tamaño población", "poblacion", "poblacion hombres", "poblacion mujeres",
         "densidad poblacional", "indice gini", "P80P20", "Renta media hogar",
         "renta media unidad consumo", "renta media persona", "salarios", "pensiones",
-        "otros ingresos", "otras prestaciones", "desempleo", "votos totales",
-        "votos blancos", "participacion"
+        "otros ingresos", "otras prestaciones", "desempleo", "edad media",
+        "votos totales", "votos blancos", "participacion"
     ]
     df_final = df_final[columnas_ordenadas]
 
