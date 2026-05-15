@@ -428,6 +428,76 @@ def plot_missing_demographics(df_nulls: pd.DataFrame, df_pob: pd.DataFrame, anyo
         for prov, cant in conteo_prov.head(10).items():
             print(f" - {str(prov):<20}: {cant:4d} municipios ({(cant/total)*100:.1f}%)")
 
+def plot_histogram_with_reference(
+    df: pd.DataFrame,
+    num_col: str,
+    ref_value: float,
+    ref_label: str = "Referencia",
+    title: str = "Histograma",
+    xlabel: Optional[str] = None,
+    ylabel: str = "Frecuencia",
+    bins: int = 20,
+    color: str = "skyblue",
+    ref_color: str = "crimson",
+    figsize: tuple = (10, 6)
+) -> None:
+    """
+    Histograma con KDE y línea de referencia vertical (ej. media/total nacional).
+    """
+    sns.set_theme(style="whitegrid")
+    plt.figure(figsize=figsize)
+
+    ax = sns.histplot(data=df, x=num_col, bins=bins, color=color, kde=True)
+    ax.axvline(x=ref_value, color=ref_color, linestyle='--', linewidth=2,
+               label=f"{ref_label}: {ref_value:.2f}")
+    ax.legend(fontsize=10)
+
+    ax.set_title(title, pad=15)
+    ax.set_xlabel(xlabel if xlabel else num_col)
+    ax.set_ylabel(ylabel)
+
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_barh_with_reference(
+    df: pd.DataFrame,
+    val_col: str,
+    label_col: str,
+    ref_value: float,
+    ref_label: str = "Referencia",
+    title: str = "Grafico de Barras",
+    xlabel: Optional[str] = None,
+    color_above: str = "steelblue",
+    color_below: str = "salmon",
+    ref_color: str = "crimson",
+    figsize: tuple = (10, 14),
+) -> None:
+    """
+    Barras horizontales ordenadas por valor con linea de referencia vertical.
+    Barras por encima de ref_value en color_above, por debajo en color_below.
+    """
+    sns.set_theme(style="whitegrid")
+    df_plot = df.sort_values(val_col, ascending=True).copy()
+    colors = [color_above if v >= ref_value else color_below for v in df_plot[val_col]]
+
+    fig, ax = plt.subplots(figsize=figsize)
+    bars = ax.barh(df_plot[label_col], df_plot[val_col], color=colors)
+
+    ax.axvline(x=ref_value, color=ref_color, linestyle='--', linewidth=2,
+               label=f"{ref_label}: {ref_value:.2f}")
+
+    for bar, val in zip(bars, df_plot[val_col]):
+        ax.text(val + 0.05, bar.get_y() + bar.get_height() / 2,
+                f"{val:.2f}", va='center', fontsize=8)
+
+    ax.set_title(title, pad=15)
+    ax.set_xlabel(xlabel if xlabel else val_col)
+    ax.legend(fontsize=10)
+    plt.tight_layout()
+    plt.show()
+
+
 def plot_adjacency_graph(gdf, w, title: str = "Mapa de Adyacencia Municipal (Grafo Queen)"):
     """
     Visualiza el GeoDataFrame de municipios y superpone el grafo de adyacencia.
