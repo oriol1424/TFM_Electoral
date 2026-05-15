@@ -67,7 +67,7 @@ def plot_votos_apilados_provincial(df_plot: pd.DataFrame, title: str):
     df_pct = df_pct.set_index(index_col)
 
     df_pct.columns = [_limpiar_caracteres_especiales(c) for c in df_pct.columns]
-    cols_votos = df_pct.columns.tolist()
+    cols_votos = df_pct.select_dtypes(include='number').columns.tolist()
 
     df_pct = df_pct[cols_votos].div(df_pct[cols_votos].sum(axis=1), axis=0) * 100
     df_pct = df_pct.loc[:, (df_pct != 0).any(axis=0)]
