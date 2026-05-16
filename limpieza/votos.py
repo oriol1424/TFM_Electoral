@@ -1,4 +1,5 @@
 import os
+import re
 import json
 from typing import Dict, List, Any, Optional, Tuple
 import pandas as pd
@@ -342,6 +343,38 @@ SLOT_MAPPING_DEFAULT: Dict[str, List[str]] = {
     'pct_teruel':   ['¡TERUEL_EXI'],
 }
 
+# Mapeo para 2023: los partidos cambiaron nombres entre elecciones.
+# - UP/Sumar: Podemos desapareció, Sumar fue la candidatura unitaria de izquierda.
+# - JxCAT: guion cambia de JxCAT-JUNTS a JxCAT_-_JUNTS en los ficheros del MIR.
+# - ERC: pierde el sufijo -SOBIRANISTES.
+# - CC: CCa-PNC-NC se acorta a CCa.
+# - NA+: UPN fue la candidatura dominante en Navarra (NA+ se disolvió).
+# - Teruel: el movimiento España Vaciada presentó candidaturas bajo EXISTE y ESPAÑA_VACIADA.
+# - CS: prácticamente desapareció; la lista vacía deja pct_cs=0 para 2023.
+# - PRC: no presentó candidatura propia en las elecciones generales de 2023.
+SLOT_MAPPING_2023: Dict[str, List[str]] = {
+    'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
+    'pct_pp':       ['PP'],
+    'pct_vox':      ['VOX'],
+    'pct_cs':       [],
+    'pct_up_sumar': [
+        'SUMAR', 'SUMAR_-_ECP',
+        'SUMAR_-_COMPROMÍS',             # Í → puede estar corrupto en el CSV
+        'SUMAR_ARAGÓN',                  # Ó → puede estar corrupto en el CSV
+        'MÉS_PER_MALLORCA-MÉS_PER_MENORCA-SUMAR',  # É → puede estar corrupto
+    ],
+    'pct_erc':      ['ERC'],
+    'pct_jxcat':    ['JxCAT_-_JUNTS'],
+    'pct_cup':      ['CUP-PR'],
+    'pct_pnv':      ['EAJ-PNV'],
+    'pct_ehbildu':  ['EH_Bildu'],
+    'pct_bng':      ['BNG'],
+    'pct_cc':       ['CCa'],
+    'pct_prc':      [],
+    'pct_naplus':   ['UPN'],
+    'pct_teruel':   ['EXISTE', 'ASTURIAS_EXISTE_EV', 'ESPAÑA_VACIADA'],
+}
+
 
 def generar_columnas_pct_votos(
     csv_votos_granular: str,
@@ -374,12 +407,33 @@ def generar_columnas_pct_votos(
     vote_cols = [c for c in df.columns if c.startswith('V_')]
     votos_total = df[vote_cols].sum(axis=1)
 
+    # Build normalized lookup to handle CSV files with corrupted special chars
+    # (e.g. Ó/É/Í/Ñ stored as U+FFFD replacement character after double-encoding).
+    # Both the mapping key and the CSV column name are normalized the same way,
+    # so 'COMPROMÍS' (clean) matches 'COMPROM�S' (corrupted in file).
+    def _norm(s: str) -> str:
+        return re.sub(r'[^\x00-\x7F]+', '?', s)
+
+    col_norm_lookup: Dict[str, str] = {}
+    for col in vote_cols:
+        if col.endswith(f'_{anio}'):
+            raw_name = col[2:-(len(anio) + 1)]  # strip 'V_' prefix and '_{anio}' suffix
+            col_norm_lookup[_norm(raw_name)] = col
+
     result = df[['ID_MUNICIPIO']].copy()
     asignadas: set = set()
 
     for slot, candidaturas in slot_mapping.items():
-        cols = [f'V_{c}_{anio}' for c in candidaturas]
-        cols_presentes = [c for c in cols if c in df.columns]
+        cols_presentes = []
+        for cand in candidaturas:
+            exact = f'V_{cand}_{anio}'
+            if exact in df.columns:
+                cols_presentes.append(exact)
+            else:
+                # Fallback: normalize and match against corrupted column names
+                matched = col_norm_lookup.get(_norm(cand))
+                if matched:
+                    cols_presentes.append(matched)
         votos_slot = df[cols_presentes].sum(axis=1) if cols_presentes else pd.Series(0, index=df.index)
         result[slot] = (votos_slot / votos_total).fillna(0).round(6)
         asignadas.update(cols_presentes)

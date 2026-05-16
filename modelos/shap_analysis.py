@@ -1,0 +1,117 @@
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from typing import Dict, Optional
+from modelos.entrenamiento import preparar_features, TARGETS
+
+
+def analizar_shap_partido(
+    modelos: Dict,
+    df: pd.DataFrame,
+    partido: str,
+    max_display: int = 15,
+    guardar: bool = True
+):
+    """
+    SHAP summary plot for one party.
+    Shows which features push the vote share up or down.
+    """
+    try:
+        import shap
+    except ImportError:
+        print("Instala shap: pip install shap")
+        return
+
+    if partido not in modelos:
+        print(f"Modelo '{partido}' no encontrado.")
+        return
+
+    X = preparar_features(df)
+    explainer = shap.TreeExplainer(modelos[partido])
+    shap_values = explainer.shap_values(X)
+
+    plt.figure(figsize=(10, 6))
+    shap.summary_plot(
+        shap_values, X,
+        max_display=max_display,
+        show=False
+    )
+    plt.title(f'SHAP — {partido}')
+    plt.tight_layout()
+
+    if guardar:
+        os.makedirs('documentation/imagenes_EDA', exist_ok=True)
+        plt.savefig(f'documentation/imagenes_EDA/shap_{partido}.png', dpi=150, bbox_inches='tight')
+
+    plt.show()
+    plt.close()
+
+
+def analizar_shap_todos(
+    modelos: Dict,
+    df: pd.DataFrame,
+    max_display: int = 15,
+    guardar: bool = True
+):
+    """
+    Generates SHAP summary plots for all trained parties.
+    """
+    for partido in modelos:
+        print(f"Calculando SHAP para {partido}...")
+        analizar_shap_partido(modelos, df, partido, max_display=max_display, guardar=guardar)
+
+
+def importancia_global_shap(
+    modelos: Dict,
+    df: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Computes mean |SHAP| per feature across all parties.
+    Returns DataFrame sorted by global importance.
+    Useful to identify which features matter most across the model.
+    """
+    try:
+        import shap
+    except ImportError:
+        print("Instala shap: pip install shap")
+        return pd.DataFrame()
+
+    X = preparar_features(df)
+    importancias = {}
+
+    for partido, modelo in modelos.items():
+        explainer = shap.TreeExplainer(modelo)
+        shap_values = explainer.shap_values(X)
+        importancias[partido.replace('pct_', '')] = np.abs(shap_values).mean(axis=0)
+
+    df_imp = pd.DataFrame(importancias, index=X.columns)
+    df_imp['media_global'] = df_imp.mean(axis=1)
+    df_imp = df_imp.sort_values('media_global', ascending=False)
+
+    print("\nIMPORTANCIA GLOBAL DE FEATURES (mean |SHAP|):")
+    print(df_imp[['media_global']].round(4).to_string())
+
+    return df_imp
+
+
+def heatmap_importancia_shap(df_imp: pd.DataFrame):
+    """
+    Heatmap of SHAP importance: features x parties.
+    """
+    cols_partidos = [c for c in df_imp.columns if c != 'media_global']
+    data = df_imp[cols_partidos]
+
+    fig, ax = plt.subplots(figsize=(14, 7))
+    sns_data = data.div(data.max())  # normalize 0-1 per party for visual clarity
+    import seaborn as sns
+    sns.heatmap(sns_data, cmap='YlOrRd', ax=ax, linewidths=0.3,
+                annot=False, cbar_kws={'label': 'Importancia relativa'})
+    ax.set_title('Importancia SHAP por feature y partido')
+    ax.tick_params(axis='x', rotation=45, labelsize=8)
+    ax.tick_params(axis='y', labelsize=8)
+    plt.tight_layout()
+
+    os.makedirs('documentation/imagenes_EDA', exist_ok=True)
+    plt.savefig('documentation/imagenes_EDA/shap_importancia_global.png', dpi=150)
+    plt.show()
