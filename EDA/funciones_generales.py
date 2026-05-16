@@ -175,6 +175,14 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     # Merge de participación
     df_final = pd.merge(df_final, df_part, left_on='id_municipio', right_on='ID_MUNICIPIO', how='left')
 
+    # Merge targets ML (pct por partido)
+    votos_pct_path = os.path.join(folder_path, f"votos_pct_{anyo_str}.csv")
+    if os.path.exists(votos_pct_path):
+        df_pct = pd.read_csv(votos_pct_path, sep=';')
+        df_pct = df_pct.rename(columns={'ID_MUNICIPIO': 'id_municipio'})
+        df_pct['id_municipio'] = df_pct['id_municipio'].astype(str).str.zfill(5)
+        df_final = pd.merge(df_final, df_pct, on='id_municipio', how='left')
+
     df_final['superficie_km2'] = pd.to_numeric(df_final['superficie_km2'].astype(str).str.replace(',', '.'), errors='coerce')
     df_final['densidad poblacional'] = df_final['poblacion_total'] / df_final['superficie_km2']
     df_final['rango tamaño población'] = df_final['poblacion_total'].apply(categorizar_municipios_tfm)
@@ -195,6 +203,7 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         'edad_media_ambos': 'edad media',
     })
     
+    pct_cols = [c for c in df_final.columns if c.startswith('pct_')]
     columnas_ordenadas = [
         "municipio", "nombre", "provincia", "superficie", "latitud", "longitud", "altitud",
         "rango tamaño población", "poblacion", "poblacion hombres", "poblacion mujeres",
@@ -202,7 +211,7 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
         "renta media unidad consumo", "renta media persona", "salarios", "pensiones",
         "otros ingresos", "otras prestaciones", "desempleo", "edad media",
         "votos totales", "votos blancos", "participacion"
-    ]
+    ] + pct_cols
     df_final = df_final[columnas_ordenadas]
 
     os.makedirs(folder_path, exist_ok=True)
@@ -297,26 +306,60 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
 
 def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
     """
-    Filtra variables numéricas relevantes y genera un mapa de calor de correlaciones.
-    Excluye identificadores, nombres y coordenadas.
+    Genera dos análisis de correlación orientados a selección de features ML:
+    1. Correlación features × features (detectar multicolinealidad)
+    2. Correlación features × targets pct_* (poder predictivo por partido)
     """
-    from EDA.visuals import plot_correlation_heatmap
-    
-    cols_excluir = ['municipio', 'nombre', 'provincia', 'latitud', 'longitud', 'altitud', 'imputado']
-    df_numeric = df.select_dtypes(include=[np.number]).drop(columns=[c for c in cols_excluir if c in df.columns], errors='ignore')
-    
-    df_clean = df_numeric.dropna()
-    
-    if df_clean.empty:
-        print(f"Aviso: No hay suficientes datos limpios para calcular correlaciones en el año {anyo}.")
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import os
+
+    cols_meta = ['municipio', 'nombre', 'provincia', 'latitud', 'longitud', 'altitud', 'imputado',
+                 'rango tamaño población', 'votos blancos']
+    cols_target = [c for c in df.columns if c.startswith('pct_')]
+    cols_feature = [c for c in df.select_dtypes(include=[np.number]).columns
+                    if c not in cols_meta and c not in cols_target]
+
+    df_all = df[cols_feature + cols_target]
+
+    if df_all.empty:
+        print(f"Aviso: No hay datos para calcular correlaciones en {anyo}.")
         return
 
-    print(f"\nANALIZANDO CORRELACIONES ({anyo})")
-    print(f"Variables analizadas: {list(df_clean.columns)}")
-    print(f"Registros completos utilizados: {len(df_clean)}")
-    
-    plot_correlation_heatmap(
-        df_clean, 
-        title=f"Mapa de Correlaciones Socioeconómicas - Año {anyo}",
-        figsize=(12, 10)
-    )
+    print(f"\nCORRELACIONES ML ({anyo})")
+    print(f"Features: {cols_feature}")
+    print(f"Targets:  {cols_target}")
+    print(f"Total municipios: {len(df_all)}")
+
+    os.makedirs("documentation/imagenes_EDA", exist_ok=True)
+
+    # --- 1. Features × Features (multicolinealidad) ---
+    # Aquí sí usamos dropna solo sobre features para evitar distorsión
+    df_features_clean = df_all[cols_feature].dropna()
+    corr_ff = df_features_clean.corr()
+    mask = np.triu(np.ones_like(corr_ff, dtype=bool))
+    fig, ax = plt.subplots(figsize=(14, 12))
+    sns.heatmap(corr_ff, mask=mask, annot=True, fmt=".2f", cmap="coolwarm",
+                vmax=1, vmin=-1, center=0, square=True, linewidths=.3,
+                annot_kws={"size": 7}, ax=ax)
+    ax.set_title(f"Correlación entre Features — {anyo}", fontsize=13)
+    ax.tick_params(axis='x', labelsize=8, rotation=45)
+    ax.tick_params(axis='y', labelsize=8, rotation=0)
+    plt.tight_layout()
+    plt.savefig(f"documentation/imagenes_EDA/correlacion_features_{anyo}.png", dpi=150)
+    plt.show()
+
+    # --- 2. Features × Targets (poder predictivo) ---
+    # Correlación pairwise: pandas usa solo filas completas por cada par de columnas,
+    # preservando así los municipios de partidos regionalistas aunque haya NaN en otras features
+    corr_ft = df_all.corr(min_periods=30).loc[cols_feature, cols_target]
+    fig, ax = plt.subplots(figsize=(14, 8))
+    sns.heatmap(corr_ft, annot=True, fmt=".2f", cmap="coolwarm",
+                vmax=1, vmin=-1, center=0, linewidths=.3,
+                annot_kws={"size": 7}, ax=ax)
+    ax.set_title(f"Correlación Features → Targets (pct partido) — {anyo}", fontsize=13)
+    ax.tick_params(axis='x', labelsize=8, rotation=45)
+    ax.tick_params(axis='y', labelsize=8, rotation=0)
+    plt.tight_layout()
+    plt.savefig(f"documentation/imagenes_EDA/correlacion_features_targets_{anyo}.png", dpi=150)
+    plt.show()

@@ -28,6 +28,7 @@
             "poblacion_csv": "data_processed/demografia/poblacion_municipios_2023.csv",
             "edad_media_municipios": "data_processed/edad_media/2023/edad_media_municipios_2023.csv",
             "edad_media_provincias": "data_processed/edad_media/2023/edad_media_provincias_2023.csv",
+            "datos_unificados": "data_processed/data_end/2023/datos_unificados_2023.csv",
             "data_end": "data_processed/data_end/2023"
         }
     },
@@ -60,6 +61,7 @@
             "poblacion_csv": "data_processed/demografia/poblacion_municipios_2019.csv",
             "edad_media_municipios": "data_processed/edad_media/2019/edad_media_municipios_2019.csv",
             "edad_media_provincias": "data_processed/edad_media/2019/edad_media_provincias_2019.csv",
+            "datos_unificados": "data_processed/data_end/2019/datos_unificados_2019.csv",
             "data_end": "data_processed/data_end/2019"
         }
     }
