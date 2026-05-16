@@ -1,0 +1,688 @@
+{
+    "000001": {
+        "siglas_generales": "FO",
+        "vinculadas": [
+            {
+                "codigo": "000001",
+                "sigla": "FO"
+            },
+            {
+                "codigo": "000097",
+                "sigla": "FO"
+            }
+        ]
+    },
+    "000002": {
+        "siglas_generales": "PSOE",
+        "vinculadas": [
+            {
+                "codigo": "000029",
+                "sigla": "PSIB-PSOE"
+            },
+            {
+                "codigo": "000047",
+                "sigla": "PSC"
+            },
+            {
+                "codigo": "000064",
+                "sigla": "PSdeG-PSOE"
+            },
+            {
+                "codigo": "000072",
+                "sigla": "PSN-PSOE"
+            },
+            {
+                "codigo": "000076",
+                "sigla": "PSE-EE (PSOE)"
+            }
+        ]
+    },
+    "000003": {
+        "siglas_generales": "PUM+J",
+        "vinculadas": [
+            {
+                "codigo": "000067",
+                "sigla": "PUM+J"
+            },
+            {
+                "codigo": "000077",
+                "sigla": "PUM+J"
+            }
+        ]
+    },
+    "000005": {
+        "siglas_generales": "PP",
+        "vinculadas": [
+            {
+                "codigo": "000005",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000048",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000056",
+                "sigla": "PP"
+            }
+        ]
+    },
+    "000006": {
+        "siglas_generales": "VOX",
+        "vinculadas": [
+            {
+                "codigo": "000006",
+                "sigla": "VOX"
+            }
+        ]
+    },
+    "000007": {
+        "siglas_generales": "PACMA",
+        "vinculadas": [
+            {
+                "codigo": "000007",
+                "sigla": "PACMA"
+            },
+            {
+                "codigo": "000058",
+                "sigla": "PACMA"
+            }
+        ]
+    },
+    "000008": {
+        "siglas_generales": "LB",
+        "vinculadas": [
+            {
+                "codigo": "000008",
+                "sigla": "LB"
+            }
+        ]
+    },
+    "000009": {
+        "siglas_generales": "RECORTES CERO",
+        "vinculadas": [
+            {
+                "codigo": "000009",
+                "sigla": "RECORTES CERO"
+            }
+        ]
+    },
+    "000010": {
+        "siglas_generales": "SUMAR",
+        "vinculadas": [
+            {
+                "codigo": "000010",
+                "sigla": "SUMAR"
+            },
+            {
+                "codigo": "000033",
+                "sigla": "SUMAR"
+            },
+            {
+                "codigo": "000066",
+                "sigla": "SUMAR"
+            }
+        ]
+    },
+    "000013": {
+        "siglas_generales": "CJ",
+        "vinculadas": [
+            {
+                "codigo": "000013",
+                "sigla": "CJ"
+            },
+            {
+                "codigo": "000096",
+                "sigla": "CJ"
+            }
+        ]
+    },
+    "000014": {
+        "siglas_generales": "ESCAï¿½OS EN BLANCO",
+        "vinculadas": [
+            {
+                "codigo": "000059",
+                "sigla": "ESCONS EN BLANC"
+            }
+        ]
+    },
+    "000015": {
+        "siglas_generales": "PCTE",
+        "vinculadas": [
+            {
+                "codigo": "000054",
+                "sigla": "PCTC"
+            },
+            {
+                "codigo": "000068",
+                "sigla": "PCTG"
+            },
+            {
+                "codigo": "000078",
+                "sigla": "PCTE/ELAK"
+            }
+        ]
+    },
+    "000016": {
+        "siglas_generales": "JxG",
+        "vinculadas": [
+            {
+                "codigo": "000016",
+                "sigla": "JxG"
+            }
+        ]
+    },
+    "000017": {
+        "siglas_generales": "XH",
+        "vinculadas": [
+            {
+                "codigo": "000017",
+                "sigla": "XH"
+            }
+        ]
+    },
+    "000030": {
+        "siglas_generales": "Mï¿½S PER MALLORCA-Mï¿½S PER MENORCA-SUMAR",
+        "vinculadas": [
+            {
+                "codigo": "000030",
+                "sigla": "Mï¿½S PER MALLORCA-Mï¿½S PER MENORCA-SUMAR"
+            }
+        ]
+    },
+    "000032": {
+        "siglas_generales": "NC-bc",
+        "vinculadas": [
+            {
+                "codigo": "000032",
+                "sigla": "NC-bc"
+            }
+        ]
+    },
+    "000034": {
+        "siglas_generales": "AHORA CANARIAS-PCPC",
+        "vinculadas": [
+            {
+                "codigo": "000034",
+                "sigla": "AHORA CANARIAS-PCPC"
+            }
+        ]
+    },
+    "000040": {
+        "siglas_generales": "VP",
+        "vinculadas": [
+            {
+                "codigo": "000040",
+                "sigla": "VP"
+            }
+        ]
+    },
+    "000041": {
+        "siglas_generales": "GITV",
+        "vinculadas": [
+            {
+                "codigo": "000041",
+                "sigla": "GITV"
+            }
+        ]
+    },
+    "000044": {
+        "siglas_generales": "Ud.Ca",
+        "vinculadas": [
+            {
+                "codigo": "000044",
+                "sigla": "Ud.Ca"
+            }
+        ]
+    },
+    "000050": {
+        "siglas_generales": "ERC",
+        "vinculadas": [
+            {
+                "codigo": "000050",
+                "sigla": "ERC"
+            }
+        ]
+    },
+    "000053": {
+        "siglas_generales": "CUP-PR",
+        "vinculadas": [
+            {
+                "codigo": "000053",
+                "sigla": "CUP-PR"
+            }
+        ]
+    },
+    "000057": {
+        "siglas_generales": "JxCAT - JUNTS",
+        "vinculadas": [
+            {
+                "codigo": "000057",
+                "sigla": "JxCAT - JUNTS"
+            }
+        ]
+    },
+    "000061": {
+        "siglas_generales": "UNIDOS SI",
+        "vinculadas": [
+            {
+                "codigo": "000061",
+                "sigla": "UNIDOS SI"
+            }
+        ]
+    },
+    "000065": {
+        "siglas_generales": "B.N.G.",
+        "vinculadas": [
+            {
+                "codigo": "000065",
+                "sigla": "B.N.G."
+            }
+        ]
+    },
+    "000070": {
+        "siglas_generales": "PH",
+        "vinculadas": [
+            {
+                "codigo": "000070",
+                "sigla": "PH"
+            }
+        ]
+    },
+    "000071": {
+        "siglas_generales": "EH Bildu",
+        "vinculadas": [
+            {
+                "codigo": "000071",
+                "sigla": "EH Bildu"
+            }
+        ]
+    },
+    "000073": {
+        "siglas_generales": "GBAI",
+        "vinculadas": [
+            {
+                "codigo": "000073",
+                "sigla": "GBAI"
+            }
+        ]
+    },
+    "000074": {
+        "siglas_generales": "U.P.N.",
+        "vinculadas": [
+            {
+                "codigo": "000074",
+                "sigla": "U.P.N."
+            }
+        ]
+    },
+    "000075": {
+        "siglas_generales": "EAJ-PNV",
+        "vinculadas": [
+            {
+                "codigo": "000075",
+                "sigla": "EAJ-PNV"
+            }
+        ]
+    },
+    "001200": {
+        "siglas_generales": "ADELANTE ANDALUCï¿½A",
+        "vinculadas": [
+            {
+                "codigo": "000012",
+                "sigla": "ADELANTE ANDALUCï¿½A"
+            }
+        ]
+    },
+    "001800": {
+        "siglas_generales": "JM+",
+        "vinculadas": [
+            {
+                "codigo": "000018",
+                "sigla": "JM+"
+            }
+        ]
+    },
+    "002000": {
+        "siglas_generales": "F.I.A.",
+        "vinculadas": [
+            {
+                "codigo": "000020",
+                "sigla": "F.I.A."
+            }
+        ]
+    },
+    "002100": {
+        "siglas_generales": "SUMAR ARAGï¿½N",
+        "vinculadas": [
+            {
+                "codigo": "000021",
+                "sigla": "SUMAR ARAGï¿½N"
+            }
+        ]
+    },
+    "002300": {
+        "siglas_generales": "EXISTE",
+        "vinculadas": [
+            {
+                "codigo": "000023",
+                "sigla": "EXISTE"
+            }
+        ]
+    },
+    "002700": {
+        "siglas_generales": "ESPAï¿½A VACIADA",
+        "vinculadas": [
+            {
+                "codigo": "000027",
+                "sigla": "ESPAï¿½A VACIADA"
+            }
+        ]
+    },
+    "003800": {
+        "siglas_generales": "PREPAL",
+        "vinculadas": [
+            {
+                "codigo": "000038",
+                "sigla": "PREPAL"
+            }
+        ]
+    },
+    "003900": {
+        "siglas_generales": "U.P.L.",
+        "vinculadas": [
+            {
+                "codigo": "000039",
+                "sigla": "U.P.L."
+            }
+        ]
+    },
+    "004500": {
+        "siglas_generales": "FUERZA Cï¿½VICA",
+        "vinculadas": [
+            {
+                "codigo": "000045",
+                "sigla": "FUERZA Cï¿½VICA"
+            }
+        ]
+    },
+    "005500": {
+        "siglas_generales": "PDeCAT-E-CiU",
+        "vinculadas": [
+            {
+                "codigo": "000055",
+                "sigla": "PDeCAT-E-CiU"
+            }
+        ]
+    },
+    "006900": {
+        "siglas_generales": "CCD",
+        "vinculadas": [
+            {
+                "codigo": "000069",
+                "sigla": "CCD"
+            }
+        ]
+    },
+    "008000": {
+        "siglas_generales": "POR MI REGIï¿½N",
+        "vinculadas": [
+            {
+                "codigo": "000080",
+                "sigla": "POR MI REGIï¿½N"
+            }
+        ]
+    },
+    "008100": {
+        "siglas_generales": "PARTIDO AUTï¿½NOMOS",
+        "vinculadas": [
+            {
+                "codigo": "000081",
+                "sigla": "PARTIDO AUTï¿½NOMOS"
+            }
+        ]
+    },
+    "008200": {
+        "siglas_generales": "SUMAR - COMPROMï¿½S",
+        "vinculadas": [
+            {
+                "codigo": "000082",
+                "sigla": "SUMAR - COMPROMï¿½S"
+            }
+        ]
+    },
+    "020000": {
+        "siglas_generales": "PSOE",
+        "vinculadas": [
+            {
+                "codigo": "000002",
+                "sigla": "PSOE"
+            }
+        ]
+    },
+    "030000": {
+        "siglas_generales": "PUM+J",
+        "vinculadas": [
+            {
+                "codigo": "000003",
+                "sigla": "PUM+J"
+            }
+        ]
+    },
+    "040000": {
+        "siglas_generales": "ALM",
+        "vinculadas": [
+            {
+                "codigo": "000004",
+                "sigla": "ALM"
+            }
+        ]
+    },
+    "110000": {
+        "siglas_generales": "SUMAR",
+        "vinculadas": [
+            {
+                "codigo": "000011",
+                "sigla": "SUMAR"
+            }
+        ]
+    },
+    "140000": {
+        "siglas_generales": "ESCAï¿½OS EN BLANCO",
+        "vinculadas": [
+            {
+                "codigo": "000014",
+                "sigla": "ESCAï¿½OS EN BLANCO"
+            }
+        ]
+    },
+    "150000": {
+        "siglas_generales": "PCTE",
+        "vinculadas": [
+            {
+                "codigo": "000015",
+                "sigla": "PCTE"
+            }
+        ]
+    },
+    "190000": {
+        "siglas_generales": "FE de las JONS",
+        "vinculadas": [
+            {
+                "codigo": "000019",
+                "sigla": "FE de las JONS"
+            }
+        ]
+    },
+    "230000": {
+        "siglas_generales": "EXISTE",
+        "vinculadas": [
+            {
+                "codigo": "000025",
+                "sigla": "EXISTE"
+            }
+        ]
+    },
+    "240000": {
+        "siglas_generales": "PAR",
+        "vinculadas": [
+            {
+                "codigo": "000024",
+                "sigla": "PAR"
+            }
+        ]
+    },
+    "260000": {
+        "siglas_generales": "PUEDE",
+        "vinculadas": [
+            {
+                "codigo": "000026",
+                "sigla": "PUEDE"
+            }
+        ]
+    },
+    "280000": {
+        "siglas_generales": "ASTURIAS EXISTE EV",
+        "vinculadas": [
+            {
+                "codigo": "000028",
+                "sigla": "ASTURIAS EXISTE EV"
+            }
+        ]
+    },
+    "310000": {
+        "siglas_generales": "CCa",
+        "vinculadas": [
+            {
+                "codigo": "000031",
+                "sigla": "CCa"
+            }
+        ]
+    },
+    "350000": {
+        "siglas_generales": "XAV",
+        "vinculadas": [
+            {
+                "codigo": "000035",
+                "sigla": "XAV"
+            }
+        ]
+    },
+    "360000": {
+        "siglas_generales": "VB",
+        "vinculadas": [
+            {
+                "codigo": "000036",
+                "sigla": "VB"
+            }
+        ]
+    },
+    "370000": {
+        "siglas_generales": "EV-PCAS-TC",
+        "vinculadas": [
+            {
+                "codigo": "000037",
+                "sigla": "EV-PCAS-TC"
+            }
+        ]
+    },
+    "420000": {
+        "siglas_generales": "3e",
+        "vinculadas": [
+            {
+                "codigo": "000042",
+                "sigla": "3e"
+            }
+        ]
+    },
+    "430000": {
+        "siglas_generales": "SY",
+        "vinculadas": [
+            {
+                "codigo": "000043",
+                "sigla": "SY"
+            }
+        ]
+    },
+    "460000": {
+        "siglas_generales": "Zsi",
+        "vinculadas": [
+            {
+                "codigo": "000046",
+                "sigla": "Zsi"
+            }
+        ]
+    },
+    "510000": {
+        "siglas_generales": "SUMAR - ECP",
+        "vinculadas": [
+            {
+                "codigo": "000051",
+                "sigla": "SUMAR - ECP"
+            }
+        ]
+    },
+    "600000": {
+        "siglas_generales": "EVC",
+        "vinculadas": [
+            {
+                "codigo": "000060",
+                "sigla": "EVC"
+            }
+        ]
+    },
+    "620000": {
+        "siglas_generales": "BQEX",
+        "vinculadas": [
+            {
+                "codigo": "000062",
+                "sigla": "BQEX"
+            }
+        ]
+    },
+    "630000": {
+        "siglas_generales": "Somos Cc",
+        "vinculadas": [
+            {
+                "codigo": "000063",
+                "sigla": "Somos Cc"
+            }
+        ]
+    },
+    "780000": {
+        "siglas_generales": "PCTE",
+        "vinculadas": [
+            {
+                "codigo": "000098",
+                "sigla": "PCTE"
+            }
+        ]
+    },
+    "790000": {
+        "siglas_generales": "+RDS+",
+        "vinculadas": [
+            {
+                "codigo": "000079",
+                "sigla": "+RDS+"
+            }
+        ]
+    },
+    "830000": {
+        "siglas_generales": "EVB",
+        "vinculadas": [
+            {
+                "codigo": "000083",
+                "sigla": "EVB"
+            }
+        ]
+    },
+    "840000": {
+        "siglas_generales": "CpM",
+        "vinculadas": [
+            {
+                "codigo": "000084",
+                "sigla": "CpM"
+            }
+        ]
+    }
+}

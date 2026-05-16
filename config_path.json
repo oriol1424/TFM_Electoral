@@ -17,6 +17,7 @@
         },
         "processed": {
             "carpeta_votos": "data_processed/votos_ideologia/votos_0723",
+            "votos_pct": "data_processed/data_end/2023/votos_pct_2023.csv",
             "renta_disponible": "data_processed/renta/indicadores_renta.csv",
             "GINI_P80P20": "data_processed/renta/Gini_P80P20.csv",
             "fuente_ingresos": "data_processed/renta/fuente_ingresos.csv",
@@ -48,6 +49,7 @@
         },
         "processed": {
             "carpeta_votos": "data_processed/votos_ideologia/votos_19",
+            "votos_pct": "data_processed/data_end/2019/votos_pct_2019.csv",
             "renta_disponible": "data_processed/renta/indicadores_renta.csv",
             "GINI_P80P20": "data_processed/renta/Gini_P80P20.csv",
             "fuente_ingresos": "data_processed/renta/fuente_ingresos.csv",

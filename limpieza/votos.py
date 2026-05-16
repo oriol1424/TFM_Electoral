@@ -309,6 +309,97 @@ def procesar_participacion_municipios(file_path_05: str, anio: str, output_file:
 
 
 # =============================================================================
+# TARGET ML: PORCENTAJES DE VOTO POR SLOT DE PARTIDO
+# =============================================================================
+
+# Mapeo base: slot → candidaturas (sin prefijo V_ ni sufijo _anio).
+# Criterio Opción B: slots estables para estatales + columna individual por
+# cada regionalista que obtuvo escaño en 2019. Reusable para 2023 añadiendo
+# o modificando entradas en el dict antes de llamar a generar_columnas_pct_votos.
+SLOT_MAPPING_DEFAULT: Dict[str, List[str]] = {
+    'pct_psoe':     ['PSOE', 'PSC-PSOE', 'PSdeG-PSOE', 'PSE-EE_(PSOE)'],
+    'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
+    'pct_vox':      ['VOX'],
+    'pct_cs':       ['Cs'],
+    # Unidas Podemos + Más País + coaliciones territoriales → Sumar en 2023
+    'pct_up_sumar': [
+        'PODEMOS-IU', 'PODEMOS-IU_LV_CA', 'ECP-GUANYEM',
+        'PODEMOS-EUPV', 'PODEMOS-EU', 'PODEMOS-EUIB',
+        'PODEMOS-IX', 'PODEMOS-IU-BATZARRE', 'PODEMOS-IU-',
+        'MÁS_PAÍS-EQ', 'MÁS_PAÍS-AN', 'MÁS_PAÍS-CA', 'MÁS_PAÍS',
+        'M_PAÍS-CHA-', 'M_PAÍS', 'MÉS_COMPROM', 'MÉS-ESQUERR',
+    ],
+    # Regionalistas con escaño propio en 2019
+    'pct_erc':      ['ERC-SOBIRANISTES'],
+    'pct_jxcat':    ['JxCAT-JUNTS'],
+    'pct_cup':      ['CUP-PR'],
+    'pct_pnv':      ['EAJ-PNV'],
+    'pct_ehbildu':  ['EH_Bildu'],
+    'pct_bng':      ['BNG'],
+    'pct_cc':       ['CCa-PNC-NC', 'NC-CCa-PNC'],
+    'pct_prc':      ['PRC'],
+    'pct_naplus':   ['NA+'],
+    'pct_teruel':   ['¡TERUEL_EXI'],
+}
+
+
+def generar_columnas_pct_votos(
+    csv_votos_granular: str,
+    anio: str,
+    output_file: str,
+    slot_mapping: Optional[Dict[str, List[str]]] = None
+) -> pd.DataFrame:
+    """
+    Genera las columnas target de ML: porcentaje de voto por slot de partido.
+
+    Para cada municipio calcula pct_slot = votos_slot / votos_candidaturas_total.
+    Las candidaturas no asignadas a ningún slot se agrupan en pct_otros.
+    La suma de todos los pct_* es siempre 1.0 por construcción (salvo municipios
+    con 0 votos, donde se rellena con 0).
+
+    Args:
+        csv_votos_granular: Ruta al CSV con votos por candidatura (Votos_Granularidad_Total_XXXX.csv).
+        anio: Sufijo de año usado en los nombres de columna ('2019' o '2023').
+        output_file: Ruta donde guardar el CSV resultado.
+        slot_mapping: Mapeo slot → lista de candidaturas. Si es None usa SLOT_MAPPING_DEFAULT.
+
+    Returns:
+        DataFrame con ID_MUNICIPIO + columnas pct_* (slots) + pct_otros.
+    """
+    if slot_mapping is None:
+        slot_mapping = SLOT_MAPPING_DEFAULT
+
+    df = pd.read_csv(csv_votos_granular, sep=';', encoding='utf-8-sig')
+
+    vote_cols = [c for c in df.columns if c.startswith('V_')]
+    votos_total = df[vote_cols].sum(axis=1)
+
+    result = df[['ID_MUNICIPIO']].copy()
+    asignadas: set = set()
+
+    for slot, candidaturas in slot_mapping.items():
+        cols = [f'V_{c}_{anio}' for c in candidaturas]
+        cols_presentes = [c for c in cols if c in df.columns]
+        votos_slot = df[cols_presentes].sum(axis=1) if cols_presentes else pd.Series(0, index=df.index)
+        result[slot] = (votos_slot / votos_total).fillna(0).round(6)
+        asignadas.update(cols_presentes)
+
+    cols_otras = [c for c in vote_cols if c not in asignadas]
+    votos_otros = df[cols_otras].sum(axis=1) if cols_otras else pd.Series(0, index=df.index)
+    result['pct_otros'] = (votos_otros / votos_total).fillna(0).round(6)
+
+    pct_cols = [c for c in result.columns if c.startswith('pct_')]
+    suma = result[pct_cols].sum(axis=1)
+    discrepancias = (suma - 1.0).abs() > 0.01
+    if discrepancias.any():
+        print(f"[AVISO] {discrepancias.sum()} municipios con suma pct != 1.0 (diff > 1%)")
+
+    guardar_dataframe_csv(result, output_file)
+    print(f"[OK] {len(result)} municipios, {len(pct_cols)} slots guardados en {output_file}")
+    return result
+
+
+# =============================================================================
 # 3. FUNCIÓN MAESTRA
 # =============================================================================
 

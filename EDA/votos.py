@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from EDA.visuals import (
     mapear_nombres_provincias, plot_histogram, plot_boxplot,
-    plot_votos_apilados_provincial, plot_votos_individuales_por_provincia
+    plot_votos_apilados_provincial, plot_votos_individuales_por_provincia,
+    obtener_mapeo_provincias
 )
 from EDA.funciones_generales import RANGOS_MUNICIPIO
 
@@ -201,6 +202,84 @@ def analizar_umbral_votos_nacional(df_votos: pd.DataFrame, umbral: float = 0.03,
         muestra = sorted(partidos_no_superan)[:20]
         resto = f" ... (y {len(partidos_no_superan)-20} más)" if len(partidos_no_superan) > 20 else ""
         print(f"\nCandidaturas descartadas (ejemplos):\n - {', '.join(muestra)}{resto}")
+
+
+def eda_slots_pct_votos(df_pct: pd.DataFrame, anyo: str = "2019") -> None:
+    """
+    EDA de las columnas pct_* (targets ML).
+
+    Produce dos visualizaciones:
+    1. Barplot horizontal del % medio nacional por slot — justifica qué partidos importan.
+    2. Heatmap provincia × slot para regionalistas — justifica los ceros estructurales.
+    """
+
+    pct_cols = sorted([c for c in df_pct.columns if c.startswith('pct_')])
+    if not pct_cols:
+        print("No se encontraron columnas pct_*")
+        return
+
+    slots_estatales = {'pct_psoe', 'pct_pp', 'pct_vox', 'pct_cs', 'pct_up_sumar', 'pct_otros'}
+
+    medias = df_pct[pct_cols].mean().sort_values(ascending=False)
+    etiquetas = [c.replace('pct_', '') for c in medias.index]
+    colores = ['#bdc3c7' if c == 'pct_otros' else
+               '#2ecc71' if c in slots_estatales else
+               '#e67e22'
+               for c in medias.index]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars = ax.barh(etiquetas[::-1], medias.values[::-1] * 100, color=colores[::-1])
+    ax.bar_label(bars, fmt='%.2f%%', label_type='edge', padding=3,
+                 labels=[f'{v * 100:.2f}%' for v in medias.values[::-1]])
+    ax.set_xlabel('% medio de voto (nivel municipal)')
+    ax.set_title(f'Distribución media del voto por slot — Elecciones {anyo}\n'
+                 '(verde: estatales · naranja: regionalistas · gris: otros)')
+    ax.set_xlim(0, medias.max() * 100 * 1.15)
+    plt.tight_layout()
+    ruta = f'documentation/imagenes_EDA/voto_medio_slots_{anyo}.png'
+    plt.savefig(ruta, dpi=150, bbox_inches='tight')
+    plt.show()
+    plt.close()
+
+    df = df_pct.copy()
+    df['id_provincia'] = df['ID_MUNICIPIO'].astype(str).str.zfill(5).str[:2]
+
+    slots_reg = [c for c in pct_cols if c not in slots_estatales]
+    df_prov = df.groupby('id_provincia')[slots_reg].mean() * 100
+
+    df_prov = df_prov[(df_prov > 0.5).any(axis=1)]
+
+    mapeo = obtener_mapeo_provincias(anyo)
+    df_prov.index = [mapeo.get(i, i) for i in df_prov.index]
+    df_prov.columns = [c.replace('pct_', '').upper() for c in df_prov.columns]
+
+    fig, ax = plt.subplots(figsize=(12, len(df_prov) * 0.55 + 2))
+    sns.heatmap(
+        df_prov, annot=True, fmt='.1f', cmap='YlOrRd',
+        linewidths=0.4, linecolor='#cccccc',
+        cbar_kws={'label': '% medio voto provincial'},
+        ax=ax
+    )
+    ax.set_title(f'Concentración geográfica de partidos regionalistas ({anyo})\n'
+                 'Solo provincias con al menos un partido > 0.5%')
+    ax.set_xlabel('Partido (slot)')
+    ax.set_ylabel('Provincia')
+    plt.tight_layout()
+    ruta2 = f'documentation/imagenes_EDA/heatmap_regionalistas_{anyo}.png'
+    plt.savefig(ruta2, dpi=150, bbox_inches='tight')
+    plt.show()
+    plt.close()
+
+    print(f"RESUMEN DE COBERTURA DE SLOTS — {anyo}")
+    print(f"{'Slot':<18} {'Media':>8} {'Max':>8} {'Municipios>0':>14}")
+    for col in sorted(pct_cols, key=lambda c: -df_pct[c].mean()):
+        label = col.replace('pct_', '')
+        media = df_pct[col].mean() * 100
+        maximo = df_pct[col].max() * 100
+        n_pos = (df_pct[col] > 0).sum()
+        print(f"{label:<18} {media:>7.2f}% {maximo:>7.2f}% {n_pos:>12,}")
+    print(f"\npct_otros cubre el {df_pct['pct_otros'].mean()*100:.2f}% del voto de media.")
+    print(f"Municipios con pct_otros > 5%: {(df_pct['pct_otros'] > 0.05).sum()} de {len(df_pct)}")
 
 
 def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019", individual: bool = True):
