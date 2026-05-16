@@ -281,9 +281,40 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
                 df_imputado.at[idx, col] = get_fallback_value(idx, col)
                 df_imputado.at[idx, 'imputado'] = True
 
+    # --- Edad media: imputación ponderada por género a nivel provincial ---
+    print(" -> Imputando edad media mediante ponderación por género...")
+    mask_edad = df_imputado['edad media'].isna()
+    if mask_edad.any():
+        df_edad_prov = pd.read_csv(
+            f"data_processed/edad_media/{anyo_str}/edad_media_provincias_{anyo_str}.csv", sep=';'
+        )
+        df_edad_prov['cod_str'] = df_edad_prov['cod_provincia'].astype(str).str.zfill(2)
+        edad_dict = df_edad_prov.set_index('cod_str')[['edad_media_hombres', 'edad_media_mujeres']].to_dict('index')
+
+        for idx in df_imputado.index[mask_edad]:
+            cod_prov = idx[:2]  # primeros 2 dígitos del código municipio (zfill(5))
+            if cod_prov not in edad_dict:
+                continue
+            edad_h = edad_dict[cod_prov]['edad_media_hombres']
+            edad_m = edad_dict[cod_prov]['edad_media_mujeres']
+            pob_h = df_imputado.at[idx, 'poblacion hombres']
+            pob_m = df_imputado.at[idx, 'poblacion mujeres']
+            pob_total = pob_h + pob_m
+            if pob_total > 0 and pd.notna(edad_h) and pd.notna(edad_m):
+                df_imputado.at[idx, 'edad media'] = (edad_h * pob_h + edad_m * pob_m) / pob_total
+                df_imputado.at[idx, 'imputado'] = True
+
+        n_imputados_edad = mask_edad.sum()
+        print(f"\n   Municipios con edad media imputada: {n_imputados_edad}")
+        print(f"   Fórmula aplicada:")
+        print(f"     edad_media = (edad_media_hombres_prov × pob_hombres")
+        print(f"                  + edad_media_mujeres_prov × pob_mujeres)")
+        print(f"                  / (pob_hombres + pob_mujeres)")
+        print(f"   Fuente provincial: edad_media_provincias_{anyo_str}.csv")
+
     df_imputado = df_imputado.reset_index()
     df_imputado = df_imputado.drop(columns=['es_rural'])
-    
+
     folder_path = f"data_processed/data_end/{anyo_str}/"
     if not os.path.exists(folder_path):
         os.makedirs(folder_path, exist_ok=True)
