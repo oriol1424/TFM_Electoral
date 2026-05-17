@@ -12,12 +12,11 @@ TARGETS = [
     'pct_bng', 'pct_cc', 'pct_prc', 'pct_naplus', 'pct_teruel'
 ]
 
-# Features fijas — orden estable entre train y predict
+# Features seleccionadas — 12 variables + provincia_enc (encoding calculado en preparar_features)
 FEATURES = [
-    'superficie', 'poblacion', 'poblacion hombres', 'poblacion mujeres',
-    'densidad poblacional', 'indice gini', 'P80P20', 'Renta media hogar',
-    'renta media unidad consumo', 'renta media persona', 'salarios', 'pensiones',
-    'otros ingresos', 'otras prestaciones', 'desempleo', 'edad media',
+    'superficie', 'poblacion', 'densidad poblacional', 'indice gini',
+    'renta media persona', 'salarios', 'pensiones', 'otros ingresos',
+    'otras prestaciones', 'desempleo', 'edad media', 'participacion',
     'provincia_enc'
 ]
 
@@ -68,7 +67,7 @@ def entrenar_modelos(
 
     print(f"ENTRENAMIENTO ML")
     print(f"Municipios train : {len(X_train)}")
-    print(f"Features         : {features_usadas}")
+    print(f"Las variables seleccionadas son: {features_usadas}")
     print(f"Modelos a entrenar: {len(TARGETS)}\n")
 
     modelos = {}
