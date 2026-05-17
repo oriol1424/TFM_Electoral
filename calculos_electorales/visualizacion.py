@@ -225,6 +225,83 @@ def mapa_ganadores_provincia(
     plt.show()
 
 
+# ── Mapa error por partido ────────────────────────────────────────────────────
+
+def mapa_error_partido(
+    pred_list: list,
+    df_real: pd.DataFrame,
+    ruta_parquet: str,
+    partido: str = 'pp',
+    guardar: bool = True,
+    lim: float = 0.18,
+) -> None:
+    """
+    Mapa de error medio por provincia para un partido concreto.
+    pred_list: [(label, df_pred), ...] — cada df_pred debe tener 'municipio' y 'pct_{partido}'.
+    Azul = subestima el partido | Rojo = sobreestima.
+    """
+    col_partido = f"pct_{partido}"
+
+    def _error_provincia(df_pred_mun: pd.DataFrame) -> pd.Series:
+        df_p = df_pred_mun[["municipio", col_partido]].copy()
+        df_r = df_real[["municipio", col_partido]].copy()
+        df_p["cod_prov"] = df_p["municipio"].astype(str).str.zfill(5).str[:2]
+        df_r["cod_prov"] = df_r["municipio"].astype(str).str.zfill(5).str[:2]
+        pred_prov = df_p.groupby("cod_prov")[col_partido].mean()
+        real_prov = df_r.groupby("cod_prov")[col_partido].mean()
+        return (pred_prov - real_prov).rename("error")
+
+    gdf = gpd.read_parquet(ruta_parquet)
+    gdf["cod_provincia"] = gdf["municipio"].astype(str).str.zfill(5).str[:2]
+    gdf["geometry"] = gdf["geometry"].buffer(0)
+    gdf_prov = gdf.dissolve(by="cod_provincia").reset_index()[["cod_provincia", "geometry"]]
+
+    n = len(pred_list)
+    fig, axes = plt.subplots(1, n, figsize=(9 * n, 8))
+    if n == 1:
+        axes = [axes]
+
+    for ax, (label, df_pred) in zip(axes, pred_list):
+        err = _error_provincia(df_pred)
+        col_err = f"err_{label}"
+        gdf_prov[col_err] = gdf_prov["cod_provincia"].map(err)
+        gdf_prov.plot(
+            column=col_err, ax=ax,
+            cmap="RdBu", vmin=-lim, vmax=lim,
+            linewidth=0.5, edgecolor="white",
+            legend=True,
+            legend_kwds={
+                "label": "Error (predicho - real)",
+                "orientation": "horizontal",
+                "shrink": 0.6, "pad": 0.02,
+            },
+        )
+        ax.set_title(
+            f"Error {partido.upper()} - {label}\nAzul = subestima  |  Rojo = sobreestima",
+            fontsize=11, fontweight="bold",
+        )
+        ax.axis("off")
+
+    fig.suptitle(
+        f"Error de prediccion del voto {partido.upper()} por provincia - 2023",
+        fontsize=13, fontweight="bold",
+    )
+    plt.tight_layout()
+
+    if guardar:
+        os.makedirs(CARPETA_IMAGENES, exist_ok=True)
+        plt.savefig(f"{CARPETA_IMAGENES}/mapa_error_{partido}.png", dpi=150, bbox_inches="tight")
+    plt.show()
+
+    first_label, first_df = pred_list[0]
+    err_0 = _error_provincia(first_df).reset_index()
+    err_0.columns = ["cod_prov", "error"]
+    err_0["error_abs"] = err_0["error"].abs()
+    err_0 = err_0.sort_values("error_abs", ascending=False)
+    print(f"TOP 10 PROVINCIAS con mayor error en {partido.upper()} ({first_label}):")
+    print(err_0.head(10).round(3).to_string(index=False))
+
+
 # ── Orquestador ───────────────────────────────────────────────────────────────
 
 def pipeline_visualizacion(
