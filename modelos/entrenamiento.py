@@ -5,14 +5,12 @@ import pandas as pd
 import xgboost as xgb
 from typing import Dict, List, Optional, Tuple
 
-# 15 targets — pct_otros se calcula como residuo, no se modela
 TARGETS = [
     'pct_psoe', 'pct_pp', 'pct_vox', 'pct_cs', 'pct_up_sumar',
     'pct_erc', 'pct_jxcat', 'pct_cup', 'pct_pnv', 'pct_ehbildu',
     'pct_bng', 'pct_cc', 'pct_prc', 'pct_naplus', 'pct_teruel'
 ]
 
-# Features seleccionadas — 12 variables + provincia_enc (encoding calculado en preparar_features)
 FEATURES = [
     'superficie', 'poblacion', 'densidad poblacional', 'indice gini',
     'renta media persona', 'salarios', 'pensiones', 'otros ingresos',

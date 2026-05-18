@@ -394,3 +394,58 @@ def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
     plt.tight_layout()
     plt.savefig(f"documentation/imagenes_EDA/correlacion_features_targets_{anyo}.png", dpi=150)
     plt.show()
+
+
+def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Crea nuevas variables derivadas a partir de las features socioeconómicas existentes.
+
+    Transformaciones aplicadas:
+      - log_poblacion, log_densidad_poblacional: corrigen skew extremo (47 y 13 respectivamente)
+      - ratio_envejecimiento: pensiones / salarios — proxy de envejecimiento demográfico
+      - dependencia_publica: suma de transferencias del Estado (pensiones + desempleo + otras_prestaciones)
+      - precariedad_laboral: componente volátil del ingreso (desempleo + otras_prestaciones)
+      - renta_ajustada_desigualdad: renta_media_persona × (1 - gini/100) — riqueza efectiva del ciudadano mediano
+      - ratio_sexo: hombres / mujeres — proxy de zonas rurales masculinizadas o con emigración femenina
+
+    Solo crea cada variable si las columnas fuente existen. Imprime un resumen de lo creado.
+    """
+    df = df.copy()
+    creadas = []
+
+    if "poblacion" in df.columns:
+        df["log_poblacion"] = np.log1p(df["poblacion"])
+        creadas.append("log_poblacion")
+
+    if "densidad poblacional" in df.columns:
+        df["log_densidad_poblacional"] = np.log1p(df["densidad poblacional"])
+        creadas.append("log_densidad_poblacional")
+
+    if {"pensiones", "salarios"}.issubset(df.columns):
+        df["ratio_envejecimiento"] = df["pensiones"] / (df["salarios"] + 0.01)
+        creadas.append("ratio_envejecimiento")
+
+    cols_dep = ["pensiones", "desempleo", "otras prestaciones"]
+    if all(c in df.columns for c in cols_dep):
+        df["dependencia_publica"] = df[cols_dep].sum(axis=1)
+        creadas.append("dependencia_publica")
+
+    cols_prec = ["desempleo", "otras prestaciones"]
+    if all(c in df.columns for c in cols_prec):
+        df["precariedad_laboral"] = df[cols_prec].sum(axis=1)
+        creadas.append("precariedad_laboral")
+
+    if {"renta media persona", "indice gini"}.issubset(df.columns):
+        df["renta_ajustada_desigualdad"] = df["renta media persona"] * (1 - df["indice gini"] / 100)
+        creadas.append("renta_ajustada_desigualdad")
+
+    if {"poblacion hombres", "poblacion mujeres"}.issubset(df.columns):
+        df["ratio_sexo"] = df["poblacion hombres"] / (df["poblacion mujeres"] + 1)
+        creadas.append("ratio_sexo")
+
+    print(f"Feature engineering completado: {len(creadas)} variables creadas")
+    for v in creadas:
+        n_nulos = df[v].isna().sum()
+        print(f"  + {v:<35} nulos={n_nulos}")
+
+    return df
