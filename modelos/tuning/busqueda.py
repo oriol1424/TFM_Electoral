@@ -8,7 +8,6 @@ from typing import Dict, Tuple, Optional
 
 from modelos.entrenamiento import preparar_features, TARGETS, cargar_modelos
 
-# Espacio de búsqueda de hiperparámetros
 PARAM_DIST = {
     'max_depth':        [4, 5, 6, 7, 8],
     'learning_rate':    [0.01, 0.03, 0.05, 0.08, 0.1],
@@ -32,7 +31,6 @@ def tunear_partido(
     Ajusta hiperparámetros para un partido con RandomizedSearchCV.
     Devuelve (mejor_modelo, mejores_params, cv_mae).
     """
-    # n_jobs=1 en el estimador para evitar conflictos de threads con sklearn en Windows
     base = xgb.XGBRegressor(random_state=random_state, n_jobs=1, verbosity=0)
 
     search = RandomizedSearchCV(

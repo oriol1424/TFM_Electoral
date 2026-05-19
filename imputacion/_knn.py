@@ -30,7 +30,7 @@ def knn_impute_group(
     ref_dist  = df[distance_cols].values[ref_mask].astype(np.float64)
     null_dist = df[distance_cols].values[null_mask].astype(np.float64)
     ref_tgt   = df[target_cols].values[ref_mask].astype(np.float64)
-    null_tgt  = df[target_cols].values[null_mask].astype(np.float64)  # contiene NaN
+    null_tgt  = df[target_cols].values[null_mask].astype(np.float64)
 
     mu    = ref_dist.mean(axis=0)
     sigma = ref_dist.std(axis=0)

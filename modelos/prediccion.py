@@ -35,7 +35,6 @@ def normalizar_predicciones(df_pred: pd.DataFrame) -> pd.DataFrame:
     suma_15 = df_norm[cols_pred].sum(axis=1)
     df_norm['pct_otros'] = (1 - suma_15).clip(lower=0)
 
-    # Renormalize to guarantee sum = 1.0
     total = df_norm[cols_pred + ['pct_otros']].sum(axis=1)
     for col in cols_pred + ['pct_otros']:
         df_norm[col] = df_norm[col] / total

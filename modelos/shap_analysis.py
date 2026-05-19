@@ -123,15 +123,12 @@ def heatmap_direccion_shap(
     for partido, modelo in modelos.items():
         explainer = shap.TreeExplainer(modelo)
         shap_values = explainer.shap_values(X)
-        # Media con signo — no valor absoluto
         direcciones[partido.replace('pct_', '')] = shap_values.mean(axis=0)
 
     df_dir = pd.DataFrame(direcciones, index=X.columns)
 
-    # Normalizar por partido: escala [-1, 1] dentro de cada columna
     df_norm = df_dir.div(df_dir.abs().max())
 
-    # Ordenar features de más a menos importante globalmente
     df_norm = df_norm.loc[df_dir.abs().mean(axis=1).sort_values(ascending=False).index]
 
     fig, ax = plt.subplots(figsize=(14, 7))

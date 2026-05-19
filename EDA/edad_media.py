@@ -2,10 +2,6 @@ import pandas as pd
 from EDA.visuals import plot_histogram_with_reference, plot_barh_with_reference
 
 
-# ---------------------------------------------------------------------------
-# Helpers privados
-# ---------------------------------------------------------------------------
-
 def _normalizar_cod_provincia(df: pd.DataFrame) -> pd.DataFrame:
     """Garantiza que cod_provincia sea string con cero a la izquierda."""
     df = df.copy()
@@ -115,9 +111,6 @@ def _plot_municipios(df_municipios: pd.DataFrame, anio: int) -> None:
         )
 
 
-# ---------------------------------------------------------------------------
-# Funcion principal (punto de entrada desde main.ipynb)
-# ---------------------------------------------------------------------------
 
 def eda_edad_media(
     df_provincias: pd.DataFrame,

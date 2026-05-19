@@ -4,7 +4,6 @@ from typing import Dict
 
 from modelos.entrenamiento import TARGETS
 
-# Slots que compiten en D'Hondt (excluye votos_otros — nunca gana escaños individualmente)
 SLOTS_DHONDT = [t.replace('pct_', 'votos_') for t in TARGETS]
 
 

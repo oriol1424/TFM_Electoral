@@ -9,7 +9,6 @@ from typing import Optional
 CARPETA_IMAGENES = 'documentation/imagenes_EDA'
 
 
-# ── Tablas ────────────────────────────────────────────────────────────────────
 
 def tabla_comparacion_mae(
     metricas_base: pd.DataFrame,
@@ -53,7 +52,6 @@ def tabla_comparacion_r2(
     return df.sort_values('R2_tuned', ascending=False).reset_index(drop=True)
 
 
-# ── Gráficos ──────────────────────────────────────────────────────────────────
 
 def grafico_comparacion_mae(
     metricas_base: pd.DataFrame,
@@ -74,7 +72,6 @@ def grafico_comparacion_mae(
     ax.barh(y + h / 2, df['MAE_base'],  h, label='Baseline', color='#7FB3D3', alpha=0.9)
     ax.barh(y - h / 2, df['MAE_tuned'], h, label='Tuned',    color='#1A5276', alpha=0.9)
 
-    # etiqueta de mejora porcentual
     for i, row in df.iterrows():
         delta = row['mejora_pct']
         color = '#1E8449' if delta > 0 else '#C0392B'
@@ -170,7 +167,6 @@ def grafico_scatter_mejora(
     plt.show()
 
 
-# ── Orquestador ───────────────────────────────────────────────────────────────
 
 def pipeline_comparacion(
     metricas_base: pd.DataFrame,

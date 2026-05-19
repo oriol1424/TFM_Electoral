@@ -22,12 +22,14 @@ def analizar_pca(
     anyo: int,
     output_dir: str = "documentation/imagenes_EDA",
     n_components: int = 10,
+    cols_override: list = None,
 ) -> pd.DataFrame:
     """
     Realiza un PCA sobre las features socioeconómicas del dataset municipal.
 
     Pasos:
-      1. Selecciona features numéricas excluyendo identificadores, targets y flags.
+      1. Selecciona features: si se pasa cols_override, usa esa lista exacta;
+         si no, toma todas las numéricas excluyendo identificadores, targets y flags.
       2. Elimina filas con NaN residuales (no debería haber tras imputación).
       3. Estandariza (media=0, std=1) con StandardScaler.
       4. Aplica PCA y genera:
@@ -40,10 +42,16 @@ def analizar_pca(
     """
     os.makedirs(output_dir, exist_ok=True)
 
-    cols_features = [
-        c for c in df.columns
-        if c not in COLS_EXCLUIR and pd.api.types.is_numeric_dtype(df[c])
-    ]
+    if cols_override is not None:
+        cols_features = [c for c in cols_override if c in df.columns]
+        missing = [c for c in cols_override if c not in df.columns]
+        if missing:
+            print(f"AVISO: columnas no encontradas en el dataframe y omitidas: {missing}")
+    else:
+        cols_features = [
+            c for c in df.columns
+            if c not in COLS_EXCLUIR and pd.api.types.is_numeric_dtype(df[c])
+        ]
     print(f"PCA {anyo} — Features seleccionadas ({len(cols_features)}):")
     for c in cols_features:
         print(f"  · {c}")

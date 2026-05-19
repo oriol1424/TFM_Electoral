@@ -5,9 +5,6 @@ from typing import Dict, List, Any, Optional, Tuple
 import pandas as pd
 from .funciones_genericas_limpieza import guardar_dataframe_csv, guardar_json, leer_json
 
-# =============================================================================
-# CANDIDATURAS GENERALES E IDEOLOGÍA
-# =============================================================================
 
 def generar_json_desde_cis(fichero_cis: str, output_json: str) -> Dict[str, Any]:
     """
@@ -154,12 +151,9 @@ def fusionar_ideologia_y_arbol(fichero_maestro_ideologia: str, fichero_arbol: st
         }
         
     guardar_json(json_final, output_file)
-        
+
     return json_final
 
-# =============================================================================
-# PROCESAMIENTO DE VOTOS
-# =============================================================================
 
 def leer_votos_municipales(file_path: str) -> pd.DataFrame:
     """
@@ -260,15 +254,14 @@ def procesar_participacion_municipios(file_path_05: str, anio: str, output_file:
     Returns:
         pd.DataFrame: DataFrame con ID_MUNICIPIO, VOTOS_BLANCO y PARTICIPACION.
     """
-    # Especificaciones según formato MIR para el fichero tipo 05 (Totales de Municipio)
     col_specs = [
-        (11, 13),   # Código I.N.E. de la provincia (Pos 12-13)
-        (13, 16),   # Código I.N.E. del municipio (Pos 14-16)
-        (16, 18),   # Número de distrito municipal (Pos 17-18)
-        (149, 157), # Censo de escrutinio (Pos 150-157)
-        (189, 197), # Votos en blanco (Pos 190-197)
-        (197, 205), # Votos nulos (Pos 198-205)
-        (205, 213)  # Votos a candidaturas (Pos 206-213)
+        (11, 13),
+        (13, 16),
+        (16, 18),
+        (149, 157),
+        (189, 197),
+        (197, 205),
+        (205, 213)
     ]
     col_names = [
         'PROVINCIA', 'MUNICIPIO', 'DISTRITO', 'CENSO', 
@@ -277,26 +270,19 @@ def procesar_participacion_municipios(file_path_05: str, anio: str, output_file:
 
     df = pd.read_fwf(file_path_05, colspecs=col_specs, names=col_names, dtype=str, encoding='latin-1')
 
-    # Filtrar por total municipal
     df = df[df['DISTRITO'] == '99'].copy()
 
-    # Crear ID_MUNICIPIO
     df['ID_MUNICIPIO'] = df['PROVINCIA'].str.zfill(2) + df['MUNICIPIO'].str.zfill(3)
 
-    # Convertir a numérico
     for col in ['CENSO', 'VOTOS_BLANCO', 'VOTOS_NULOS', 'VOTOS_CANDIDATURAS']:
         df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0).astype(int)
 
-    # Calcular participación
-    # Votos emitidos = Blancos + Nulos + Candidaturas
     df['VOTOS_EMITIDOS'] = df['VOTOS_BLANCO'] + df['VOTOS_NULOS'] + df['VOTOS_CANDIDATURAS']
 
-    # Evitar división por cero
     df['PARTICIPACION'] = 0.0
     mask = df['CENSO'] > 0
     df.loc[mask, 'PARTICIPACION'] = (df.loc[mask, 'VOTOS_EMITIDOS'] / df.loc[mask, 'CENSO']) * 100
 
-    # Renombrar columnas con el año para consistencia con el resto del pipeline
     df = df.rename(columns={
         'VOTOS_BLANCO': f'V_BLANCOS_{anio}',
         'PARTICIPACION': f'PARTICIPACION_{anio}'
@@ -309,20 +295,12 @@ def procesar_participacion_municipios(file_path_05: str, anio: str, output_file:
     return df_result
 
 
-# =============================================================================
-# TARGET ML: PORCENTAJES DE VOTO POR SLOT DE PARTIDO
-# =============================================================================
 
-# Mapeo base: slot → candidaturas (sin prefijo V_ ni sufijo _anio).
-# Criterio Opción B: slots estables para estatales + columna individual por
-# cada regionalista que obtuvo escaño en 2019. Reusable para 2023 añadiendo
-# o modificando entradas en el dict antes de llamar a generar_columnas_pct_votos.
 SLOT_MAPPING_DEFAULT: Dict[str, List[str]] = {
     'pct_psoe':     ['PSOE', 'PSC-PSOE', 'PSdeG-PSOE', 'PSE-EE_(PSOE)'],
     'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
     'pct_vox':      ['VOX'],
     'pct_cs':       ['Cs'],
-    # Unidas Podemos + Más País + coaliciones territoriales → Sumar en 2023
     'pct_up_sumar': [
         'PODEMOS-IU', 'PODEMOS-IU_LV_CA', 'ECP-GUANYEM',
         'PODEMOS-EUPV', 'PODEMOS-EU', 'PODEMOS-EUIB',
@@ -330,7 +308,6 @@ SLOT_MAPPING_DEFAULT: Dict[str, List[str]] = {
         'MÁS_PAÍS-EQ', 'MÁS_PAÍS-AN', 'MÁS_PAÍS-CA', 'MÁS_PAÍS',
         'M_PAÍS-CHA-', 'M_PAÍS', 'MÉS_COMPROM', 'MÉS-ESQUERR',
     ],
-    # Regionalistas con escaño propio en 2019
     'pct_erc':      ['ERC-SOBIRANISTES'],
     'pct_jxcat':    ['JxCAT-JUNTS'],
     'pct_cup':      ['CUP-PR'],
@@ -343,15 +320,6 @@ SLOT_MAPPING_DEFAULT: Dict[str, List[str]] = {
     'pct_teruel':   ['¡TERUEL_EXI'],
 }
 
-# Mapeo para 2023: los partidos cambiaron nombres entre elecciones.
-# - UP/Sumar: Podemos desapareció, Sumar fue la candidatura unitaria de izquierda.
-# - JxCAT: guion cambia de JxCAT-JUNTS a JxCAT_-_JUNTS en los ficheros del MIR.
-# - ERC: pierde el sufijo -SOBIRANISTES.
-# - CC: CCa-PNC-NC se acorta a CCa.
-# - NA+: UPN fue la candidatura dominante en Navarra (NA+ se disolvió).
-# - Teruel: el movimiento España Vaciada presentó candidaturas bajo EXISTE y ESPAÑA_VACIADA.
-# - CS: prácticamente desapareció; la lista vacía deja pct_cs=0 para 2023.
-# - PRC: no presentó candidatura propia en las elecciones generales de 2023.
 SLOT_MAPPING_2023: Dict[str, List[str]] = {
     'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
     'pct_pp':       ['PP'],
@@ -359,9 +327,9 @@ SLOT_MAPPING_2023: Dict[str, List[str]] = {
     'pct_cs':       [],
     'pct_up_sumar': [
         'SUMAR', 'SUMAR_-_ECP',
-        'SUMAR_-_COMPROMÍS',             # Í → puede estar corrupto en el CSV
-        'SUMAR_ARAGÓN',                  # Ó → puede estar corrupto en el CSV
-        'MÉS_PER_MALLORCA-MÉS_PER_MENORCA-SUMAR',  # É → puede estar corrupto
+        'SUMAR_-_COMPROMÍS',
+        'SUMAR_ARAGÓN',
+        'MÉS_PER_MALLORCA-MÉS_PER_MENORCA-SUMAR',
     ],
     'pct_erc':      ['ERC'],
     'pct_jxcat':    ['JxCAT_-_JUNTS'],
@@ -407,17 +375,13 @@ def generar_columnas_pct_votos(
     vote_cols = [c for c in df.columns if c.startswith('V_')]
     votos_total = df[vote_cols].sum(axis=1)
 
-    # Build normalized lookup to handle CSV files with corrupted special chars
-    # (e.g. Ó/É/Í/Ñ stored as U+FFFD replacement character after double-encoding).
-    # Both the mapping key and the CSV column name are normalized the same way,
-    # so 'COMPROMÍS' (clean) matches 'COMPROM�S' (corrupted in file).
     def _norm(s: str) -> str:
         return re.sub(r'[^\x00-\x7F]+', '?', s)
 
     col_norm_lookup: Dict[str, str] = {}
     for col in vote_cols:
         if col.endswith(f'_{anio}'):
-            raw_name = col[2:-(len(anio) + 1)]  # strip 'V_' prefix and '_{anio}' suffix
+            raw_name = col[2:-(len(anio) + 1)]
             col_norm_lookup[_norm(raw_name)] = col
 
     result = df[['ID_MUNICIPIO']].copy()
@@ -430,7 +394,6 @@ def generar_columnas_pct_votos(
             if exact in df.columns:
                 cols_presentes.append(exact)
             else:
-                # Fallback: normalize and match against corrupted column names
                 matched = col_norm_lookup.get(_norm(cand))
                 if matched:
                     cols_presentes.append(matched)
@@ -452,10 +415,6 @@ def generar_columnas_pct_votos(
     print(f"[OK] {len(result)} municipios, {len(pct_cols)} slots guardados en {output_file}")
     return result
 
-
-# =============================================================================
-# 3. FUNCIÓN MAESTRA
-# =============================================================================
 
 def limpieza_votos_partidos(fichero_cis: str, fichero_03: str, fichero_05: str, fichero_06: str, ruta_guardado: str, anio: str = "2023") -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """

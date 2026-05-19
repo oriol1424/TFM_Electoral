@@ -1,9 +1,6 @@
 import pandas as pd
 import json
 
-# =============================================================================
-# MÓDULO 1: POBLACIÓN Y REPARTO DE ESCAÑOS (JSON)
-# =============================================================================
 
 def calcular_y_guardar_escanos_json(ruta_json_poblacion):
     """
@@ -54,9 +51,6 @@ def calcular_y_guardar_escanos_json(ruta_json_poblacion):
         
     return {id_prov: datos['escaños'] for id_prov, datos in provincias.items()}
 
-# =============================================================================
-# MÓDULO 2: VOTOS Y LEY D'HONDT
-# =============================================================================
 
 def agrupar_votos_csv(ruta_csv_votos):
     """
@@ -74,6 +68,7 @@ def agrupar_votos_csv(ruta_csv_votos):
     votos_provinciales = df_largo.groupby(['id_provincia', 'partido'])['votos'].sum().reset_index()
     
     return votos_provinciales
+
 
 def aplicar_dhondt(dict_votos, num_escaños):
     """
@@ -106,9 +101,6 @@ def aplicar_dhondt(dict_votos, num_escaños):
         
     return {p: esc for p, esc in resultados_partidos.items() if esc > 0}
 
-# =============================================================================
-# MÓDULO 3: FUNCIÓN MAESTRA ORQUESTADORA
-# =============================================================================
 
 def sistema_electoral(ruta_json_poblacion, ruta_csv_votos, ruta_salida_csv):
     """
@@ -129,7 +121,7 @@ def sistema_electoral(ruta_json_poblacion, ruta_csv_votos, ruta_salida_csv):
         reparto_provincia = aplicar_dhondt(dict_votos_prov, num_escaños)
         
         for partido, votos in dict_votos_prov.items():
-            if votos > 0: # Ignorar partidos con 0 votos en esa provincia
+            if votos > 0:
                 escaños_obtenidos = reparto_provincia.get(partido, 0)
                 resultados_finales.append({
                     'id_provincia': prov,

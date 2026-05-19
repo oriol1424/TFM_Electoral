@@ -54,14 +54,12 @@ NOMBRES_DISPLAY = {
     'teruel':   'Teruel Existe',
 }
 
-# Orden político izquierda → derecha (para el hemiciclo)
 ORDEN_POLITICO = [
     'cup', 'ehbildu', 'bng', 'erc', 'up_sumar', 'jxcat',
     'psoe', 'pnv', 'prc', 'cc', 'naplus', 'teruel', 'cs', 'pp', 'vox'
 ]
 
 
-# ── Hemiciclo ─────────────────────────────────────────────────────────────────
 
 def _posiciones_hemiciclo(n_total: int, n_filas: int = 10) -> np.ndarray:
     """Devuelve array (n_total, 2) con posiciones (x, y) en arcos concéntricos."""
@@ -91,11 +89,9 @@ def _dibujar_hemiciclo(ax, escanos_dict: Dict[str, int], titulo: str) -> None:
 
     pos = _posiciones_hemiciclo(total)
 
-    # Ordenar posiciones por ángulo (π → 0) para aspecto de cuña por partido
     angulos = np.arctan2(pos[:, 1], pos[:, 0])
     pos = pos[np.argsort(angulos)[::-1]]
 
-    # Construir lista de colores en orden político
     colores = []
     for partido in ORDEN_POLITICO:
         n = escanos_dict.get(partido, 0)
@@ -155,7 +151,6 @@ def hemiciclo_escanos(
     plt.show()
 
 
-# ── Mapa provincial ───────────────────────────────────────────────────────────
 
 def ganador_por_provincia(df_votos_prov: pd.DataFrame) -> Dict[str, str]:
     """
@@ -179,11 +174,9 @@ def mapa_ganadores_provincia(
     Mapa de España coloreado por partido más votado en cada provincia.
     Real (izquierda) vs Predicho (derecha).
     """
-    # Cargar geometrías municipales y disolver a provincia
     gdf = gpd.read_parquet(ruta_parquet_municipios)
     gdf['cod_provincia'] = gdf['municipio'].astype(str).str.zfill(5).str[:2]
 
-    # Buffer(0) para reparar geometrías inválidas antes de disolver
     gdf['geometry'] = gdf['geometry'].buffer(0)
     gdf_prov = (
         gdf.dissolve(by='cod_provincia')
@@ -225,7 +218,6 @@ def mapa_ganadores_provincia(
     plt.show()
 
 
-# ── Mapa error por partido ────────────────────────────────────────────────────
 
 def mapa_error_partido(
     pred_list: list,
@@ -302,7 +294,6 @@ def mapa_error_partido(
     print(err_0.head(10).round(3).to_string(index=False))
 
 
-# ── Orquestador ───────────────────────────────────────────────────────────────
 
 def pipeline_visualizacion(
     modelos: Dict,
@@ -338,7 +329,6 @@ def pipeline_visualizacion(
     ganadores_real = ganador_por_provincia(df_prov_real)
 
     print("[4/4] Generando gráficos...")
-    # dhondt devuelve claves 'votos_pp'; hemiciclo espera 'pp'
     esc_pred_viz = {k.replace('votos_', ''): v for k, v in escanos_pred.items()}
     esc_real_viz = {k.replace('votos_', ''): v for k, v in escanos_real.items()}
     hemiciclo_escanos(esc_pred_viz, esc_real_viz, etiqueta, guardar)

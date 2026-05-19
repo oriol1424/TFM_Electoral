@@ -89,7 +89,6 @@ def extraer_datos_navarra(path_xlsx: str) -> pd.DataFrame:
     df.columns = col_names
     
     def formatear_codigo(cod):
-        # Convertir a string, quitar decimales y rellenar a 3 dígitos + prefijo 31
         cod_str = str(cod).split('.')[0].strip()
         if cod_str.isdigit():
             return "31" + cod_str.zfill(3)

@@ -115,12 +115,10 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
             df_obj['Cod_Muni'] = df_obj['Cod_Muni'].astype(str).str.zfill(5)
             auditar_municipios_extintos(df_obj, df_pob, df_name, 'Cod_Muni')
 
-    # --- CARGA EDAD MEDIA MUNICIPAL ---
     df_edad = pd.read_csv(config["edad_media_municipios"], sep=';')
     df_edad['id_municipio'] = df_edad['id_municipio'].astype(str).str.zfill(5)
     auditar_municipios_extintos(df_edad.rename(columns={'id_municipio': 'Cod_Muni'}), df_pob, "Edad Media", 'Cod_Muni')
 
-    # --- CARGA DE VOTOS Y PARTICIPACIÓN ---
     votos_path = os.path.join(config["carpeta_votos"], f"Votos_Granularidad_Total_{anyo_str}.csv")
     if not os.path.exists(votos_path):
          votos_path = os.path.join(config["carpeta_votos"], "Votos_Granularidad_Total_2019.csv")
@@ -135,7 +133,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     cols_v = [c for c in df_votos.columns if c not in ['id_municipio', 'nombre_muni', 'fecha_eleccion', 'FECHA_ELECCION']]
     df_votos['votos totales'] = df_votos[cols_v].sum(axis=1)
 
-    # Carga de participación
     participacion_path = os.path.join(config["carpeta_votos"], f"participación_electoral_{anyo_str}.csv")
     if os.path.exists(participacion_path):
         df_part = pd.read_csv(participacion_path, sep=';')
@@ -143,7 +140,6 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
     else:
         df_part = pd.DataFrame(columns=['ID_MUNICIPIO', f'V_BLANCOS_{anyo_str}', f'PARTICIPACION_{anyo_str}'])
 
-    # --- MERGES FINALES ---
     df_final = pd.merge(df_final, df_gini[['Cod_Muni', f'Índice de Gini {anyo_str}', f'Distribución de la renta P80/P20 {anyo_str}']], 
                         left_on='id_municipio', right_on='Cod_Muni', how='left')
     
@@ -172,10 +168,8 @@ def unificar_datos_eda(anyo: int) -> pd.DataFrame:
 
     df_final = pd.merge(df_final, df_votos[['id_municipio', 'votos totales']], on='id_municipio', how='left')
     
-    # Merge de participación
     df_final = pd.merge(df_final, df_part, left_on='id_municipio', right_on='ID_MUNICIPIO', how='left')
 
-    # Merge targets ML (pct por partido)
     votos_pct_path = os.path.join(folder_path, f"votos_pct_{anyo_str}.csv")
     if os.path.exists(votos_pct_path):
         df_pct = pd.read_csv(votos_pct_path, sep=';')
@@ -281,7 +275,6 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
                 df_imputado.at[idx, col] = get_fallback_value(idx, col)
                 df_imputado.at[idx, 'imputado'] = True
 
-    # --- Edad media: imputación ponderada por género a nivel provincial ---
     print(" -> Imputando edad media mediante ponderación por género...")
     mask_edad = df_imputado['edad media'].isna()
     if mask_edad.any():
@@ -292,7 +285,7 @@ def imputar_datos_socioeconomicos(df: pd.DataFrame, w, anyo: int) -> pd.DataFram
         edad_dict = df_edad_prov.set_index('cod_str')[['edad_media_hombres', 'edad_media_mujeres']].to_dict('index')
 
         for idx in df_imputado.index[mask_edad]:
-            cod_prov = idx[:2]  # primeros 2 dígitos del código municipio (zfill(5))
+            cod_prov = idx[:2]
             if cod_prov not in edad_dict:
                 continue
             edad_h = edad_dict[cod_prov]['edad_media_hombres']
@@ -364,8 +357,6 @@ def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
 
     os.makedirs("documentation/imagenes_EDA", exist_ok=True)
 
-    # --- 1. Features × Features (multicolinealidad) ---
-    # Aquí sí usamos dropna solo sobre features para evitar distorsión
     df_features_clean = df_all[cols_feature].dropna()
     corr_ff = df_features_clean.corr()
     mask = np.triu(np.ones_like(corr_ff, dtype=bool))
@@ -380,9 +371,6 @@ def analizar_correlaciones_eda(df: pd.DataFrame, anyo: int):
     plt.savefig(f"documentation/imagenes_EDA/correlacion_features_{anyo}.png", dpi=150)
     plt.show()
 
-    # --- 2. Features × Targets (poder predictivo) ---
-    # Correlación pairwise: pandas usa solo filas completas por cada par de columnas,
-    # preservando así los municipios de partidos regionalistas aunque haya NaN en otras features
     corr_ft = df_all.corr(min_periods=30).loc[cols_feature, cols_target]
     fig, ax = plt.subplots(figsize=(14, 8))
     sns.heatmap(corr_ft, annot=True, fmt=".2f", cmap="coolwarm",

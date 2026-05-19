@@ -24,7 +24,6 @@ def generar_grafo_adyacencia(anyo: int = 2019, force: bool = False):
     Filtra los resultados para que coincidan exactamente con el padrón de población del año indicado.
     Si los archivos ya existen en data_processed, los carga directamente (a menos que force=True).
     """
-    # Rutas de salida
     output_dir = os.path.join('data_processed', 'geografia')
     os.makedirs(output_dir, exist_ok=True)
     

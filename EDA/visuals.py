@@ -27,7 +27,6 @@ def mapear_nombres_provincias(df: pd.DataFrame, anyo: str) -> pd.DataFrame:
     """
     Añade o completa la columna 'nombre_provincia' en el DataFrame usando el mapeo del JSON.
     """
-    # Estandarizar nombre de columna de entrada
     col_id = None
     for c in ['id_provincia', 'Cod_Muni', 'cod_muni', 'id_municipio']:
         if c in df.columns:
@@ -99,7 +98,6 @@ def plot_votos_individuales_por_provincia(df_final: pd.DataFrame):
         if data.empty: continue
             
         data_pct = (data / data.sum()) * 100
-        # Limpiar nombres de índices (partidos)
         data_pct.index = [_limpiar_caracteres_especiales(str(i)) for i in data_pct.index]
         
         plt.figure(figsize=(10, len(data_pct) * 0.5 + 1))
@@ -227,16 +225,13 @@ def plot_boxplot(
     sns.set_theme(style="whitegrid")
     plt.figure(figsize=figsize)
     
-    # En Seaborn 0.13+, si se usa palette se debe asignar hue.
-    # En algunas versiones 0.13.x, legend=False en boxplot puede dar UnboundLocalError: 'boxprops'
-    # Por ello, lo generamos y lo quitamos manualmente si existe.
     ax = sns.boxplot(
-        data=df, 
-        x=cat_col, 
-        y=num_col, 
+        data=df,
+        x=cat_col,
+        y=num_col,
         palette=palette,
-        hue=cat_col, # Si lo mantienes, asegúrate de que no haya legend=False dentro
-        legend=False # A veces, ponerlo explícitamente como True y luego borrarlo funciona
+        hue=cat_col,
+        legend=False
     )
     
     if ax.get_legend() is not None:

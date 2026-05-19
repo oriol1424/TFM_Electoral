@@ -121,7 +121,6 @@ def verificar_datos_municipios_pequenos(df_gini: pd.DataFrame, df_pob: pd.DataFr
     else:
         con_datos = mapear_nombres_provincias(con_datos, anyo)
         
-        # Resumen por provincia
         resumen_prov = con_datos['nombre_provincia'].value_counts()
         print(f"Se han encontrado {len(con_datos)} municipios con datos a pesar de su pequeño tamaño (<= 100 hab).")
         print("\nRESUMEN DE EXCEPCIONES POR PROVINCIA:")
@@ -168,7 +167,7 @@ def procesar_desigualdad_anyo(df_gini: pd.DataFrame, anyo: str) -> pd.DataFrame:
             
     if col_id == col_nombre:
         df_filtrado = df_gini[[col_id, col_gini, col_p80p20]].copy()
-        df_filtrado.insert(1, 'Nombre_Temp', df_filtrado[col_id]) # Duplicamos la columna para tener nombre
+        df_filtrado.insert(1, 'Nombre_Temp', df_filtrado[col_id])
         mapping = {col_id: 'Cod_Muni', 'Nombre_Temp': 'Nombre_Muni', col_gini: 'gini', col_p80p20: 'p80_p20'}
     else:
         df_filtrado = df_gini[[col_id, col_nombre, col_gini, col_p80p20]].copy()

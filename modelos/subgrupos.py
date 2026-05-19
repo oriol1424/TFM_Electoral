@@ -8,7 +8,6 @@ from typing import Dict, Optional
 from modelos.entrenamiento import TARGETS, PARAMS_DEFAULT, preparar_features
 from modelos.prediccion import normalizar_predicciones, predicciones_a_votos
 
-# Mapeo rango_tamaño_población → grupo
 GRUPOS = {
     'rural':      ['<100', '101-500', '501-1000'],
     'semiurbano': ['1001-2000', '2001-5000', '5001-10000', '10001-20000', '20001-50000'],

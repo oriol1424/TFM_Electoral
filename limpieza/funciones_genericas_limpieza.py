@@ -161,13 +161,9 @@ def limpiar_valor_numerico(val: Any, to_nan: bool = False, handle_less_than_5: b
         return 2.0
 
     try:
-        # Si ya es un número (float o int), no lo tratamos como cadena
         if isinstance(val, (int, float)):
             return float(val)
 
-        # En archivos INE/SEPE brutos (formato español):
-        # El '.' suele ser separador de miles y la ',' de decimales.
-        # Quitamos el punto y cambiamos la coma por punto.
         val_clean = v_str.replace('.', '').replace(',', '.')
         return float(val_clean)
     except (ValueError, TypeError):

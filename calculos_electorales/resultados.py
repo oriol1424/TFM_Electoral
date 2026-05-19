@@ -10,7 +10,6 @@ from calculos_electorales.dhondt import agregar_votos_a_provincia, SLOTS_DHONDT
 CARPETA_IMAGENES = 'documentation/imagenes_EDA'
 
 
-# ── Preparación de votos ──────────────────────────────────────────────────────
 
 def votos_reales_por_provincia(df_datos_unificados: pd.DataFrame) -> pd.DataFrame:
     """
@@ -37,7 +36,6 @@ def votos_predichos_por_provincia(df_prediccion: pd.DataFrame) -> pd.DataFrame:
     return agregar_votos_a_provincia(df_prediccion, cols_votos)
 
 
-# ── Tabla comparativa ─────────────────────────────────────────────────────────
 
 def tabla_escanos(
     escanos_pred: Dict[str, int],
@@ -65,7 +63,6 @@ def tabla_escanos(
     return df.reset_index(drop=True)
 
 
-# ── Gráficos ──────────────────────────────────────────────────────────────────
 
 def grafico_barras_escanos(
     df_comp: pd.DataFrame,
