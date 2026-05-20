@@ -11,10 +11,17 @@ TARGETS = [
     'pct_bng', 'pct_cc', 'pct_prc', 'pct_naplus', 'pct_teruel'
 ]
 
-FEATURES = [
+FEATURES_LEGACY = [
     'superficie', 'poblacion', 'densidad poblacional', 'indice gini',
     'renta media persona', 'salarios', 'pensiones', 'otros ingresos',
     'otras prestaciones', 'desempleo', 'edad media', 'participacion',
+    'provincia_enc'
+]
+
+FEATURES = [
+    'log_poblacion', 'log_densidad_poblacional', 'superficie',
+    'indice gini', 'renta media persona', 'ratio_sexo',
+    'salarios', 'pensiones', 'otros ingresos', 'otras prestaciones', 'desempleo',
     'provincia_enc'
 ]
 
