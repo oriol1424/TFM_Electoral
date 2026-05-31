@@ -25,6 +25,8 @@ FEATURES = [
     'provincia_enc'
 ]
 
+FEATURES_PERCENTIL = ['renta media persona']
+
 PARAMS_DEFAULT = {
     'n_estimators': 500,
     'max_depth': 6,
@@ -46,6 +48,10 @@ def preparar_features(df: pd.DataFrame) -> pd.DataFrame:
 
     if 'provincia' in df_prep.columns:
         df_prep['provincia_enc'] = df_prep['provincia'].astype('category').cat.codes
+
+    for col in FEATURES_PERCENTIL:
+        if col in df_prep.columns:
+            df_prep[col] = df_prep[col].rank(pct=True)
 
     cols_presentes = [c for c in FEATURES if c in df_prep.columns]
     cols_faltantes = [c for c in FEATURES if c not in df_prep.columns]
