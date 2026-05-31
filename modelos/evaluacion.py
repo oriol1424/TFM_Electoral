@@ -3,20 +3,23 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Dict
+from typing import Dict, Optional
 from modelos.entrenamiento import preparar_features, TARGETS
 
 
 def evaluar_modelos(
     modelos: Dict,
     df_test: pd.DataFrame,
-    etiqueta: str = "test"
+    etiqueta: str = "test",
+    X_test: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """
     Evaluates each model on df_test.
+    Pass X_test explicitly when features differ from preparar_features output (e.g. spatial model).
     Returns DataFrame with MAE, RMSE, R² and mean real value per party.
     """
-    X_test = preparar_features(df_test)
+    if X_test is None:
+        X_test = preparar_features(df_test)
     resultados = []
 
     for partido, modelo in modelos.items():

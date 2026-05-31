@@ -58,7 +58,11 @@ def preparar_features(df: pd.DataFrame) -> pd.DataFrame:
     if cols_faltantes:
         print(f"  Aviso: features no encontradas en el dataset: {cols_faltantes}")
 
-    return df_prep[cols_presentes]
+    X = df_prep[cols_presentes]
+    nulos = X.isnull().sum().sum()
+    if nulos > 0:
+        X = X.fillna(X.median())
+    return X
 
 
 def entrenar_modelos(
