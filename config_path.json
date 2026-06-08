@@ -1,4 +1,13 @@
 {
+    "demo": {
+        "raw": {
+            "GINI_P80P20_navarra_multianual": "data_raw/renta/37731.csv"
+        },
+        "processed": {
+            "carpeta_salida": "data_processed/Demo/",
+            "panel_demo": "data_processed/Demo/panel_demo.csv"
+        }
+    },
     "2023": {
         "raw": {
             "votos_candidaturas": "data_raw/votos/01_julio_2023/03022307.DAT",
@@ -31,6 +40,34 @@
             "datos_unificados": "data_processed/data_end/2023/datos_unificados_2023.csv",
             "datos_unificados_imputados": "data_processed/data_end/2023/datos_unificados_imputados_2023.csv",
             "data_end": "data_processed/data_end/2023"
+        }
+    },
+    "2016": {
+        "raw": {
+            "votos_candidaturas": "data_raw/votos/04_junio_2016/03021606.DAT",
+            "Votos_candidaturas_agrupados": "data_raw/votos/04_junio_2016/06021606.DAT",
+            "votos_municipios_totales": "data_raw/votos/04_junio_2016/05021606.DAT",
+            "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
+            "poblacion": "data_raw/demografia/pobmun16.xlsx"
+        },
+        "processed": {
+            "carpeta_votos": "data_processed/votos_ideologia/votos_0616",
+            "votos_pct": "data_processed/data_end/2016/votos_pct_2016.csv",
+            "data_end": "data_processed/data_end/2016"
+        }
+    },
+    "2015": {
+        "raw": {
+            "votos_candidaturas": "data_raw/votos/20_diciembre_2015/03021512.DAT",
+            "Votos_candidaturas_agrupados": "data_raw/votos/20_diciembre_2015/06021512.DAT",
+            "votos_municipios_totales": "data_raw/votos/20_diciembre_2015/05021512.DAT",
+            "ideologias": "data_raw/ideologia_partidos/ficha_pregunta_3388.xlsx",
+            "poblacion": "data_raw/demografia/pobmun15.xlsx"
+        },
+        "processed": {
+            "carpeta_votos": "data_processed/votos_ideologia/votos_1215",
+            "votos_pct": "data_processed/data_end/2015/votos_pct_2015.csv",
+            "data_end": "data_processed/data_end/2015"
         }
     },
     "2019": {

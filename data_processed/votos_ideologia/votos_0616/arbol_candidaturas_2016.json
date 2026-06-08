@@ -1,0 +1,581 @@
+{
+    "000001": {
+        "siglas_generales": "ALCD",
+        "vinculadas": [
+            {
+                "codigo": "000001",
+                "sigla": "ALCD"
+            }
+        ]
+    },
+    "000002": {
+        "siglas_generales": "AND",
+        "vinculadas": [
+            {
+                "codigo": "000002",
+                "sigla": "AND"
+            }
+        ]
+    },
+    "000005": {
+        "siglas_generales": "BNG-NÓS",
+        "vinculadas": [
+            {
+                "codigo": "000005",
+                "sigla": "BNG-NÓS"
+            }
+        ]
+    },
+    "000007": {
+        "siglas_generales": "CCa-PNC",
+        "vinculadas": [
+            {
+                "codigo": "000007",
+                "sigla": "CCa-PNC"
+            }
+        ]
+    },
+    "000008": {
+        "siglas_generales": "CCD",
+        "vinculadas": [
+            {
+                "codigo": "000008",
+                "sigla": "CCD"
+            }
+        ]
+    },
+    "000009": {
+        "siglas_generales": "CCD-CI",
+        "vinculadas": [
+            {
+                "codigo": "000009",
+                "sigla": "CCD-CI"
+            }
+        ]
+    },
+    "000010": {
+        "siglas_generales": "CDC",
+        "vinculadas": [
+            {
+                "codigo": "000010",
+                "sigla": "CDC"
+            }
+        ]
+    },
+    "000011": {
+        "siglas_generales": "CENTRO MODERADO",
+        "vinculadas": [
+            {
+                "codigo": "000011",
+                "sigla": "CENTRO MODERADO"
+            }
+        ]
+    },
+    "000012": {
+        "siglas_generales": "CILUS",
+        "vinculadas": [
+            {
+                "codigo": "000012",
+                "sigla": "CILUS"
+            }
+        ]
+    },
+    "000013": {
+        "siglas_generales": "C's",
+        "vinculadas": [
+            {
+                "codigo": "000013",
+                "sigla": "C's"
+            },
+            {
+                "codigo": "000014",
+                "sigla": "C's"
+            },
+            {
+                "codigo": "000015",
+                "sigla": "C's"
+            }
+        ]
+    },
+    "000016": {
+        "siglas_generales": "EAJ-PNV",
+        "vinculadas": [
+            {
+                "codigo": "000016",
+                "sigla": "EAJ-PNV"
+            }
+        ]
+    },
+    "000017": {
+        "siglas_generales": "EB",
+        "vinculadas": [
+            {
+                "codigo": "000017",
+                "sigla": "EB"
+            },
+            {
+                "codigo": "000018",
+                "sigla": "EB"
+            },
+            {
+                "codigo": "000021",
+                "sigla": "EB-AZ"
+            }
+        ]
+    },
+    "000022": {
+        "siglas_generales": "ECP",
+        "vinculadas": [
+            {
+                "codigo": "000022",
+                "sigla": "ECP"
+            }
+        ]
+    },
+    "000023": {
+        "siglas_generales": "EH Bildu",
+        "vinculadas": [
+            {
+                "codigo": "000023",
+                "sigla": "EH Bildu"
+            }
+        ]
+    },
+    "000024": {
+        "siglas_generales": "ENTABAN",
+        "vinculadas": [
+            {
+                "codigo": "000024",
+                "sigla": "ENTABAN"
+            }
+        ]
+    },
+    "000025": {
+        "siglas_generales": "ERC-CATSÍ",
+        "vinculadas": [
+            {
+                "codigo": "000025",
+                "sigla": "ERC-CATSÍ"
+            }
+        ]
+    },
+    "000027": {
+        "siglas_generales": "FE",
+        "vinculadas": [
+            {
+                "codigo": "000027",
+                "sigla": "FE"
+            }
+        ]
+    },
+    "000028": {
+        "siglas_generales": "FE de las J",
+        "vinculadas": [
+            {
+                "codigo": "000028",
+                "sigla": "FE de las J"
+            }
+        ]
+    },
+    "000029": {
+        "siglas_generales": "FME",
+        "vinculadas": [
+            {
+                "codigo": "000029",
+                "sigla": "FME"
+            }
+        ]
+    },
+    "000030": {
+        "siglas_generales": "GBAI",
+        "vinculadas": [
+            {
+                "codigo": "000030",
+                "sigla": "GBAI"
+            }
+        ]
+    },
+    "000031": {
+        "siglas_generales": "HRTS-Ln",
+        "vinculadas": [
+            {
+                "codigo": "000031",
+                "sigla": "HRTS-Ln"
+            }
+        ]
+    },
+    "000033": {
+        "siglas_generales": "IMC",
+        "vinculadas": [
+            {
+                "codigo": "000033",
+                "sigla": "IMC"
+            }
+        ]
+    },
+    "000034": {
+        "siglas_generales": "INDEPENDIEN",
+        "vinculadas": [
+            {
+                "codigo": "000034",
+                "sigla": "INDEPENDIEN"
+            }
+        ]
+    },
+    "000035": {
+        "siglas_generales": "IZAR",
+        "vinculadas": [
+            {
+                "codigo": "000035",
+                "sigla": "IZAR"
+            }
+        ]
+    },
+    "000036": {
+        "siglas_generales": "JXC",
+        "vinculadas": [
+            {
+                "codigo": "000036",
+                "sigla": "JXC"
+            }
+        ]
+    },
+    "000038": {
+        "siglas_generales": "Ln",
+        "vinculadas": [
+            {
+                "codigo": "000038",
+                "sigla": "Ln"
+            }
+        ]
+    },
+    "000039": {
+        "siglas_generales": "MAS",
+        "vinculadas": [
+            {
+                "codigo": "000039",
+                "sigla": "MAS"
+            }
+        ]
+    },
+    "000041": {
+        "siglas_generales": "PACMA",
+        "vinculadas": [
+            {
+                "codigo": "000041",
+                "sigla": "PACMA"
+            },
+            {
+                "codigo": "000042",
+                "sigla": "PACMA"
+            },
+            {
+                "codigo": "000043",
+                "sigla": "PACMA"
+            }
+        ]
+    },
+    "000044": {
+        "siglas_generales": "PCOE",
+        "vinculadas": [
+            {
+                "codigo": "000044",
+                "sigla": "PCOE"
+            }
+        ]
+    },
+    "000049": {
+        "siglas_generales": "PCPE",
+        "vinculadas": [
+            {
+                "codigo": "000045",
+                "sigla": "PCPC"
+            },
+            {
+                "codigo": "000046",
+                "sigla": "PCPC"
+            },
+            {
+                "codigo": "000047",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000048",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000049",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000050",
+                "sigla": "PCPE"
+            }
+        ]
+    },
+    "000051": {
+        "siglas_generales": "PFyV",
+        "vinculadas": [
+            {
+                "codigo": "000051",
+                "sigla": "PFyV"
+            }
+        ]
+    },
+    "000052": {
+        "siglas_generales": "PH",
+        "vinculadas": [
+            {
+                "codigo": "000052",
+                "sigla": "PH"
+            }
+        ]
+    },
+    "000053": {
+        "siglas_generales": "P-LIB",
+        "vinculadas": [
+            {
+                "codigo": "000053",
+                "sigla": "P-LIB"
+            }
+        ]
+    },
+    "000055": {
+        "siglas_generales": "PODEMOS-COM",
+        "vinculadas": [
+            {
+                "codigo": "000055",
+                "sigla": "PODEMOS-COM"
+            }
+        ]
+    },
+    "000056": {
+        "siglas_generales": "PODEMOS-EN MAREA-ANOVA-EU",
+        "vinculadas": [
+            {
+                "codigo": "000056",
+                "sigla": "PODEMOS-EN MAREA-ANOVA-EU"
+            }
+        ]
+    },
+    "000059": {
+        "siglas_generales": "PODEMOS-IU-EQUO",
+        "vinculadas": [
+            {
+                "codigo": "000054",
+                "sigla": "PODEMOS/AHAL DUGU-IU-EQUO"
+            },
+            {
+                "codigo": "000057",
+                "sigla": "PODEMOS-EUI"
+            },
+            {
+                "codigo": "000059",
+                "sigla": "PODEMOS-IU-EQUO"
+            },
+            {
+                "codigo": "000060",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000061",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000062",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000063",
+                "sigla": "PODEMOS-IU-EQUO-BATZARRE"
+            },
+            {
+                "codigo": "000064",
+                "sigla": "PODEMOS-IU-EQUO-CLIAS"
+            },
+            {
+                "codigo": "000065",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000066",
+                "sigla": "PODEMOS-IU-EQUO-IZCA"
+            },
+            {
+                "codigo": "000067",
+                "sigla": "PODEMOS-IU-EQUO-SEGOVIEMOS"
+            },
+            {
+                "codigo": "000089",
+                "sigla": "UNIDOS PODEMOS"
+            }
+        ]
+    },
+    "000068": {
+        "siglas_generales": "PP",
+        "vinculadas": [
+            {
+                "codigo": "000068",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000069",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000070",
+                "sigla": "PP-FORO"
+            },
+            {
+                "codigo": "000071",
+                "sigla": "PP-PAR"
+            },
+            {
+                "codigo": "000092",
+                "sigla": "UPN-PP"
+            }
+        ]
+    },
+    "000072": {
+        "siglas_generales": "PREPAL",
+        "vinculadas": [
+            {
+                "codigo": "000072",
+                "sigla": "PREPAL"
+            }
+        ]
+    },
+    "000077": {
+        "siglas_generales": "PSOE",
+        "vinculadas": [
+            {
+                "codigo": "000074",
+                "sigla": "PSC-PSOE"
+            },
+            {
+                "codigo": "000075",
+                "sigla": "PSdeG-PSOE"
+            },
+            {
+                "codigo": "000076",
+                "sigla": "PSE-EE (PSOE)"
+            },
+            {
+                "codigo": "000077",
+                "sigla": "PSOE"
+            },
+            {
+                "codigo": "000078",
+                "sigla": "PSOE-NCa"
+            }
+        ]
+    },
+    "000079": {
+        "siglas_generales": "PUEDE",
+        "vinculadas": [
+            {
+                "codigo": "000079",
+                "sigla": "PUEDE"
+            }
+        ]
+    },
+    "000080": {
+        "siglas_generales": "PxC",
+        "vinculadas": [
+            {
+                "codigo": "000080",
+                "sigla": "PxC"
+            }
+        ]
+    },
+    "000081": {
+        "siglas_generales": "RECORTES CERO-GRUPO VERDE",
+        "vinculadas": [
+            {
+                "codigo": "000081",
+                "sigla": "RECORTES CERO-GRUPO VERDE"
+            }
+        ]
+    },
+    "000083": {
+        "siglas_generales": "REPO",
+        "vinculadas": [
+            {
+                "codigo": "000083",
+                "sigla": "REPO"
+            }
+        ]
+    },
+    "000084": {
+        "siglas_generales": "SAIn",
+        "vinculadas": [
+            {
+                "codigo": "000084",
+                "sigla": "SAIn"
+            }
+        ]
+    },
+    "000085": {
+        "siglas_generales": "SI",
+        "vinculadas": [
+            {
+                "codigo": "000085",
+                "sigla": "SI"
+            }
+        ]
+    },
+    "000086": {
+        "siglas_generales": "SOMVAL",
+        "vinculadas": [
+            {
+                "codigo": "000086",
+                "sigla": "SOMVAL"
+            }
+        ]
+    },
+    "000087": {
+        "siglas_generales": "UDT",
+        "vinculadas": [
+            {
+                "codigo": "000087",
+                "sigla": "UDT"
+            }
+        ]
+    },
+    "000088": {
+        "siglas_generales": "UNIDAD DEL PUEBLO",
+        "vinculadas": [
+            {
+                "codigo": "000088",
+                "sigla": "UNIDAD DEL PUEBLO"
+            }
+        ]
+    },
+    "000091": {
+        "siglas_generales": "UPL",
+        "vinculadas": [
+            {
+                "codigo": "000091",
+                "sigla": "UPL"
+            }
+        ]
+    },
+    "000093": {
+        "siglas_generales": "UPyD",
+        "vinculadas": [
+            {
+                "codigo": "000093",
+                "sigla": "UPyD"
+            }
+        ]
+    },
+    "000094": {
+        "siglas_generales": "VOX",
+        "vinculadas": [
+            {
+                "codigo": "000094",
+                "sigla": "VOX"
+            }
+        ]
+    }
+}

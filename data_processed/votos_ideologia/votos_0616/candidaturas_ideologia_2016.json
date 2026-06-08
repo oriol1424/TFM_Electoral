@@ -1,0 +1,683 @@
+{
+    "000001": {
+        "nombre_unificado": "ALCD",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000001",
+                "sigla": "ALCD"
+            }
+        ]
+    },
+    "000002": {
+        "nombre_unificado": "PSOE",
+        "ideologia": 3.76,
+        "voto_retrospectivo_id": "bloque_socialista",
+        "vinculadas": [
+            {
+                "codigo": "000002",
+                "sigla": "AND"
+            }
+        ]
+    },
+    "000005": {
+        "nombre_unificado": "PP",
+        "ideologia": 7.47,
+        "voto_retrospectivo_id": "bloque_popular",
+        "vinculadas": [
+            {
+                "codigo": "000005",
+                "sigla": "BNG-NÓS"
+            }
+        ]
+    },
+    "000007": {
+        "nombre_unificado": "CCa-PNC",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000007",
+                "sigla": "CCa-PNC"
+            }
+        ]
+    },
+    "000008": {
+        "nombre_unificado": "CCD",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000008",
+                "sigla": "CCD"
+            }
+        ]
+    },
+    "000009": {
+        "nombre_unificado": "CCD-CI",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000009",
+                "sigla": "CCD-CI"
+            }
+        ]
+    },
+    "000010": {
+        "nombre_unificado": "SUMAR",
+        "ideologia": 2.24,
+        "voto_retrospectivo_id": "bloque_izquierda_radical",
+        "vinculadas": [
+            {
+                "codigo": "000010",
+                "sigla": "CDC"
+            }
+        ]
+    },
+    "000011": {
+        "nombre_unificado": "VOX",
+        "ideologia": 8.95,
+        "voto_retrospectivo_id": "bloque_derecha_radical",
+        "vinculadas": [
+            {
+                "codigo": "000011",
+                "sigla": "CENTRO MODERADO"
+            }
+        ]
+    },
+    "000012": {
+        "nombre_unificado": "CILUS",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000012",
+                "sigla": "CILUS"
+            }
+        ]
+    },
+    "000013": {
+        "nombre_unificado": "C's",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000013",
+                "sigla": "C's"
+            },
+            {
+                "codigo": "000014",
+                "sigla": "C's"
+            },
+            {
+                "codigo": "000015",
+                "sigla": "C's"
+            }
+        ]
+    },
+    "000016": {
+        "nombre_unificado": "EAJ-PNV",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000016",
+                "sigla": "EAJ-PNV"
+            }
+        ]
+    },
+    "000017": {
+        "nombre_unificado": "EB",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000017",
+                "sigla": "EB"
+            },
+            {
+                "codigo": "000018",
+                "sigla": "EB"
+            },
+            {
+                "codigo": "000021",
+                "sigla": "EB-AZ"
+            }
+        ]
+    },
+    "000022": {
+        "nombre_unificado": "ECP",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000022",
+                "sigla": "ECP"
+            }
+        ]
+    },
+    "000023": {
+        "nombre_unificado": "Teruel Existe",
+        "ideologia": 4.41,
+        "voto_retrospectivo_id": "bloque_nacionalista_canario",
+        "vinculadas": [
+            {
+                "codigo": "000023",
+                "sigla": "EH Bildu"
+            }
+        ]
+    },
+    "000024": {
+        "nombre_unificado": "ENTABAN",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000024",
+                "sigla": "ENTABAN"
+            }
+        ]
+    },
+    "000025": {
+        "nombre_unificado": "ERC-CATSÍ",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000025",
+                "sigla": "ERC-CATSÍ"
+            }
+        ]
+    },
+    "000027": {
+        "nombre_unificado": "FE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000027",
+                "sigla": "FE"
+            }
+        ]
+    },
+    "000028": {
+        "nombre_unificado": "FE de las J",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000028",
+                "sigla": "FE de las J"
+            }
+        ]
+    },
+    "000029": {
+        "nombre_unificado": "FME",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000029",
+                "sigla": "FME"
+            }
+        ]
+    },
+    "000030": {
+        "nombre_unificado": "EAJ-PNV",
+        "ideologia": 4.88,
+        "voto_retrospectivo_id": "bloque_nacionalista_vasco",
+        "vinculadas": [
+            {
+                "codigo": "000030",
+                "sigla": "GBAI"
+            }
+        ]
+    },
+    "000031": {
+        "nombre_unificado": "CCa-PNC-NC",
+        "ideologia": 5.31,
+        "voto_retrospectivo_id": "bloque_nacionalista_canario",
+        "vinculadas": [
+            {
+                "codigo": "000031",
+                "sigla": "HRTS-Ln"
+            }
+        ]
+    },
+    "000033": {
+        "nombre_unificado": "IMC",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000033",
+                "sigla": "IMC"
+            }
+        ]
+    },
+    "000034": {
+        "nombre_unificado": "INDEPENDIEN",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000034",
+                "sigla": "INDEPENDIEN"
+            }
+        ]
+    },
+    "000035": {
+        "nombre_unificado": "IZAR",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000035",
+                "sigla": "IZAR"
+            }
+        ]
+    },
+    "000036": {
+        "nombre_unificado": "JXC",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000036",
+                "sigla": "JXC"
+            }
+        ]
+    },
+    "000038": {
+        "nombre_unificado": "Ln",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000038",
+                "sigla": "Ln"
+            }
+        ]
+    },
+    "000039": {
+        "nombre_unificado": "MAS",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000039",
+                "sigla": "MAS"
+            }
+        ]
+    },
+    "000041": {
+        "nombre_unificado": "PACMA",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000041",
+                "sigla": "PACMA"
+            },
+            {
+                "codigo": "000042",
+                "sigla": "PACMA"
+            },
+            {
+                "codigo": "000043",
+                "sigla": "PACMA"
+            }
+        ]
+    },
+    "000044": {
+        "nombre_unificado": "PCOE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000044",
+                "sigla": "PCOE"
+            }
+        ]
+    },
+    "000049": {
+        "nombre_unificado": "PCPE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000045",
+                "sigla": "PCPC"
+            },
+            {
+                "codigo": "000046",
+                "sigla": "PCPC"
+            },
+            {
+                "codigo": "000047",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000048",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000049",
+                "sigla": "PCPE"
+            },
+            {
+                "codigo": "000050",
+                "sigla": "PCPE"
+            }
+        ]
+    },
+    "000051": {
+        "nombre_unificado": "PFyV",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000051",
+                "sigla": "PFyV"
+            }
+        ]
+    },
+    "000052": {
+        "nombre_unificado": "PH",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000052",
+                "sigla": "PH"
+            }
+        ]
+    },
+    "000053": {
+        "nombre_unificado": "CUP",
+        "ideologia": 2.5,
+        "voto_retrospectivo_id": "bloque_nacionalista_cat",
+        "vinculadas": [
+            {
+                "codigo": "000053",
+                "sigla": "P-LIB"
+            }
+        ]
+    },
+    "000055": {
+        "nombre_unificado": "PODEMOS-COM",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000055",
+                "sigla": "PODEMOS-COM"
+            }
+        ]
+    },
+    "000056": {
+        "nombre_unificado": "PODEMOS-EN MAREA-ANOVA-EU",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000056",
+                "sigla": "PODEMOS-EN MAREA-ANOVA-EU"
+            }
+        ]
+    },
+    "000059": {
+        "nombre_unificado": "PODEMOS-IU-EQUO",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000054",
+                "sigla": "PODEMOS/AHAL DUGU-IU-EQUO"
+            },
+            {
+                "codigo": "000057",
+                "sigla": "PODEMOS-EUI"
+            },
+            {
+                "codigo": "000059",
+                "sigla": "PODEMOS-IU-EQUO"
+            },
+            {
+                "codigo": "000060",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000061",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000062",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000063",
+                "sigla": "PODEMOS-IU-EQUO-BATZARRE"
+            },
+            {
+                "codigo": "000064",
+                "sigla": "PODEMOS-IU-EQUO-CLIAS"
+            },
+            {
+                "codigo": "000065",
+                "sigla": "PODEMOS-IU-"
+            },
+            {
+                "codigo": "000066",
+                "sigla": "PODEMOS-IU-EQUO-IZCA"
+            },
+            {
+                "codigo": "000067",
+                "sigla": "PODEMOS-IU-EQUO-SEGOVIEMOS"
+            },
+            {
+                "codigo": "000089",
+                "sigla": "UNIDOS PODEMOS"
+            }
+        ]
+    },
+    "000068": {
+        "nombre_unificado": "PP",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000068",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000069",
+                "sigla": "PP"
+            },
+            {
+                "codigo": "000070",
+                "sigla": "PP-FORO"
+            },
+            {
+                "codigo": "000071",
+                "sigla": "PP-PAR"
+            },
+            {
+                "codigo": "000092",
+                "sigla": "UPN-PP"
+            }
+        ]
+    },
+    "000072": {
+        "nombre_unificado": "PREPAL",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000072",
+                "sigla": "PREPAL"
+            }
+        ]
+    },
+    "000077": {
+        "nombre_unificado": "PSOE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000074",
+                "sigla": "PSC-PSOE"
+            },
+            {
+                "codigo": "000075",
+                "sigla": "PSdeG-PSOE"
+            },
+            {
+                "codigo": "000076",
+                "sigla": "PSE-EE (PSOE)"
+            },
+            {
+                "codigo": "000077",
+                "sigla": "PSOE"
+            },
+            {
+                "codigo": "000078",
+                "sigla": "PSOE-NCa"
+            }
+        ]
+    },
+    "000079": {
+        "nombre_unificado": "PUEDE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000079",
+                "sigla": "PUEDE"
+            }
+        ]
+    },
+    "000080": {
+        "nombre_unificado": "PxC",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000080",
+                "sigla": "PxC"
+            }
+        ]
+    },
+    "000081": {
+        "nombre_unificado": "RECORTES CERO-GRUPO VERDE",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000081",
+                "sigla": "RECORTES CERO-GRUPO VERDE"
+            }
+        ]
+    },
+    "000083": {
+        "nombre_unificado": "REPO",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000083",
+                "sigla": "REPO"
+            }
+        ]
+    },
+    "000084": {
+        "nombre_unificado": "SAIn",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000084",
+                "sigla": "SAIn"
+            }
+        ]
+    },
+    "000085": {
+        "nombre_unificado": "SI",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000085",
+                "sigla": "SI"
+            }
+        ]
+    },
+    "000086": {
+        "nombre_unificado": "SOMVAL",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000086",
+                "sigla": "SOMVAL"
+            }
+        ]
+    },
+    "000087": {
+        "nombre_unificado": "UDT",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000087",
+                "sigla": "UDT"
+            }
+        ]
+    },
+    "000088": {
+        "nombre_unificado": "UNIDAD DEL PUEBLO",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000088",
+                "sigla": "UNIDAD DEL PUEBLO"
+            }
+        ]
+    },
+    "000091": {
+        "nombre_unificado": "UPL",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000091",
+                "sigla": "UPL"
+            }
+        ]
+    },
+    "000093": {
+        "nombre_unificado": "UPyD",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000093",
+                "sigla": "UPyD"
+            }
+        ]
+    },
+    "000094": {
+        "nombre_unificado": "VOX",
+        "ideologia": -1.0,
+        "voto_retrospectivo_id": "desconocido",
+        "vinculadas": [
+            {
+                "codigo": "000094",
+                "sigla": "VOX"
+            }
+        ]
+    }
+}
