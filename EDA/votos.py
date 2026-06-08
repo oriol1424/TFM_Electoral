@@ -34,7 +34,7 @@ def participacion_electoral(df: pd.DataFrame, anyo: str = ""):
     Muestra histogramas y boxplots por rango de municipio.
     """
     title_suffix = f" ({anyo})" if anyo else ""
-    print(f"\n--- Análisis de Participación y Votos en Blanco{title_suffix} ---")
+    print(f"\nAnálisis de Participación y Votos en Blanco{title_suffix}")
 
     plot_histogram(
         df, 'participacion',
@@ -96,7 +96,7 @@ def participacion_electoral_100(df: pd.DataFrame, anyo: str = ""):
 
     df_100['votos blancos %'] = (df_100['votos blancos'] / df_100['votos totales']) * 100
 
-    print(f"\n--- Análisis de Votos en Blanco: Municipios < 100 hab.{title_suffix} ---")
+    print(f"\nAnálisis de Votos en Blanco: Municipios < 100 hab.{title_suffix}")
     print(f"Total de municipios analizados: {len(df_100)}")
 
     plot_histogram(

@@ -107,7 +107,7 @@ def graficar_distribucion_fuentes(df_clean: pd.DataFrame, anyo: str) -> None:
     plt.show()
 
 def eda_fuente_ingresos(df_fuentes_completo: pd.DataFrame, df_pob: pd.DataFrame, anyo: str) -> pd.DataFrame:
-    print(f"\n{'='*20} INICIANDO ANÁLISIS DE FUENTES DE INGRESOS ({anyo}) {'='*20}")
+    print(f"\n INICIANDO ANÁLISIS DE FUENTES DE INGRESOS ({anyo})")
     gestion_nulos_fuentes(df_fuentes_completo, df_pob, anyo)
     df_clean = procesar_fuentes_anyo(df_fuentes_completo, anyo)
     if not df_clean.empty:

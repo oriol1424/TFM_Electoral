@@ -20,8 +20,8 @@ def _plot_provincias_ambos(df_provincias: pd.DataFrame, anio: int) -> None:
         return
 
     val_nac = float(total_nac.iloc[0])
-    print(f"  Edad media Total Nacional ({anio}): {val_nac:.2f} anos")
-    print(f"  Rango provincial: {df_prov['edad_media_ambos'].min():.2f} - {df_prov['edad_media_ambos'].max():.2f} anos")
+    print(f"  Edad media Total Nacional ({anio}): {val_nac:.2f} años")
+    print(f"  Rango provincial: {df_prov['edad_media_ambos'].min():.2f} - {df_prov['edad_media_ambos'].max():.2f} años")
 
     plot_barh_with_reference(
         df=df_prov,
@@ -30,7 +30,7 @@ def _plot_provincias_ambos(df_provincias: pd.DataFrame, anio: int) -> None:
         ref_value=val_nac,
         ref_label='Total Nacional',
         title=f'Edad Media Provincial - Ambos sexos ({anio})',
-        xlabel='Edad Media (anos)',
+        xlabel='Edad Media (años)',
         color_above='steelblue',
         color_below='salmon',
     )
@@ -55,7 +55,7 @@ def _plot_provincias_genero(df_provincias: pd.DataFrame, anio: int) -> None:
             continue
 
         val_nac = float(total_nac[col].iloc[0])
-        print(f"  {genero} - Total Nacional ({anio}): {val_nac:.2f} anos")
+        print(f"  {genero} - Total Nacional ({anio}): {val_nac:.2f} años")
 
         plot_barh_with_reference(
             df=df_prov.dropna(subset=[col]),
@@ -64,7 +64,7 @@ def _plot_provincias_genero(df_provincias: pd.DataFrame, anio: int) -> None:
             ref_value=val_nac,
             ref_label=f'Total Nacional',
             title=f'Edad Media Provincial - {genero} ({anio})',
-            xlabel='Edad Media (anos)',
+            xlabel='Edad Media (años)',
             color_above=colores_above[col],
             color_below=colores_below[col],
         )
@@ -96,7 +96,7 @@ def _plot_municipios(df_municipios: pd.DataFrame, anio: int) -> None:
         media_nac = df_clean[col].mean()
         print(f"  {genero} — municipios con dato: {len(df_clean):,} | "
               f"media: {media_nac:.2f} | "
-              f"rango: {df_clean[col].min():.2f} - {df_clean[col].max():.2f} anos")
+              f"rango: {df_clean[col].min():.2f} - {df_clean[col].max():.2f} años")
 
         plot_histogram_with_reference(
             df=df_clean,
@@ -104,7 +104,7 @@ def _plot_municipios(df_municipios: pd.DataFrame, anio: int) -> None:
             ref_value=media_nac,
             ref_label=f'Media de municipios ({genero})',
             title=f'Distribucion de la Edad Media Municipal - {genero} ({anio})',
-            xlabel='Edad Media (anos)',
+            xlabel='Edad Media (años)',
             ylabel='Numero de Municipios',
             bins=35,
             color=colores[col],
@@ -132,9 +132,7 @@ def eda_edad_media(
                        edad_media_ambos, edad_media_hombres, edad_media_mujeres.
         anio: Anno a analizar.
     """
-    print(f"\n{'='*50}")
     print(f"  EDA EDAD MEDIA - {anio}")
-    print(f"{'='*50}")
 
     print("\n[1/3] Provincias - Ambos sexos")
     _plot_provincias_ambos(df_provincias, anio)
