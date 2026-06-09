@@ -268,18 +268,16 @@ def comparar_metricas_modelos(
 def pipeline_comparacion_dhondt_modelos(
     modelos_base: Dict,
     modelos_v2_dict: Dict,
-    modelos_sub_dict: Dict,
     df_2023: pd.DataFrame,
     ruta_json_pob: str,
     esc_base: Dict[str, int],
     esc_real: Dict[str, int],
 ) -> tuple:
     """
-    Ejecuta las pipelines de prediccion para V2 y subgrupos, aplica D'Hondt
-    y llama a comparar_dhondt_modelos. Devuelve (df_pred_v2, df_pred_sub, df_dhondt_cmp).
+    Ejecuta la pipeline de prediccion para V2, aplica D'Hondt
+    y llama a comparar_dhondt_modelos. Devuelve (df_pred_v2, df_dhondt_cmp).
     """
     from modelos.v2 import pipeline_prediccion_v2
-    from modelos.subgrupos import pipeline_prediccion_subgrupos
     from calculos_electorales.resultados import votos_predichos_por_provincia
     from calculos_electorales.dhondt import dhondt_todas_provincias, escanos_por_provincia
 
@@ -293,18 +291,8 @@ def pipeline_comparacion_dhondt_modelos(
         ).items()
     }
 
-    df_pred_sub = pipeline_prediccion_subgrupos(
-        modelos_sub_dict, df_2023, modelos_fallback=modelos_base
-    )
-    esc_sub = {
-        k.replace("votos_", ""): v
-        for k, v in dhondt_todas_provincias(
-            votos_predichos_por_provincia(df_pred_sub), dict_esc
-        ).items()
-    }
-
     df_dhondt_cmp = comparar_dhondt_modelos(
-        esc_real, {"base": esc_base, "v2": esc_v2, "sub": esc_sub}
+        esc_real, {"base": esc_base, "v2": esc_v2}
     )
 
-    return df_pred_v2, df_pred_sub, df_dhondt_cmp
+    return df_pred_v2, df_dhondt_cmp
