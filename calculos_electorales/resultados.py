@@ -3,15 +3,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from typing import Dict, Optional
 
 from calculos_electorales.dhondt import agregar_votos_a_provincia, SLOTS_DHONDT
 
 CARPETA_IMAGENES = 'documentation/imagenes_EDA'
 
 
-
-def votos_reales_por_provincia(df_datos_unificados: pd.DataFrame) -> pd.DataFrame:
+def votos_reales_por_provincia(df_datos_unificados):
     """
     Calcula los votos reales por slot a nivel provincial desde datos_unificados.
     Multiplica pct_* (reales) por votos totales (reales) y agrega por provincia.
@@ -28,23 +26,14 @@ def votos_reales_por_provincia(df_datos_unificados: pd.DataFrame) -> pd.DataFram
     return agregar_votos_a_provincia(df, cols_votos)
 
 
-def votos_predichos_por_provincia(df_prediccion: pd.DataFrame) -> pd.DataFrame:
-    """
-    Agrega los votos predichos (columnas votos_* del pipeline_prediccion) a nivel provincial.
-    """
+def votos_predichos_por_provincia(df_prediccion):
+    """Agrega los votos predichos (columnas votos_*) a nivel provincial."""
     cols_votos = [c for c in df_prediccion.columns if c.startswith('votos_')]
     return agregar_votos_a_provincia(df_prediccion, cols_votos)
 
 
-
-def tabla_escanos(
-    escanos_pred: Dict[str, int],
-    escanos_real: Dict[str, int],
-) -> pd.DataFrame:
-    """
-    Construye la tabla comparativa predichos vs reales.
-    Incluye todos los slots modelados aunque tengan 0 escaños.
-    """
+def tabla_escanos(escanos_pred, escanos_real):
+    """Construye la tabla comparativa predichos vs reales para todos los slots modelados."""
     slots = SLOTS_DHONDT
     filas = []
     for slot in slots:
@@ -63,16 +52,8 @@ def tabla_escanos(
     return df.reset_index(drop=True)
 
 
-
-def grafico_barras_escanos(
-    df_comp: pd.DataFrame,
-    etiqueta: str = '2023',
-    guardar: bool = True,
-) -> None:
-    """
-    Barras horizontales dobles: escaños predichos vs reales por partido.
-    Ordenado de mayor a menor escaños reales.
-    """
+def grafico_barras_escanos(df_comp, etiqueta='2023', guardar=True):
+    """Barras horizontales dobles: escaños predichos vs reales por partido."""
     df = df_comp.sort_values('escanos_real', ascending=True)
     y = np.arange(len(df))
     h = 0.35
@@ -94,15 +75,8 @@ def grafico_barras_escanos(
     plt.show()
 
 
-def grafico_error_escanos(
-    df_comp: pd.DataFrame,
-    etiqueta: str = '2023',
-    guardar: bool = True,
-) -> None:
-    """
-    Barras del error por partido (predicho - real).
-    Verde = sobreestimación, Rojo = subestimación.
-    """
+def grafico_error_escanos(df_comp, etiqueta='2023', guardar=True):
+    """Barras del error por partido (predicho - real). Verde = sobreestimación, Rojo = subestimación."""
     df = df_comp[df_comp['escanos_real'] + df_comp['escanos_pred'] > 0].copy()
     df = df.sort_values('error')
 

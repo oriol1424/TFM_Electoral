@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import Dict
 
 from modelos.prediccion import pipeline_prediccion
 from calculos_electorales.dhondt import (
@@ -15,21 +14,8 @@ from calculos_electorales.resultados import (
 )
 
 
-def pipeline_dhondt_predicho(
-    modelos: Dict,
-    df_2023: pd.DataFrame,
-    ruta_json_poblacion: str,
-    verbose: bool = True,
-    w=None,
-) -> Dict[str, int]:
-    """
-    Pipeline completo sobre votos PREDICHOS:
-      1. Predice porcentajes y convierte a votos absolutos por municipio.
-      2. Agrega votos de municipal a provincial.
-      3. Aplica D'Hondt provincia a provincia.
-    Pasa w para usar el modelo espacial.
-    Devuelve {slot: escanos_nacionales}.
-    """
+def pipeline_dhondt_predicho(modelos, df_2023, ruta_json_poblacion, verbose=True, w=None):
+    """Pipeline sobre votos PREDICHOS: predice → agrega a provincial → D'Hondt. Devuelve {slot: escanos}."""
     if verbose: print("  [Predicho] Generando predicciones por municipio...")
     if w is not None:
         from modelos.alternativos.espacial import pipeline_prediccion_espacial
@@ -48,21 +34,8 @@ def pipeline_dhondt_predicho(
     return escanos
 
 
-def pipeline_dhondt_real(
-    df_2023_completo: pd.DataFrame,
-    ruta_json_poblacion: str,
-    verbose: bool = True,
-) -> Dict[str, int]:
-    """
-    Pipeline completo sobre votos REALES (benchmark):
-      1. Calcula votos reales por slot (pct_* × votos totales) por municipio.
-      2. Agrega a nivel provincial.
-      3. Aplica D'Hondt provincia a provincia.
-    Devuelve {slot: escanos_nacionales}.
-
-    Nota: usa los mismos slots que el modelo, por lo que el resultado puede diferir
-    ligeramente del reparto oficial (que opera con candidaturas individuales).
-    """
+def pipeline_dhondt_real(df_2023_completo, ruta_json_poblacion, verbose=True):
+    """Pipeline sobre votos REALES (benchmark): votos reales por slot → agrega → D'Hondt."""
     if verbose: print("  [Real] Calculando votos reales por slot...")
     df_prov = votos_reales_por_provincia(df_2023_completo)
 
@@ -75,29 +48,19 @@ def pipeline_dhondt_real(
 
 
 def pipeline_comparacion_dhondt(
-    modelos: Dict,
-    df_2023_completo: pd.DataFrame,
-    ruta_json_poblacion: str,
-    etiqueta: str = '2023',
-    guardar_graficos: bool = True,
-    verbose: bool = True,
+    modelos,
+    df_2023_completo,
+    ruta_json_poblacion,
+    etiqueta='2023',
+    guardar_graficos=True,
+    verbose=True,
     w=None,
-) -> pd.DataFrame:
-    """
-    Orquestador completo: ejecuta D'Hondt sobre votos predichos y reales,
-    imprime la tabla comparativa y genera los gráficos de escaños y error.
-    Usa verbose=False para suprimir toda la salida por pantalla.
-    Pasa w para usar el modelo espacial.
-
-    Uso en main.ipynb:
-        df_escanos = pipeline_comparacion_dhondt(modelos_esp, df_2023_completo, ruta_json_pob, w=w)
-
-    Devuelve el DataFrame comparativo (partido, escanos_pred, escanos_real, error).
-    """
+):
+    """Orquestador: D'Hondt predicho y real, tabla comparativa y gráficos. Devuelve DataFrame comparativo."""
     if verbose:
-        print("=" * 55)
+        print("-" * 50)
         print("  SIMULACIÓN LEY D'HONDT")
-        print("=" * 55)
+        print("-" * 50)
         print("\nPaso 1 — Escaños predichos:")
 
     escanos_pred = pipeline_dhondt_predicho(modelos, df_2023_completo, ruta_json_poblacion, verbose=verbose, w=w)

@@ -1,21 +1,11 @@
 import json
 import pandas as pd
-from typing import Dict
-
 from modelos.entrenamiento import TARGETS
-
 SLOTS_DHONDT = [t.replace('pct_', 'votos_') for t in TARGETS]
 
 
-def aplicar_dhondt(votos_dict: Dict[str, float], n_escanos: int) -> Dict[str, int]:
-    """
-    Ley D'Hondt con barrera del 3% provincial.
-
-    votos_dict : {slot: votos} — puede incluir votos_otros (se usa para calcular el umbral
-                                 pero votos_otros no compite por escaños).
-    n_escanos  : escaños a repartir en esta provincia.
-    Devuelve   : {slot: escanos} solo para slots que ganan ≥ 1 escaño.
-    """
+def aplicar_dhondt(votos_dict, n_escanos):
+    """Ley D'Hondt con barrera del 3% provincial. Devuelve {slot: escanos} solo para slots con ≥ 1 escaño."""
     if n_escanos == 0 or not votos_dict:
         return {}
 
@@ -47,7 +37,7 @@ def aplicar_dhondt(votos_dict: Dict[str, float], n_escanos: int) -> Dict[str, in
     return {slot: esc for slot, esc in resultado.items() if esc > 0}
 
 
-def escanos_por_provincia(ruta_json: str) -> Dict[str, int]:
+def escanos_por_provincia(ruta_json):
     """
     Reparto constitucional de escaños (LOREG):
     - Ceuta (51) y Melilla (52): 1 escaño fijo cada una.
@@ -58,7 +48,7 @@ def escanos_por_provincia(ruta_json: str) -> Dict[str, int]:
         datos = json.load(f)
 
     provincias = datos['provincias']
-    escanos: Dict[str, int] = {}
+    escanos = {}
     pob_continental = 0
 
     for cod, info in provincias.items():
@@ -69,8 +59,8 @@ def escanos_por_provincia(ruta_json: str) -> Dict[str, int]:
             pob_continental += info['total_provincial']
 
     cuota = pob_continental / 248
-    proporcional: Dict[str, int] = {}
-    restos: Dict[str, float] = {}
+    proporcional = {}
+    restos = {}
 
     for cod, info in provincias.items():
         if cod in ('51', '52'):
@@ -92,11 +82,8 @@ def escanos_por_provincia(ruta_json: str) -> Dict[str, int]:
     return escanos
 
 
-def agregar_votos_a_provincia(df: pd.DataFrame, cols_votos: list) -> pd.DataFrame:
-    """
-    Suma votos de nivel municipal a provincial.
-    Deriva el código de provincia (2 dígitos) de la columna 'municipio'.
-    """
+def agregar_votos_a_provincia(df, cols_votos):
+    """Suma votos de nivel municipal a provincial derivando el código de provincia de la columna 'municipio'."""
     df_agg = df.copy()
     df_agg['cod_provincia'] = df_agg['municipio'].astype(str).str.zfill(5).str[:2]
 
@@ -109,19 +96,10 @@ def agregar_votos_a_provincia(df: pd.DataFrame, cols_votos: list) -> pd.DataFram
     )
 
 
-def dhondt_todas_provincias(
-    df_votos_prov: pd.DataFrame,
-    dict_escanos: Dict[str, int],
-) -> Dict[str, int]:
-    """
-    Aplica D'Hondt en cada provincia y agrega los escaños a nivel nacional.
-
-    df_votos_prov : DataFrame con cod_provincia + columnas votos_* (nivel provincial).
-    dict_escanos  : {cod_provincia: n_escanos} — salida de escanos_por_provincia().
-    Devuelve      : {slot: escanos_totales_nacionales}.
-    """
+def dhondt_todas_provincias(df_votos_prov, dict_escanos):
+    """Aplica D'Hondt en cada provincia y agrega escaños a nivel nacional. Devuelve {slot: escanos_totales}."""
     cols_votos = [c for c in df_votos_prov.columns if c.startswith('votos_')]
-    escanos_nacionales: Dict[str, int] = {}
+    escanos_nacionales = {}
 
     for _, row in df_votos_prov.iterrows():
         cod = str(row['cod_provincia']).zfill(2)

@@ -8,15 +8,8 @@ import seaborn as sns
 CARPETA_IMAGENES = 'documentation/imagenes_EDA'
 
 
-
-def tabla_comparacion_mae(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Cruza MAE de baseline y tuned.
-    mejora > 0 significa que tuned es mejor (MAE más bajo).
-    """
+def tabla_comparacion_mae(metricas_base, metricas_tuned):
+    """Cruza MAE de baseline y tuned. mejora > 0 significa que tuned es mejor (MAE más bajo)."""
     df = metricas_base[['partido', 'MAE']].merge(
         metricas_tuned[['partido', 'MAE']],
         on='partido', suffixes=('_base', '_tuned')
@@ -30,14 +23,8 @@ def tabla_comparacion_mae(
     return df.sort_values('MAE_base', ascending=False).reset_index(drop=True)
 
 
-def tabla_comparacion_r2(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Cruza R2 de baseline y tuned.
-    mejora > 0 significa que tuned es mejor (R2 más alto).
-    """
+def tabla_comparacion_r2(metricas_base, metricas_tuned):
+    """Cruza R2 de baseline y tuned. mejora > 0 significa que tuned es mejor (R2 más alto)."""
     df = metricas_base[['partido', 'R2']].merge(
         metricas_tuned[['partido', 'R2']],
         on='partido', suffixes=('_base', '_tuned')
@@ -51,17 +38,8 @@ def tabla_comparacion_r2(
     return df.sort_values('R2_tuned', ascending=False).reset_index(drop=True)
 
 
-
-def grafico_comparacion_mae(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-    etiqueta: str = '2023 (test)',
-    guardar: bool = True,
-) -> None:
-    """
-    Barras horizontales dobles: MAE baseline vs tuned por partido.
-    Ordenado de mayor a menor error baseline (los peores arriba).
-    """
+def grafico_comparacion_mae(metricas_base, metricas_tuned, etiqueta='2023 (test)', guardar=True):
+    """Barras horizontales dobles: MAE baseline vs tuned por partido."""
     df = tabla_comparacion_mae(metricas_base, metricas_tuned)
 
     fig, ax = plt.subplots(figsize=(11, 7))
@@ -93,16 +71,8 @@ def grafico_comparacion_mae(
     plt.show()
 
 
-def grafico_comparacion_r2(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-    etiqueta: str = '2023 (test)',
-    guardar: bool = True,
-) -> None:
-    """
-    Barras horizontales dobles: R2 baseline vs tuned por partido.
-    Ordenado de mayor a menor R2 tuned.
-    """
+def grafico_comparacion_r2(metricas_base, metricas_tuned, etiqueta='2023 (test)', guardar=True):
+    """Barras horizontales dobles: R2 baseline vs tuned por partido."""
     df = tabla_comparacion_r2(metricas_base, metricas_tuned)
 
     fig, ax = plt.subplots(figsize=(11, 7))
@@ -127,16 +97,8 @@ def grafico_comparacion_r2(
     plt.show()
 
 
-def grafico_scatter_mejora(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-    etiqueta: str = '2023 (test)',
-    guardar: bool = True,
-) -> None:
-    """
-    Scatter MAE baseline (eje X) vs MAE tuned (eje Y).
-    Puntos por debajo de la diagonal = mejora.
-    """
+def grafico_scatter_mejora(metricas_base, metricas_tuned, etiqueta='2023 (test)', guardar=True):
+    """Scatter MAE baseline (eje X) vs MAE tuned (eje Y). Puntos bajo la diagonal = mejora."""
     df = tabla_comparacion_mae(metricas_base, metricas_tuned)
     max_val = max(df['MAE_base'].max(), df['MAE_tuned'].max()) * 1.08
 
@@ -166,17 +128,8 @@ def grafico_scatter_mejora(
     plt.show()
 
 
-
-def pipeline_comparacion(
-    metricas_base: pd.DataFrame,
-    metricas_tuned: pd.DataFrame,
-    etiqueta: str = '2023 (test)',
-    guardar: bool = True,
-) -> None:
-    """
-    Orquestador: imprime resumen de mejoras y genera los tres gráficos de comparación.
-    Llamar desde main.ipynb tras evaluar_modelos() sobre ambos conjuntos de modelos.
-    """
+def pipeline_comparacion(metricas_base, metricas_tuned, etiqueta='2023 (test)', guardar=True):
+    """Orquestador: imprime resumen de mejoras y genera los tres gráficos de comparación."""
     df_mae = tabla_comparacion_mae(metricas_base, metricas_tuned)
     df_r2  = tabla_comparacion_r2(metricas_base,  metricas_tuned)
 

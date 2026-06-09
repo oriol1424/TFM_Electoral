@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import geopandas as gpd
-from typing import Dict
 
 from modelos.prediccion import pipeline_prediccion
 from calculos_electorales.dhondt import (
@@ -60,8 +59,7 @@ ORDEN_POLITICO = [
 ]
 
 
-
-def _posiciones_hemiciclo(n_total: int, n_filas: int = 10) -> np.ndarray:
+def _posiciones_hemiciclo(n_total, n_filas=10):
     """Devuelve array (n_total, 2) con posiciones (x, y) en arcos concéntricos."""
     radios = np.linspace(1.5, 3.0, n_filas)
     raw = radios / radios.sum() * n_total
@@ -81,7 +79,7 @@ def _posiciones_hemiciclo(n_total: int, n_filas: int = 10) -> np.ndarray:
     return np.array(posiciones)
 
 
-def _dibujar_hemiciclo(ax, escanos_dict: Dict[str, int], titulo: str) -> None:
+def _dibujar_hemiciclo(ax, escanos_dict, titulo):
     """Dibuja un único hemiciclo en el eje ax."""
     total = sum(escanos_dict.values())
     if total == 0:
@@ -109,16 +107,8 @@ def _dibujar_hemiciclo(ax, escanos_dict: Dict[str, int], titulo: str) -> None:
     ax.text(0, -0.3, f'{total} escaños', ha='center', fontsize=9, color='#555555')
 
 
-def hemiciclo_escanos(
-    escanos_pred: Dict[str, int],
-    escanos_real: Dict[str, int],
-    etiqueta: str = '2023',
-    guardar: bool = True,
-) -> None:
-    """
-    Dos hemiciclos lado a lado: real (izquierda) y predicho (derecha).
-    Leyenda compartida con n_real / n_predicho por partido.
-    """
+def hemiciclo_escanos(escanos_pred, escanos_real, etiqueta='2023', guardar=True):
+    """Dos hemiciclos lado a lado: real (izquierda) y predicho (derecha) con leyenda compartida."""
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 7))
 
     _dibujar_hemiciclo(ax1, escanos_real,  f'Congreso real — {etiqueta}')
@@ -151,12 +141,8 @@ def hemiciclo_escanos(
     plt.show()
 
 
-
-def ganador_por_provincia(df_votos_prov: pd.DataFrame) -> Dict[str, str]:
-    """
-    Devuelve {cod_provincia: slot_ganador} según el partido con más votos en cada provincia.
-    Excluye votos_otros (no compite como slot individual).
-    """
+def ganador_por_provincia(df_votos_prov):
+    """Devuelve {cod_provincia: slot_ganador} según el partido con más votos en cada provincia."""
     cols = [c for c in df_votos_prov.columns
             if c.startswith('votos_') and c != 'votos_otros']
     df = df_votos_prov.set_index('cod_provincia')[cols]
@@ -164,16 +150,13 @@ def ganador_por_provincia(df_votos_prov: pd.DataFrame) -> Dict[str, str]:
 
 
 def mapa_ganadores_provincia(
-    ganadores_pred: Dict[str, str],
-    ganadores_real: Dict[str, str],
-    ruta_parquet_municipios: str,
-    etiqueta: str = '2023',
-    guardar: bool = True,
-) -> None:
-    """
-    Mapa de España coloreado por partido más votado en cada provincia.
-    Real (izquierda) vs Predicho (derecha).
-    """
+    ganadores_pred,
+    ganadores_real,
+    ruta_parquet_municipios,
+    etiqueta='2023',
+    guardar=True,
+):
+    """Mapa de España coloreado por partido más votado en cada provincia: real vs predicho."""
     gdf = gpd.read_parquet(ruta_parquet_municipios)
     gdf['cod_provincia'] = gdf['municipio'].astype(str).str.zfill(5).str[:2]
 
@@ -218,23 +201,18 @@ def mapa_ganadores_provincia(
     plt.show()
 
 
-
 def mapa_error_partido(
-    pred_list: list,
-    df_real: pd.DataFrame,
-    ruta_parquet: str,
-    partido: str = 'pp',
-    guardar: bool = True,
-    lim: float = 0.18,
-) -> None:
-    """
-    Mapa de error medio por provincia para un partido concreto.
-    pred_list: [(label, df_pred), ...] — cada df_pred debe tener 'municipio' y 'pct_{partido}'.
-    Azul = subestima el partido | Rojo = sobreestima.
-    """
+    pred_list,
+    df_real,
+    ruta_parquet,
+    partido='pp',
+    guardar=True,
+    lim=0.18,
+):
+    """Mapa de error medio por provincia para un partido. Azul = subestima | Rojo = sobreestima."""
     col_partido = f"pct_{partido}"
 
-    def _error_provincia(df_pred_mun: pd.DataFrame) -> pd.Series:
+    def _error_provincia(df_pred_mun):
         df_p = df_pred_mun[["municipio", col_partido]].copy()
         df_r = df_real[["municipio", col_partido]].copy()
         df_p["cod_prov"] = df_p["municipio"].astype(str).str.zfill(5).str[:2]
@@ -294,26 +272,19 @@ def mapa_error_partido(
     print(err_0.head(10).round(3).to_string(index=False))
 
 
-
 def pipeline_visualizacion(
-    modelos: Dict,
-    df_2023_completo: pd.DataFrame,
-    ruta_json_poblacion: str,
-    ruta_parquet_municipios: str,
-    etiqueta: str = '2023',
-    guardar: bool = True,
+    modelos,
+    df_2023_completo,
+    ruta_json_poblacion,
+    ruta_parquet_municipios,
+    etiqueta='2023',
+    guardar=True,
     w=None,
-) -> None:
-    """
-    Orquestador: genera hemiciclo y mapa provincial (real vs predicho).
-    Pasa w para usar el modelo espacial.
-
-    Uso en main.ipynb:
-        pipeline_visualizacion(modelos_esp, df_2023_completo, ruta_json_pob, ruta_parquet, w=w)
-    """
-    print("=" * 50)
+):
+    """Orquestador: genera hemiciclo y mapa provincial real vs predicho."""
+    print("-" * 50)
     print("  VISUALIZACIÓN DE RESULTADOS ELECTORALES")
-    print("=" * 50)
+    print("-" * 50)
 
     print("\n[1/4] Prediciendo votos por municipio...")
     if w is not None:
