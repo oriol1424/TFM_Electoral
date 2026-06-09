@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from typing import Dict, Optional
 
 from modelos.entrenamiento import TARGETS, PARAMS_DEFAULT
 from modelos.prediccion import normalizar_predicciones, predicciones_a_votos
@@ -20,14 +19,14 @@ FEATURES_V2 = [
 ]
 
 
-def _col_rango(df: pd.DataFrame) -> Optional[str]:
+def _col_rango(df):
     for c in df.columns:
         if 'rango' in c.lower():
             return c
     return None
 
 
-def asignar_grupo_numerico(df: pd.DataFrame) -> pd.Series:
+def asignar_grupo_numerico(df):
     """0 = rural (<1000 hab)  |  1 = semiurbano (1000-50000)  |  2 = urbano (>50000)."""
     col = _col_rango(df)
     grupo = pd.Series(1, index=df.index, dtype=int)
@@ -37,7 +36,7 @@ def asignar_grupo_numerico(df: pd.DataFrame) -> pd.Series:
     return grupo
 
 
-def preparar_features_v2(df: pd.DataFrame) -> pd.DataFrame:
+def preparar_features_v2(df):
     df_prep = df.copy()
     if 'provincia' in df_prep.columns:
         df_prep['provincia_enc'] = df_prep['provincia'].astype('category').cat.codes
@@ -50,11 +49,11 @@ def preparar_features_v2(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def entrenar_modelos_v2(
-    df_train: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_v2',
-) -> Dict[str, xgb.XGBRegressor]:
+    df_train,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_v2',
+):
     """
     Entrena 15 XGBoost (uno por partido) con las mismas features del baseline
     más 'grupo_tamano' (rural=0 / semiurbano=1 / urbano=2).
@@ -96,11 +95,7 @@ def entrenar_modelos_v2(
     return modelos
 
 
-def evaluar_modelos_v2(
-    modelos: Dict[str, xgb.XGBRegressor],
-    df_test: pd.DataFrame,
-    etiqueta: str = "test v2",
-) -> pd.DataFrame:
+def evaluar_modelos_v2(modelos, df_test, etiqueta="test v2"):
     X_test = preparar_features_v2(df_test)
     resultados = []
 
@@ -129,14 +124,8 @@ def evaluar_modelos_v2(
     return df_res
 
 
-def pipeline_prediccion_v2(
-    modelos: Dict[str, xgb.XGBRegressor],
-    df: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Prediction pipeline para modelos v2. Mismo formato de salida que
-    pipeline_prediccion() — compatible con D'Hondt y visualización.
-    """
+def pipeline_prediccion_v2(modelos, df):
+    """Pipeline de predicción para modelos v2. Mismo formato de salida que pipeline_prediccion()."""
     print("Paso 1: Prediciendo porcentajes (V2)...")
     X = preparar_features_v2(df)
     cols_id = [c for c in ['municipio', 'provincia'] if c in df.columns]
@@ -153,9 +142,7 @@ def pipeline_prediccion_v2(
     return df_votos
 
 
-def cargar_modelos_v2(
-    carpeta: str = 'modelos/modelos_v2',
-) -> Dict[str, xgb.XGBRegressor]:
+def cargar_modelos_v2(carpeta='modelos/modelos_v2'):
     modelos = {}
     for partido in TARGETS:
         path = os.path.join(carpeta, f"{partido}.json")

@@ -2,7 +2,6 @@ import os
 import joblib
 import numpy as np
 import pandas as pd
-from typing import Dict, Optional
 from sklearn.linear_model import BayesianRidge
 from sklearn.model_selection import GridSearchCV
 
@@ -46,12 +45,12 @@ def _buscar_mejores_params(X_train, y_train) -> dict:
 
 
 def entrenar_modelos_bayesiano(
-    df_train: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_bayesiano',
-    buscar_params: bool = True,
-) -> Dict[str, BayesianRidge]:
+    df_train,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_bayesiano',
+    buscar_params=True,
+):
     if os.path.isdir(carpeta) and all(
         os.path.exists(os.path.join(carpeta, f"{p}.pkl")) for p in TARGETS
     ):
@@ -96,8 +95,8 @@ def entrenar_modelos_bayesiano(
 
 
 def cargar_modelos_bayesiano(
-    carpeta: str = 'modelos/modelos_bayesiano',
-) -> Dict[str, BayesianRidge]:
+    carpeta='modelos/modelos_bayesiano',
+):
     modelos = {}
     for partido in TARGETS:
         path = os.path.join(carpeta, f"{partido}.pkl")

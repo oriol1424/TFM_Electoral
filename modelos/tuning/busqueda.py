@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import xgboost as xgb
 from sklearn.model_selection import RandomizedSearchCV
-from typing import Dict, Tuple, Optional
 
 from modelos.entrenamiento import preparar_features, TARGETS, cargar_modelos
 
@@ -19,18 +18,8 @@ PARAM_DIST = {
 }
 
 
-def tunear_partido(
-    X_train: pd.DataFrame,
-    y_train: pd.Series,
-    partido: str,
-    n_iter: int = 30,
-    cv: int = 5,
-    random_state: int = 42,
-) -> Tuple[xgb.XGBRegressor, dict, float]:
-    """
-    Ajusta hiperparámetros para un partido con RandomizedSearchCV.
-    Devuelve (mejor_modelo, mejores_params, cv_mae).
-    """
+def tunear_partido(X_train, y_train, partido, n_iter=30, cv=5, random_state=42):
+    """Ajusta hiperparámetros para un partido con RandomizedSearchCV. Devuelve (mejor_modelo, mejores_params, cv_mae)."""
     base = xgb.XGBRegressor(random_state=random_state, n_jobs=1, verbosity=0)
 
     search = RandomizedSearchCV(
@@ -51,15 +40,15 @@ def tunear_partido(
 
 
 def tunear_todos_modelos(
-    df_train: pd.DataFrame,
-    n_iter: int = 30,
-    cv: int = 5,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_tuned',
-    forzar: bool = False,
-) -> Dict[str, xgb.XGBRegressor]:
+    df_train,
+    n_iter=30,
+    cv=5,
+    guardar=True,
+    carpeta='modelos/modelos_tuned',
+    forzar=False,
+):
     """
-    Orquestador: ajusta un XGBoost por partido con RandomizedSearchCV.
+    Ajusta un XGBoost por partido con RandomizedSearchCV.
     Si los modelos ya existen en carpeta y forzar=False, los carga directamente.
     Guarda modelos, features y mejores_params en carpeta si guardar=True.
     """
@@ -104,7 +93,7 @@ def tunear_todos_modelos(
     return modelos
 
 
-def cargar_mejores_params(carpeta: str = 'modelos/modelos_tuned') -> dict:
+def cargar_mejores_params(carpeta='modelos/modelos_tuned'):
     """Carga el JSON con los mejores hiperparámetros encontrados durante el tuning."""
     with open(os.path.join(carpeta, 'mejores_params.json')) as f:
         return json.load(f)

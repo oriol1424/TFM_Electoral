@@ -2,7 +2,6 @@ import os
 import joblib
 import numpy as np
 import pandas as pd
-from typing import Dict, Optional, Tuple
 from sklearn.ensemble import RandomForestRegressor
 
 from modelos.entrenamiento import preparar_features, TARGETS
@@ -16,11 +15,11 @@ PARAMS_DEFAULT_RF = {
 
 
 def entrenar_modelos_rf(
-    df_train: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_rf',
-) -> Dict[str, RandomForestRegressor]:
+    df_train,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_rf',
+):
     X_train = preparar_features(df_train)
     params_uso = params or PARAMS_DEFAULT_RF
 
@@ -51,8 +50,8 @@ def entrenar_modelos_rf(
 
 
 def cargar_modelos_rf(
-    carpeta: str = 'modelos/modelos_rf',
-) -> Dict[str, RandomForestRegressor]:
+    carpeta='modelos/modelos_rf',
+):
     modelos = {}
     for partido in TARGETS:
         path = os.path.join(carpeta, f"{partido}.pkl")

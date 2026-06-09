@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
-from typing import Optional
 
 CARPETA_IMAGENES = 'documentation/imagenes_EDA'
 
@@ -181,9 +180,9 @@ def pipeline_comparacion(
     df_mae = tabla_comparacion_mae(metricas_base, metricas_tuned)
     df_r2  = tabla_comparacion_r2(metricas_base,  metricas_tuned)
 
-    print("=" * 55)
+    print("-" * 50)
     print(f"  COMPARACIÓN BASELINE vs TUNED — {etiqueta}")
-    print("=" * 55)
+    print("-" * 50)
 
     print("\nMAE (↓ mejor):")
     print(df_mae[['partido', 'MAE_base', 'MAE_tuned', 'mejora_pp', 'mejora_pct']].to_string(index=False))

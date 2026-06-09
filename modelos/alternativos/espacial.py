@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from typing import Dict, Optional
 
 from modelos.entrenamiento import preparar_features, TARGETS, PARAMS_DEFAULT
 
@@ -17,12 +16,8 @@ def cargar_pesos_espaciales(ruta: str = RUTA_PESOS_DEFAULT):
     return w
 
 
-def preparar_features_espacial(df: pd.DataFrame, w) -> pd.DataFrame:
-    """
-    Extends preparar_features with spatial lag columns (_lag suffix).
-    For each numeric feature, adds the mean value of geographic neighbors.
-    Preserves the original DataFrame index for compatibility with evaluar_modelos.
-    """
+def preparar_features_espacial(df, w):
+    """Añade columnas de lag espacial (_lag) calculando la media de vecinos geográficos."""
     X = preparar_features(df)
 
     if 'municipio' not in df.columns:
@@ -47,12 +42,12 @@ def preparar_features_espacial(df: pd.DataFrame, w) -> pd.DataFrame:
 
 
 def entrenar_modelos_espacial(
-    df_train: pd.DataFrame,
+    df_train,
     w=None,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_espacial',
-) -> Dict[str, xgb.XGBRegressor]:
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_espacial',
+):
     if os.path.isdir(carpeta) and all(
         os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in TARGETS
     ):
@@ -92,8 +87,8 @@ def entrenar_modelos_espacial(
 
 
 def cargar_modelos_espacial(
-    carpeta: str = 'modelos/modelos_espacial',
-) -> Dict[str, xgb.XGBRegressor]:
+    carpeta='modelos/modelos_espacial',
+):
     modelos = {}
     for partido in TARGETS:
         path = os.path.join(carpeta, f"{partido}.json")
@@ -106,11 +101,7 @@ def cargar_modelos_espacial(
     return modelos
 
 
-def pipeline_prediccion_espacial(
-    modelos: Dict[str, xgb.XGBRegressor],
-    df: pd.DataFrame,
-    w,
-) -> pd.DataFrame:
+def pipeline_prediccion_espacial(modelos, df, w):
     """
     Versión espacial de pipeline_prediccion: usa preparar_features_espacial
     en lugar de preparar_features. Reutiliza normalizar y conversión a votos.

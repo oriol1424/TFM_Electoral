@@ -3,21 +3,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Dict, Optional
 from modelos.entrenamiento import preparar_features, TARGETS
 
 
-def evaluar_modelos(
-    modelos: Dict,
-    df_test: pd.DataFrame,
-    etiqueta: str = "test",
-    X_test: Optional[pd.DataFrame] = None,
-) -> pd.DataFrame:
-    """
-    Evaluates each model on df_test.
-    Pass X_test explicitly when features differ from preparar_features output (e.g. spatial model).
-    Returns DataFrame with MAE, RMSE, R² and mean real value per party.
-    """
+def evaluar_modelos(modelos, df_test, etiqueta="test", X_test=None):
+    """Evalúa cada modelo sobre df_test. Devuelve DataFrame con MAE, RMSE, R² y media real."""
     if X_test is None:
         X_test = preparar_features(df_test)
     resultados = []
@@ -48,11 +38,8 @@ def evaluar_modelos(
     return df_res
 
 
-def visualizar_metricas(df_metricas: pd.DataFrame, etiqueta: str = "2023"):
-    """
-    Horizontal bar plots of MAE and R² per party.
-    Saved to documentation/imagenes_EDA/.
-    """
+def visualizar_metricas(df_metricas, etiqueta="2023"):
+    """Barras horizontales de MAE y R² por partido. Guarda en documentation/imagenes_EDA/."""
     os.makedirs('documentation/imagenes_EDA', exist_ok=True)
     df_s = df_metricas.sort_values('MAE', ascending=True)
 
@@ -72,15 +59,12 @@ def visualizar_metricas(df_metricas: pd.DataFrame, etiqueta: str = "2023"):
     plt.show()
 
 
-def comparar_dhondt_modelos(
-    esc_real: Dict[str, int],
-    modelos_esc: Dict[str, Dict[str, int]],
-) -> pd.DataFrame:
+def comparar_dhondt_modelos(esc_real, modelos_esc):
     """
     Muestra tabla comparativa de escanos real vs varios modelos y calcula MAE.
     modelos_esc: {"base": {pp:96,...}, "v2": {...}, ...}
     """
-    todos_keys: set = set(esc_real)
+    todos_keys = set(esc_real)
     for esc in modelos_esc.values():
         todos_keys |= set(esc)
     todos = sorted(todos_keys)
@@ -104,11 +88,7 @@ def comparar_dhondt_modelos(
     return df
 
 
-def evaluar_accuracy_ganador(
-    df_real: pd.DataFrame,
-    pred_dict: Dict[str, pd.DataFrame],
-    guardar: bool = True,
-) -> pd.DataFrame:
+def evaluar_accuracy_ganador(df_real, pred_dict, guardar=True):
     """
     Calcula accuracy y recall del partido ganador por municipio para varios modelos.
     pred_dict: {"Baseline": df_base, "V2 (+grupo)": df_v2, ...}
@@ -151,7 +131,7 @@ def evaluar_accuracy_ganador(
     for partido in conteo_real.index:
         mask = ganador_real == partido
         n_real = int(mask.sum())
-        row: Dict = {"partido": partido, "n_real": n_real}
+        row = {"partido": partido, "n_real": n_real}
         for label, g in ganadores.items():
             col_key = "recall_" + label.lower().replace(" ", "_").replace("+", "").replace("(", "").replace(")", "")
             row[col_key] = round(float((g[mask] == partido).sum()) / n_real, 3)
@@ -188,10 +168,8 @@ def evaluar_accuracy_ganador(
     return df_acc
 
 
-def comparar_real_predicho(modelos: Dict, df_test: pd.DataFrame, partido: str):
-    """
-    Scatter plot real vs predicted for one party.
-    """
+def comparar_real_predicho(modelos, df_test, partido):
+    """Scatter real vs predicho para un partido."""
     X_test = preparar_features(df_test)
     y_true = df_test[partido].values
     y_pred = modelos[partido].predict(X_test)
@@ -208,10 +186,7 @@ def comparar_real_predicho(modelos: Dict, df_test: pd.DataFrame, partido: str):
     plt.show()
 
 
-def comparar_metricas_modelos(
-    metricas_dict: Dict[str, pd.DataFrame],
-    guardar: bool = True,
-) -> pd.DataFrame:
+def comparar_metricas_modelos(metricas_dict, guardar=True):
     """
     Tabla y grafico de barras comparando MAE y R2 de varios modelos.
     metricas_dict: {"base": df_metricas_base, "v2": df_v2, "sub": df_sub, ...}
@@ -266,17 +241,14 @@ def comparar_metricas_modelos(
 
 
 def pipeline_comparacion_dhondt_modelos(
-    modelos_base: Dict,
-    modelos_v2_dict: Dict,
-    df_2023: pd.DataFrame,
-    ruta_json_pob: str,
-    esc_base: Dict[str, int],
-    esc_real: Dict[str, int],
-) -> tuple:
-    """
-    Ejecuta la pipeline de prediccion para V2, aplica D'Hondt
-    y llama a comparar_dhondt_modelos. Devuelve (df_pred_v2, df_dhondt_cmp).
-    """
+    modelos_base,
+    modelos_v2_dict,
+    df_2023,
+    ruta_json_pob,
+    esc_base,
+    esc_real,
+):
+    """Ejecuta la pipeline V2, aplica D'Hondt y llama a comparar_dhondt_modelos. Devuelve (df_pred_v2, df_dhondt_cmp)."""
     from modelos.v2 import pipeline_prediccion_v2
     from calculos_electorales.resultados import votos_predichos_por_provincia
     from calculos_electorales.dhondt import dhondt_todas_provincias, escanos_por_provincia

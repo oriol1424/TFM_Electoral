@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from typing import Dict, Optional
 
 from modelos.entrenamiento import TARGETS, PARAMS_DEFAULT, preparar_features
 from modelos.prediccion import normalizar_predicciones, predicciones_a_votos
@@ -20,14 +19,14 @@ ETIQUETAS_GRUPOS = {
 }
 
 
-def _col_rango(df: pd.DataFrame) -> Optional[str]:
+def _col_rango(df):
     for c in df.columns:
         if 'rango' in c.lower():
             return c
     return None
 
 
-def asignar_grupo(df: pd.DataFrame) -> pd.Series:
+def asignar_grupo(df):
     """Devuelve Series con 'rural' / 'semiurbano' / 'urbano' por municipio."""
     col = _col_rango(df)
     grupo = pd.Series('semiurbano', index=df.index)
@@ -38,12 +37,12 @@ def asignar_grupo(df: pd.DataFrame) -> pd.Series:
 
 
 def entrenar_modelos_subgrupos(
-    df_train: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_subgrupos',
-    min_muestras: int = 20,
-) -> Dict[str, Dict[str, xgb.XGBRegressor]]:
+    df_train,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_subgrupos',
+    min_muestras=20,
+):
     """
     Entrena un juego de 15 modelos por cada grupo de tamaño.
     Devuelve {grupo: {partido: modelo}}.
@@ -94,8 +93,8 @@ def entrenar_modelos_subgrupos(
 
 
 def cargar_modelos_subgrupos(
-    carpeta: str = 'modelos/modelos_subgrupos',
-) -> Dict[str, Dict[str, xgb.XGBRegressor]]:
+    carpeta='modelos/modelos_subgrupos',
+):
     modelos_sub = {}
     for nombre in GRUPOS:
         carpeta_g = os.path.join(carpeta, nombre)
@@ -114,10 +113,10 @@ def cargar_modelos_subgrupos(
 
 
 def pipeline_prediccion_subgrupos(
-    modelos_sub: Dict[str, Dict[str, xgb.XGBRegressor]],
-    df: pd.DataFrame,
-    modelos_fallback: Optional[Dict] = None,
-) -> pd.DataFrame:
+    modelos_sub,
+    df,
+    modelos_fallback=None,
+):
     """
     Predice enrutando cada municipio a su modelo de subgrupo.
     Para partidos sin modelo en un subgrupo usa modelos_fallback (baseline).
@@ -156,11 +155,11 @@ def pipeline_prediccion_subgrupos(
 
 
 def evaluar_modelos_subgrupos(
-    modelos_sub: Dict[str, Dict[str, xgb.XGBRegressor]],
-    df_test: pd.DataFrame,
-    modelos_fallback: Optional[Dict] = None,
-    etiqueta: str = "test subgrupos",
-) -> pd.DataFrame:
+    modelos_sub,
+    df_test,
+    modelos_fallback=None,
+    etiqueta="test subgrupos",
+):
     """
     Evalúa los modelos de subgrupo enrutando cada municipio a su grupo.
     Devuelve DataFrame en el mismo formato que evaluar_modelos().
@@ -168,8 +167,8 @@ def evaluar_modelos_subgrupos(
     df_test = df_test.copy()
     df_test['_grupo'] = asignar_grupo(df_test)
 
-    y_true_all: Dict[str, list] = {p: [] for p in TARGETS}
-    y_pred_all: Dict[str, list] = {p: [] for p in TARGETS}
+    y_true_all = {p: [] for p in TARGETS}
+    y_pred_all = {p: [] for p in TARGETS}
 
     for nombre in GRUPOS:
         df_g = df_test[df_test['_grupo'] == nombre].drop(columns='_grupo')

@@ -22,18 +22,8 @@ LABELS = {
 }
 
 
-def analizar_estabilidad_features(
-    df_2019: pd.DataFrame,
-    df_2023: pd.DataFrame,
-) -> pd.DataFrame:
-    """
-    Calcula la correlación de Pearson municipio a municipio entre 2019 y 2023
-    para cada feature numérica del modelo, y el drift relativo de la media.
-
-    Returns DataFrame con columnas:
-        feature, label, correlacion, media_2019, media_2023,
-        std_2019, std_2023, drift_relativo
-    """
+def analizar_estabilidad_features(df_2019, df_2023):
+    """Correlación de Pearson y drift de la media entre 2019 y 2023 para cada feature del modelo."""
     sufijo_19 = {f: f + '_2019' for f in FEATURES_NUMERICAS}
     sufijo_23 = {f: f + '_2023' for f in FEATURES_NUMERICAS}
 
@@ -74,10 +64,10 @@ def analizar_estabilidad_features(
 
 
 def visualizar_estabilidad_features(
-    df_est: pd.DataFrame,
-    guardar: bool = False,
-    ruta: str = 'documentation/imagenes_EDA/estabilidad_features.png',
-) -> None:
+    df_est,
+    guardar=False,
+    ruta='documentation/imagenes_EDA/estabilidad_features.png',
+):
     """
     Dos paneles:
     - Izquierda: correlación de Pearson por feature (verde ≥0.97, naranja ≥0.90, rojo <0.90)
@@ -140,11 +130,7 @@ def visualizar_estabilidad_features(
     plt.show()
 
 
-def pipeline_estabilidad(
-    df_2019: pd.DataFrame,
-    df_2023: pd.DataFrame,
-    guardar: bool = False,
-) -> pd.DataFrame:
+def pipeline_estabilidad(df_2019, df_2023, guardar=False):
     """
     Orquestador: calcula y visualiza la estabilidad temporal de las features.
     Devuelve el DataFrame de resultados.
@@ -152,7 +138,7 @@ def pipeline_estabilidad(
     df_est = analizar_estabilidad_features(df_2019, df_2023)
 
     print("\nRESUMEN DE ESTABILIDAD TEMPORAL DE FEATURES")
-    print("=" * 62)
+    print("-" * 50)
     print(df_est[['label', 'correlacion', 'media_2019', 'media_2023', 'drift_relativo']].to_string(index=False))
     print()
 

@@ -1,5 +1,4 @@
 import pandas as pd
-from typing import Dict, Optional
 
 from modelos.entrenamiento import entrenar_modelos, cargar_modelos
 from modelos.evaluacion import evaluar_modelos, comparar_metricas_modelos, comparar_dhondt_modelos
@@ -65,12 +64,12 @@ def pipeline_comparacion_modelos(
 
 
 def pipeline_escanos_todos_modelos(
-    modelos_dict: Dict[str, Dict],
-    df_2023: pd.DataFrame,
+    modelos_dict,
+    df_2023,
     w,
-    ruta_json_pob: str,
-    esc_real: Optional[Dict[str, int]] = None,
-) -> pd.DataFrame:
+    ruta_json_pob,
+    esc_real=None,
+):
     """
     Aplica D'Hondt a las predicciones de cada modelo y devuelve tabla comparativa.
     Filas = partidos, columnas = real + cada modelo.

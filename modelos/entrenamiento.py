@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from typing import Dict, List, Optional, Tuple
 
 TARGETS = [
     'pct_psoe', 'pct_pp', 'pct_vox', 'pct_cs', 'pct_up_sumar',
@@ -39,11 +38,8 @@ PARAMS_DEFAULT = {
 }
 
 
-def preparar_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Encodes 'provincia' and returns a DataFrame with exactly FEATURES columns.
-    Consistent between train and predict.
-    """
+def preparar_features(df):
+    """Codifica provincia y devuelve DataFrame con las columnas FEATURES."""
     df_prep = df.copy()
 
     if 'provincia' in df_prep.columns:
@@ -66,16 +62,12 @@ def preparar_features(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def entrenar_modelos(
-    df_train: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_guardados'
-) -> Dict[str, xgb.XGBRegressor]:
-    """
-    Trains one XGBoostRegressor per party (15 models).
-    Saves models and feature list to carpeta if guardar=True.
-    Returns dict {partido: modelo}.
-    """
+    df_train,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_guardados'
+):
+    """Entrena un XGBoostRegressor por partido (15 modelos). Devuelve {partido: modelo}."""
     if os.path.isdir(carpeta) and all(
         os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in TARGETS
     ):
@@ -118,12 +110,9 @@ def entrenar_modelos(
 
 
 def cargar_modelos(
-    carpeta: str = 'modelos/modelos_guardados'
-) -> Tuple[Dict[str, xgb.XGBRegressor], List[str]]:
-    """
-    Loads saved models and feature list from carpeta.
-    Returns (modelos_dict, features_list).
-    """
+    carpeta='modelos/modelos_guardados'
+):
+    """Carga modelos y lista de features desde carpeta. Devuelve (modelos_dict, features_list)."""
     modelos = {}
     for partido in TARGETS:
         path = os.path.join(carpeta, f"{partido}.json")

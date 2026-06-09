@@ -1,18 +1,10 @@
 import numpy as np
 import pandas as pd
-from typing import Dict, List
 from modelos.entrenamiento import preparar_features, TARGETS
 
 
-def predecir_porcentajes(
-    modelos: Dict,
-    df: pd.DataFrame
-) -> pd.DataFrame:
-    """
-    Step 1: Predicts pct for each of the 15 modeled parties.
-    Negative predictions are clamped to 0.
-    Returns DataFrame with municipio + provincia + 15 pct columns.
-    """
+def predecir_porcentajes(modelos, df):
+    """Predice pct para los 15 partidos. Valores negativos se clampean a 0."""
     X = preparar_features(df)
 
     cols_id = [c for c in ['municipio', 'provincia'] if c in df.columns]
@@ -24,11 +16,8 @@ def predecir_porcentajes(
     return df_pred
 
 
-def normalizar_predicciones(df_pred: pd.DataFrame) -> pd.DataFrame:
-    """
-    Step 2: Calculates pct_otros = 1 - sum(15 predictions), clamped to 0.
-    Normalizes so all 16 slots sum exactly to 1.0 per municipality.
-    """
+def normalizar_predicciones(df_pred):
+    """Calcula pct_otros como residuo y normaliza para que los 16 slots sumen 1.0."""
     df_norm = df_pred.copy()
     cols_pred = [c for c in TARGETS if c in df_norm.columns]
 
@@ -45,16 +34,8 @@ def normalizar_predicciones(df_pred: pd.DataFrame) -> pd.DataFrame:
     return df_norm
 
 
-def predicciones_a_votos(
-    df_pred_norm: pd.DataFrame,
-    df_votos_reales: pd.DataFrame,
-    col_votos: str = 'votos totales'
-) -> pd.DataFrame:
-    """
-    Step 3: Multiplies predicted pct by real total votes per municipality.
-    Uses real 2023 total votes — the model predicts vote SHARE, not turnout.
-    Returns DataFrame with absolute vote counts per party per municipality.
-    """
+def predicciones_a_votos(df_pred_norm, df_votos_reales, col_votos='votos totales'):
+    """Multiplica pct predicho por votos totales reales para obtener votos absolutos."""
     votos_totales = df_votos_reales[['municipio', col_votos]].copy()
     df_votos = df_pred_norm.merge(votos_totales, on='municipio', how='left')
 
@@ -66,17 +47,8 @@ def predicciones_a_votos(
     return df_votos
 
 
-def pipeline_prediccion(
-    modelos: Dict,
-    df: pd.DataFrame
-) -> pd.DataFrame:
-    """
-    Full prediction pipeline for one year:
-      1. Predict 15 pct per municipality (clip negatives)
-      2. Calculate pct_otros as residual, normalize to sum = 1.0
-      3. Convert to absolute votes using real total votes from df
-    Returns DataFrame with pct_* and votos_* columns per municipality.
-    """
+def pipeline_prediccion(modelos, df):
+    """Pipeline completo: predice porcentajes → normaliza → convierte a votos absolutos."""
     print("Paso 1: Prediciendo porcentajes por municipio...")
     df_pred = predecir_porcentajes(modelos, df)
 

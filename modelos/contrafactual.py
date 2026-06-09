@@ -3,7 +3,6 @@ import json
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from typing import Dict, Optional
 
 from modelos.entrenamiento import TARGETS, PARAMS_DEFAULT, preparar_features
 from modelos.prediccion import pipeline_prediccion
@@ -11,7 +10,7 @@ from calculos_electorales.resultados import votos_predichos_por_provincia
 from calculos_electorales.dhondt import dhondt_todas_provincias
 
 
-def preparar_dataset_sin_cs(df_2019: pd.DataFrame) -> pd.DataFrame:
+def preparar_dataset_sin_cs(df_2019):
     """
     Devuelve copia del dataset 2019 con Cs absorbida por PP y PRC por PSOE.
     Simula que ambos partidos no se presentan en 2023.
@@ -25,11 +24,11 @@ def preparar_dataset_sin_cs(df_2019: pd.DataFrame) -> pd.DataFrame:
 
 
 def entrenar_modelos_sin_cs(
-    df_2019: pd.DataFrame,
-    params: Optional[dict] = None,
-    guardar: bool = True,
-    carpeta: str = 'modelos/modelos_sin_cs',
-) -> Dict[str, xgb.XGBRegressor]:
+    df_2019,
+    params=None,
+    guardar=True,
+    carpeta='modelos/modelos_sin_cs',
+):
     """
     Entrena modelos sobre el dataset 2019 con conocimiento previo de candidaturas:
       - Cs fusionada en PP   (colapso previsto)
@@ -76,9 +75,7 @@ def entrenar_modelos_sin_cs(
     return modelos
 
 
-def cargar_modelos_sin_cs(
-    carpeta: str = 'modelos/modelos_sin_cs',
-) -> Dict[str, xgb.XGBRegressor]:
+def cargar_modelos_sin_cs(carpeta='modelos/modelos_sin_cs'):
     targets_sin_cs = [t for t in TARGETS if t not in ("pct_cs", "pct_prc")]
     modelos = {}
     for partido in targets_sin_cs:
@@ -92,12 +89,12 @@ def cargar_modelos_sin_cs(
 
 
 def pipeline_comparacion_contrafactual(
-    modelos_sin_cs: Dict,
-    df_2023: pd.DataFrame,
-    dict_esc: Dict,
-    esc_base: Dict[str, int],
-    esc_real: Dict[str, int],
-) -> pd.DataFrame:
+    modelos_sin_cs,
+    df_2023,
+    dict_esc,
+    esc_base,
+    esc_real,
+):
     """
     Calcula D'Hondt para el escenario contrafactual (sin Cs+PRC), muestra la tabla
     comparativa y descompone el error del PP y la correccion del PSOE.

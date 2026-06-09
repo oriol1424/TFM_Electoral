@@ -2,21 +2,11 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from typing import Dict, Optional
 from modelos.entrenamiento import preparar_features, TARGETS
 
 
-def analizar_shap_partido(
-    modelos: Dict,
-    df: pd.DataFrame,
-    partido: str,
-    max_display: int = 15,
-    guardar: bool = True
-):
-    """
-    SHAP summary plot for one party.
-    Shows which features push the vote share up or down.
-    """
+def analizar_shap_partido(modelos, df, partido, max_display=15, guardar=True):
+    """SHAP summary plot para un partido. Muestra qué features suben o bajan el voto."""
     try:
         import shap
     except ImportError:
@@ -48,35 +38,15 @@ def analizar_shap_partido(
     plt.close()
 
 
-def analizar_shap_todos(
-    modelos: Dict,
-    df: pd.DataFrame,
-    max_display: int = 15,
-    guardar: bool = True
-):
-    """
-    Generates SHAP summary plots for all trained parties.
-    """
+def analizar_shap_todos(modelos, df, max_display=15, guardar=True):
+    """Genera SHAP summary plots para todos los partidos entrenados."""
     for partido in modelos:
         print(f"Calculando SHAP para {partido}...")
         analizar_shap_partido(modelos, df, partido, max_display=max_display, guardar=guardar)
 
 
-
-def heatmap_direccion_shap(
-    modelos: Dict,
-    df: pd.DataFrame,
-    guardar: bool = True,
-    annot: bool = True,
-) -> pd.DataFrame:
-    """
-    Heatmap de dirección SHAP: mean(SHAP con signo) por feature × partido.
-    Rojo  = la feature aumenta el voto del partido cuando su valor es alto.
-    Azul  = la feature reduce el voto del partido cuando su valor es alto.
-    Normalizado por partido para que partidos pequeños (PNV, BNG) sean comparables
-    con partidos grandes (PP, PSOE) en la misma escala visual.
-    Devuelve el DataFrame con los valores brutos (sin normalizar).
-    """
+def heatmap_direccion_shap(modelos, df, guardar=True, annot=True):
+    """Heatmap de dirección SHAP (mean con signo) por feature × partido, normalizado por partido."""
     try:
         import shap
     except ImportError:
@@ -126,9 +96,3 @@ def heatmap_direccion_shap(
     plt.show()
 
     return df_dir
-
-
-
-    os.makedirs('documentation/imagenes_EDA', exist_ok=True)
-    plt.savefig('documentation/imagenes_EDA/shap_importancia_global.png', dpi=150)
-    plt.show()
