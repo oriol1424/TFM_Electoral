@@ -1,10 +1,13 @@
 """
-limpieza/panel.py
-Construye el panel multianual demo: una fila por municipio, columnas con sufijo _YYYY.
+limpieza/historicos.py
+Construye el panel multianual histórico: una fila por municipio, columnas con sufijo _YYYY.
 
-Subconjunto (~1.241 municipios) que cumple:
-  1. POB_2019 >= 5.000 hab  (pobmun19.xlsx)
-  2. Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio
+Subconjunto de municipios que cumple:
+  - Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio en todos los años
+
+Incluye el procesamiento ETL de los años históricos 2015 y 2016, cuyos
+slot mappings electorales difieren de 2019/2023 y no están cubiertos
+por ETL_limpieza.
 """
 import os
 import numpy as np
@@ -15,12 +18,126 @@ from .funciones_genericas_limpieza import (
     leer_json, guardar_dataframe_csv, limpiar_valor_numerico,
     leer_archivo_csv, leer_datos_mixtos, formatear_serie_codigo,
 )
+from .votos import limpieza_votos_partidos, generar_columnas_pct_votos
+
+
+# ── Slot mappings históricos ──────────────────────────────────────────────────
+
+# Junio 2016: Unidos Podemos (PODEMOS + IU) corrieron juntos.
+# JxCAT no existía aún (era DL/CDC). VOX marginal.
+SLOT_MAPPING_2016: Dict[str, List[str]] = {
+    'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
+    'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
+    'pct_vox':      ['VOX'],
+    'pct_cs':       ['Cs'],
+    'pct_up_sumar': [
+        'PODEMOS-IU', 'PODEMOS-IU_LV_CA', 'ECP-GUANYEM',
+        'PODEMOS-EUPV', 'PODEMOS-EU', 'PODEMOS-EUIB',
+        'PODEMOS-IX', 'PODEMOS-IU-BATZARRE', 'EN_MAREA',
+    ],
+    'pct_erc':      ['ERC-SOBIRANISTES', 'ERC'],
+    'pct_jxcat':    ['DL', 'CDC', 'DiL'],
+    'pct_cup':      ['CUP', 'CUP-PR'],
+    'pct_pnv':      ['EAJ-PNV'],
+    'pct_ehbildu':  ['EH_Bildu'],
+    'pct_bng':      ['BNG'],
+    'pct_cc':       ['CCa-PNC-NC', 'NC-CCa-PNC', 'CCa'],
+    'pct_prc':      ['PRC'],
+    'pct_naplus':   ['UPN'],
+    'pct_teruel':   [],
+}
+
+# Diciembre 2015: Podemos e IU corrieron por separado.
+# JxCAT no existía (era DL = Democràcia i Llibertat, fusión CiU/CDC).
+# ERC corrió como SOBIRANISTES en Cataluña.
+SLOT_MAPPING_2015: Dict[str, List[str]] = {
+    'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
+    'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
+    'pct_vox':      ['VOX'],
+    'pct_cs':       ['Cs'],
+    'pct_up_sumar': [
+        'PODEMOS', 'PODEMOS-EQUO', 'PODEMOS-EUIB',
+        'PODEMOS-EU', 'PODEMOS-IX', 'PODEMOS-IU-BATZARRE',
+        'EN_COMÚ_PODEM', 'EN_MAREA', 'PODEMOS-COMPROMÍS',
+        'IU', 'IU-UP',
+    ],
+    'pct_erc':      ['SOBIRANISTES', 'ERC-SOBIRANISTES', 'ERC-CATSÍ', 'ERC'],
+    'pct_jxcat':    ['DL', 'CDC', 'DiL', 'CiU'],
+    'pct_cup':      ['CUP', 'CUP-PR'],
+    'pct_pnv':      ['EAJ-PNV'],
+    'pct_ehbildu':  ['EH_Bildu'],
+    'pct_bng':      ['BNG'],
+    'pct_cc':       ['CCa-PNC-NC', 'NC-CCa-PNC', 'CCa'],
+    'pct_prc':      ['PRC'],
+    'pct_naplus':   ['UPN'],
+    'pct_teruel':   [],
+}
+
+_SLOT_MAPPING_HISTORICO: Dict[str, Dict[str, List[str]]] = {
+    '2015': SLOT_MAPPING_2015,
+    '2016': SLOT_MAPPING_2016,
+}
 
 
 # Años con datos electorales (participación + votos pct)
 ANOS_ELECCIONES: List[int] = [2015, 2016, 2019, 2023]
 
 # ── Mapeos: nombre completo INE → nombre corto para columnas del panel ────────
+
+# ── ETL años históricos ──────────────────────────────────────────────────────
+
+def _etl_votos_anio_historico(config: dict, anio: str) -> None:
+    """
+    Procesa los ficheros de votos de un año histórico (2015 ó 2016) si no existen.
+    Equivalente al ETL que hace ETL_limpieza para 2019/2023, pero con el
+    slot mapping específico de cada año electoral.
+    """
+    raw  = config[anio]['raw']
+    proc = config[anio]['processed']
+
+    carpeta_votos = proc['carpeta_votos']
+    votos_pct     = proc['votos_pct']
+    csv_granular  = os.path.join(carpeta_votos, f'Votos_Granularidad_Total_{anio}.csv')
+
+    ya_procesado = (
+        os.path.exists(csv_granular) and os.path.exists(votos_pct)
+    )
+    if ya_procesado:
+        print(f"  [OK] Votos {anio} ya procesados — omitiendo ETL.")
+        return
+
+    print(f"  [ETL] Procesando votos históricos {anio}...")
+    os.makedirs(carpeta_votos, exist_ok=True)
+    os.makedirs(os.path.dirname(votos_pct), exist_ok=True)
+
+    limpieza_votos_partidos(
+        fichero_cis=raw['ideologias'],
+        fichero_03=raw['votos_candidaturas'],
+        fichero_05=raw['votos_municipios_totales'],
+        fichero_06=raw['Votos_candidaturas_agrupados'],
+        ruta_guardado=carpeta_votos,
+        anio=anio,
+    )
+
+    generar_columnas_pct_votos(
+        csv_votos_granular=csv_granular,
+        anio=anio,
+        output_file=votos_pct,
+        slot_mapping=_SLOT_MAPPING_HISTORICO[anio],
+    )
+    print(f"  [OK] Votos {anio} generados.")
+
+
+def _etl_votos_historicos(config: dict) -> None:
+    """Asegura que los ficheros de votos de 2015 y 2016 existen."""
+    for anio in ('2015', '2016'):
+        if anio in config:
+            _etl_votos_anio_historico(config, anio)
+        else:
+            print(f"  [AVISO] Año {anio} no encontrado en config — omitido.")
+
+
+# ── Mapeos INE ────────────────────────────────────────────────────────────────
 
 _RENTA_MAP: Dict[str, str] = {
     "Renta neta media por persona":               "renta_neta_persona",
@@ -182,23 +299,15 @@ def _cargar_targets_anio(path_csv: str, anio: int) -> Optional[pd.DataFrame]:
 
 def calcular_filtro_demo(config: dict) -> Set[str]:
     """
-    Calcula el subconjunto demo (~1.241 municipios) que cumple:
-      1. POB_2019 >= 5.000 hab
-      2. Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio
+    Calcula el subconjunto de municipios con datos INE completos:
+      - Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio
 
     Returns:
-        Set de cod_ine (strings de 5 dígitos) que pasan ambos criterios.
+        Set de cod_ine (strings de 5 dígitos) que pasan el criterio.
     """
     raw19 = config["2019"]["raw"]
 
-    # ── Filtro 1: población ────────────────────────────────────────────────
-    df_pop = _cargar_poblacion_anio(raw19["poblacion"], 2019)
-    if df_pop is None:
-        raise FileNotFoundError("No se encuentra pobmun19.xlsx")
-    munis_pop = set(df_pop.loc[df_pop["poblacion_2019"] >= 5000, "cod_ine"])
-    print(f"  [Filtro 1] POB_2019 >= 5.000 hab: {len(munis_pop)} municipios")
-
-    # ── Filtro 2: completitud INE ──────────────────────────────────────────
+    # ── Completitud INE ────────────────────────────────────────────────────
     ok_30824 = _municipios_completos_ine(raw19["renta_disponible"])
     ok_30825 = _municipios_completos_ine(raw19["fuente_ingresos"])
 
@@ -209,19 +318,16 @@ def calcular_filtro_demo(config: dict) -> Set[str]:
     )
     ok_gini = ok_37677 | ok_37731
 
-    munis_ok = ok_30824 & ok_30825 & ok_gini
-    print(f"  [Filtro 2] Sin '.' en 30824+30825+37677/37731: {len(munis_ok)} municipios")
-
-    resultado = munis_pop & munis_ok
-    print(f"  [Filtro combinado] Municipios demo: {len(resultado)}")
+    resultado = ok_30824 & ok_30825 & ok_gini
+    print(f"  [Filtro] Sin '.' en 30824+30825+37677/37731: {len(resultado)} municipios")
     return resultado
 
 
 # ── Orquestador ──────────────────────────────────────────────────────────────
 
-def construir_panel_demo(config_path: str = "config_path.json") -> pd.DataFrame:
+def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
     """
-    Construye y guarda panel_demo.csv.
+    Construye y guarda panel_historico.csv.
 
     Columnas resultantes:
       - Identificador: cod_ine
@@ -245,13 +351,16 @@ def construir_panel_demo(config_path: str = "config_path.json") -> pd.DataFrame:
     output_path = config["demo"]["processed"]["panel_demo"]
 
     if os.path.exists(output_path):
-        print(f"[OK] panel_demo.csv ya existe — cargando desde '{output_path}'")
+        print(f"[OK] panel_historico.csv ya existe — cargando desde '{output_path}'")
         panel = pd.read_csv(output_path, sep=";", encoding="utf-8-sig", dtype={"cod_ine": str})
         print(f"     {len(panel)} municipios × {panel.shape[1]} columnas")
         return panel
 
+    # ── 0. ETL años históricos (2015 y 2016) si no existen ────────────────────
+    _etl_votos_historicos(config)
+
     raw19 = config["2019"]["raw"]
-    print("=== CONSTRUYENDO PANEL DEMO ===")
+    print("=== CONSTRUYENDO PANEL HISTÓRICO ===")
 
     # ── 1. Filtro de municipios ────────────────────────────────────────────
     munis_demo = calcular_filtro_demo(config)
@@ -374,6 +483,6 @@ def construir_panel_demo(config_path: str = "config_path.json") -> pd.DataFrame:
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     guardar_dataframe_csv(panel, output_path)
 
-    print(f"\n[OK] panel_demo.csv guardado en '{output_path}'")
+    print(f"\n[OK] panel_historico.csv guardado en '{output_path}'")
     print(f"     {len(panel)} municipios × {panel.shape[1]} columnas")
     return panel

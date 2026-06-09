@@ -4,8 +4,8 @@
             "GINI_P80P20_navarra_multianual": "data_raw/renta/37731.csv"
         },
         "processed": {
-            "carpeta_salida": "data_processed/Demo/",
-            "panel_demo": "data_processed/Demo/panel_demo.csv"
+            "carpeta_salida": "data_processed/municipios_historicos/",
+            "panel_demo": "data_processed/municipios_historicos/panel_historico.csv"
         }
     },
     "2023": {
