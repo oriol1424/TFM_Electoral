@@ -1,0 +1,21 @@
+model_der  = models_bloq['derecha']['model']
+X_test_der = models_bloq['derecha']['X_te']
+
+explainer   = shap.TreeExplainer(model_der)
+shap_values = explainer.shap_values(X_test_der)
+
+fig, ax = plt.subplots(figsize=(9, 5))
+shap.summary_plot(shap_values, X_test_der, plot_type='bar', show=False)
+plt.title('Importancia SHAP — pct_derecha (test 2023, muestra total)\n'
+          'Variables que más determinan el porcentaje de voto al bloque de derechas')
+plt.tight_layout()
+plt.savefig('documentation/imagenes_EDA/shap_pct_derecha_bar.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+fig2, ax2 = plt.subplots(figsize=(9, 5))
+shap.summary_plot(shap_values, X_test_der, show=False)
+plt.title('Dirección del efecto SHAP — pct_derecha (test 2023)\n'
+          'Rojo = valor alto de feature, Azul = valor bajo')
+plt.tight_layout()
+plt.savefig('documentation/imagenes_EDA/shap_pct_derecha_beeswarm.png', dpi=150, bbox_inches='tight')
+plt.show()
