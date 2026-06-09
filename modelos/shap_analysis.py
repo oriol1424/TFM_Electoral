@@ -62,38 +62,6 @@ def analizar_shap_todos(
         analizar_shap_partido(modelos, df, partido, max_display=max_display, guardar=guardar)
 
 
-def importancia_global_shap(
-    modelos: Dict,
-    df: pd.DataFrame
-) -> pd.DataFrame:
-    """
-    Computes mean |SHAP| per feature across all parties.
-    Returns DataFrame sorted by global importance.
-    Useful to identify which features matter most across the model.
-    """
-    try:
-        import shap
-    except ImportError:
-        print("Instala shap: pip install shap")
-        return pd.DataFrame()
-
-    X = preparar_features(df)
-    importancias = {}
-
-    for partido, modelo in modelos.items():
-        explainer = shap.TreeExplainer(modelo)
-        shap_values = explainer.shap_values(X)
-        importancias[partido.replace('pct_', '')] = np.abs(shap_values).mean(axis=0)
-
-    df_imp = pd.DataFrame(importancias, index=X.columns)
-    df_imp['media_global'] = df_imp.mean(axis=1)
-    df_imp = df_imp.sort_values('media_global', ascending=False)
-
-    print("\nIMPORTANCIA GLOBAL DE FEATURES (mean |SHAP|):")
-    print(df_imp[['media_global']].round(4).to_string())
-
-    return df_imp
-
 
 def heatmap_direccion_shap(
     modelos: Dict,
@@ -160,22 +128,6 @@ def heatmap_direccion_shap(
     return df_dir
 
 
-def heatmap_importancia_shap(df_imp: pd.DataFrame):
-    """
-    Heatmap of SHAP importance: features x parties.
-    """
-    cols_partidos = [c for c in df_imp.columns if c != 'media_global']
-    data = df_imp[cols_partidos]
-
-    fig, ax = plt.subplots(figsize=(14, 7))
-    sns_data = data.div(data.max())  # normalize 0-1 per party for visual clarity
-    import seaborn as sns
-    sns.heatmap(sns_data, cmap='YlOrRd', ax=ax, linewidths=0.3,
-                annot=False, cbar_kws={'label': 'Importancia relativa'})
-    ax.set_title('Importancia SHAP por feature y partido')
-    ax.tick_params(axis='x', rotation=45, labelsize=8)
-    ax.tick_params(axis='y', labelsize=8)
-    plt.tight_layout()
 
     os.makedirs('documentation/imagenes_EDA', exist_ok=True)
     plt.savefig('documentation/imagenes_EDA/shap_importancia_global.png', dpi=150)
