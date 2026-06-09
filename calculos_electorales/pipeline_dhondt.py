@@ -20,16 +20,22 @@ def pipeline_dhondt_predicho(
     df_2023: pd.DataFrame,
     ruta_json_poblacion: str,
     verbose: bool = True,
+    w=None,
 ) -> Dict[str, int]:
     """
     Pipeline completo sobre votos PREDICHOS:
       1. Predice porcentajes y convierte a votos absolutos por municipio.
       2. Agrega votos de municipal a provincial.
       3. Aplica D'Hondt provincia a provincia.
+    Pasa w para usar el modelo espacial.
     Devuelve {slot: escanos_nacionales}.
     """
     if verbose: print("  [Predicho] Generando predicciones por municipio...")
-    df_pred = pipeline_prediccion(modelos, df_2023)
+    if w is not None:
+        from modelos.alternativos.espacial import pipeline_prediccion_espacial
+        df_pred = pipeline_prediccion_espacial(modelos, df_2023, w)
+    else:
+        df_pred = pipeline_prediccion(modelos, df_2023)
 
     if verbose: print("  [Predicho] Agregando a nivel provincial...")
     df_prov = votos_predichos_por_provincia(df_pred)
@@ -75,15 +81,16 @@ def pipeline_comparacion_dhondt(
     etiqueta: str = '2023',
     guardar_graficos: bool = True,
     verbose: bool = True,
+    w=None,
 ) -> pd.DataFrame:
     """
     Orquestador completo: ejecuta D'Hondt sobre votos predichos y reales,
     imprime la tabla comparativa y genera los gráficos de escaños y error.
     Usa verbose=False para suprimir toda la salida por pantalla.
+    Pasa w para usar el modelo espacial.
 
     Uso en main.ipynb:
-        from calculos_electorales.pipeline_dhondt import pipeline_comparacion_dhondt
-        df_escanos = pipeline_comparacion_dhondt(modelos, df_2023_completo, ruta_json_pob)
+        df_escanos = pipeline_comparacion_dhondt(modelos_esp, df_2023_completo, ruta_json_pob, w=w)
 
     Devuelve el DataFrame comparativo (partido, escanos_pred, escanos_real, error).
     """
@@ -93,7 +100,7 @@ def pipeline_comparacion_dhondt(
         print("=" * 55)
         print("\nPaso 1 — Escaños predichos:")
 
-    escanos_pred = pipeline_dhondt_predicho(modelos, df_2023_completo, ruta_json_poblacion, verbose=verbose)
+    escanos_pred = pipeline_dhondt_predicho(modelos, df_2023_completo, ruta_json_poblacion, verbose=verbose, w=w)
 
     if verbose: print("\nPaso 2 — Escaños reales (benchmark slots):")
     escanos_real = pipeline_dhondt_real(df_2023_completo, ruta_json_poblacion, verbose=verbose)

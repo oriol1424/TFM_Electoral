@@ -302,20 +302,25 @@ def pipeline_visualizacion(
     ruta_parquet_municipios: str,
     etiqueta: str = '2023',
     guardar: bool = True,
+    w=None,
 ) -> None:
     """
     Orquestador: genera hemiciclo y mapa provincial (real vs predicho).
+    Pasa w para usar el modelo espacial.
 
     Uso en main.ipynb:
-        from calculos_electorales.visualizacion import pipeline_visualizacion
-        pipeline_visualizacion(modelos, df_2023_completo, ruta_json_pob, ruta_parquet)
+        pipeline_visualizacion(modelos_esp, df_2023_completo, ruta_json_pob, ruta_parquet, w=w)
     """
     print("=" * 50)
     print("  VISUALIZACIÓN DE RESULTADOS ELECTORALES")
     print("=" * 50)
 
     print("\n[1/4] Prediciendo votos por municipio...")
-    df_pred = pipeline_prediccion(modelos, df_2023_completo)
+    if w is not None:
+        from modelos.alternativos.espacial import pipeline_prediccion_espacial
+        df_pred = pipeline_prediccion_espacial(modelos, df_2023_completo, w)
+    else:
+        df_pred = pipeline_prediccion(modelos, df_2023_completo)
 
     print("[2/4] Agregando a nivel provincial...")
     df_prov_pred = votos_predichos_por_provincia(df_pred)

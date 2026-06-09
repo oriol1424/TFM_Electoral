@@ -95,6 +95,9 @@ def pipeline_escanos_todos_modelos(
         print(f"\nD'Hondt — {nombre}...")
         if 'espacial' in nombre:
             df_pred = pipeline_prediccion_espacial(modelos, df_2023, w)
+        elif 'v2' in nombre:
+            from modelos.v2 import pipeline_prediccion_v2
+            df_pred = pipeline_prediccion_v2(modelos, df_2023)
         else:
             df_pred = pipeline_prediccion(modelos, df_2023)
 
