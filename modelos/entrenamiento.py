@@ -76,6 +76,13 @@ def entrenar_modelos(
     Saves models and feature list to carpeta if guardar=True.
     Returns dict {partido: modelo}.
     """
+    if os.path.isdir(carpeta) and all(
+        os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in TARGETS
+    ):
+        print(f"Modelos ya existentes en '{carpeta}/' — cargando sin reentrenar.")
+        modelos, _ = cargar_modelos(carpeta)
+        return modelos
+
     X_train = preparar_features(df_train)
     features_usadas = list(X_train.columns)
     params_uso = params or PARAMS_DEFAULT

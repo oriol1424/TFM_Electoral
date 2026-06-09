@@ -53,6 +53,12 @@ def entrenar_modelos_espacial(
     guardar: bool = True,
     carpeta: str = 'modelos/modelos_espacial',
 ) -> Dict[str, xgb.XGBRegressor]:
+    if os.path.isdir(carpeta) and all(
+        os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in TARGETS
+    ):
+        print(f"Modelos espaciales ya existentes en '{carpeta}/' — cargando sin reentrenar.")
+        return cargar_modelos_espacial(carpeta)
+
     if w is None:
         w = cargar_pesos_espaciales()
 

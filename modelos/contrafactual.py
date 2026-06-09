@@ -36,8 +36,15 @@ def entrenar_modelos_sin_cs(
       - PRC fusionada en PSOE (no se presenta en 2023)
     Excluye pct_cs y pct_prc de los targets.
     """
-    df_train = preparar_dataset_sin_cs(df_2019)
     targets_sin_cs = [t for t in TARGETS if t not in ("pct_cs", "pct_prc")]
+
+    if os.path.isdir(carpeta) and all(
+        os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in targets_sin_cs
+    ):
+        print(f"Modelos sin_cs ya existentes en '{carpeta}/' — cargando sin reentrenar.")
+        return cargar_modelos_sin_cs(carpeta)
+
+    df_train = preparar_dataset_sin_cs(df_2019)
     X_train = preparar_features(df_train)
     params_uso = params or PARAMS_DEFAULT
 

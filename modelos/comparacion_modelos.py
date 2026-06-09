@@ -34,17 +34,15 @@ def pipeline_comparacion_modelos(
     etiqueta = ' (sin CS+PRC)' if sin_cs else ''
     df_tr = preparar_dataset_sin_cs(df_train) if sin_cs else df_train
 
-    sep = "=" * 60
-    print(sep)
+
     modelos_xgb = entrenar_modelos(df_tr, guardar=guardar,
                                    carpeta=f'modelos/modelos_guardados{sufijo}')
-    print(sep)
+
     modelos_bayes = entrenar_modelos_bayesiano(df_tr, guardar=guardar,
                                                carpeta=f'modelos/modelos_bayesiano{sufijo}')
-    print(sep)
+
     modelos_esp = entrenar_modelos_espacial(df_tr, w=w, guardar=guardar,
                                             carpeta=f'modelos/modelos_espacial{sufijo}')
-    print(sep)
 
     print(f"\nEVALUACIÓN TEST (2023){etiqueta}\n")
     met_xgb   = evaluar_modelos(modelos_xgb,   df_test, etiqueta=f"XGBoost{etiqueta}")

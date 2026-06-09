@@ -60,6 +60,12 @@ def entrenar_modelos_v2(
     más 'grupo_tamano' (rural=0 / semiurbano=1 / urbano=2).
     Guarda en carpeta/. Devuelve {partido: modelo}.
     """
+    if os.path.isdir(carpeta) and all(
+        os.path.exists(os.path.join(carpeta, f"{p}.json")) for p in TARGETS
+    ):
+        print(f"Modelos V2 ya existentes en '{carpeta}/' — cargando sin reentrenar.")
+        return cargar_modelos_v2(carpeta)
+
     X_train = preparar_features_v2(df_train)
     params_uso = params or PARAMS_DEFAULT
 
