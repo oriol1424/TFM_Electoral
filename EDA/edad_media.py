@@ -112,26 +112,8 @@ def _plot_municipios(df_municipios: pd.DataFrame, anio: int) -> None:
 
 
 
-def eda_edad_media(
-    df_provincias: pd.DataFrame,
-    df_municipios: pd.DataFrame,
-    anio: int
-) -> None:
-    """
-    EDA completo de la edad media provincial y municipal.
-
-    Genera tres bloques de histogramas:
-      1. Provincias - Ambos sexos, con linea Total Nacional.
-      2. Provincias - Hombres y Mujeres por separado, con linea Total Nacional.
-      3. Municipios - distribucion con linea de media nacional calculada.
-
-    Args:
-        df_provincias: DataFrame del ETL con columnas cod_provincia, nombre_provincia,
-                       edad_media_ambos, edad_media_hombres, edad_media_mujeres.
-        df_municipios: DataFrame del ETL con columnas id_municipio, nombre_municipio,
-                       edad_media_ambos, edad_media_hombres, edad_media_mujeres.
-        anio: Anno a analizar.
-    """
+def eda_edad_media(df_provincias, df_municipios, anio):
+    """EDA completo de edad media provincial y municipal: ambos sexos, hombres y mujeres."""
     print(f"  EDA EDAD MEDIA - {anio}")
 
     print("\n[1/3] Provincias - Ambos sexos")

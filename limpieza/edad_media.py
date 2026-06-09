@@ -6,17 +6,8 @@ from .funciones_genericas_limpieza import (
 )
 
 
-def procesar_edad_media_municipios(path_csv: str, anio: int, path_salida: str) -> None:
-    """
-    Extrae la edad media municipal del INE para un año dado y la guarda en CSV.
-    Genera formato ancho: una fila por municipio con columnas por género
-    (edad_media_ambos, edad_media_hombres, edad_media_mujeres).
-
-    Args:
-        path_csv: Ruta al fichero raw del INE (30699.csv, municipios).
-        anio: Año objetivo.
-        path_salida: Ruta del CSV de salida.
-    """
+def procesar_edad_media_municipios(path_csv, anio, path_salida):
+    """Extrae la edad media municipal del INE para un año y guarda CSV en formato ancho."""
     df = leer_archivo_csv(path_csv)
     df = df[df["Periodo"].astype(str) == str(anio)].copy()
 
@@ -40,18 +31,8 @@ def procesar_edad_media_municipios(path_csv: str, anio: int, path_salida: str) -
     print(f"Edad media municipios {anio}: {len(df_wide)} registros → '{path_salida}'.")
 
 
-def procesar_edad_media_provincias(path_csv: str, anio: int, path_salida: str) -> None:
-    """
-    Extrae la edad media provincial del INE para un año dado y la guarda en CSV.
-    Genera formato ancho: una fila por provincia con columnas por género
-    (edad_media_ambos, edad_media_hombres, edad_media_mujeres).
-    'Total Nacional' recibe el código '00'.
-
-    Args:
-        path_csv: Ruta al fichero raw del INE (3199.csv, provincias).
-        anio: Año objetivo.
-        path_salida: Ruta del CSV de salida.
-    """
+def procesar_edad_media_provincias(path_csv, anio, path_salida):
+    """Extrae la edad media provincial del INE para un año y guarda CSV en formato ancho."""
     df = leer_archivo_csv(path_csv)
     df = df[df["Periodo"].astype(str) == str(anio)].copy()
 

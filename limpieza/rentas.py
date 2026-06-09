@@ -1,12 +1,11 @@
 import pandas as pd
-from typing import Callable
 from .funciones_genericas_limpieza import (
     limpiar_valor_numerico, formatear_serie_codigo,
     leer_archivo_csv, normalizar_nombres_columnas, guardar_dataframe_csv
 )
 
 
-def crear_lista_maestra(df: pd.DataFrame) -> pd.DataFrame:
+def crear_lista_maestra(df):
     """Extrae la lista única de municipios con código y nombre."""
     col_muni = df.columns[0]
     df_temp = pd.DataFrame()
@@ -16,7 +15,7 @@ def crear_lista_maestra(df: pd.DataFrame) -> pd.DataFrame:
     return maestra[['Cod_Muni', 'Nombre_Muni']].copy()
 
 
-def _pivotar_ine(df: pd.DataFrame, col_indicador: str) -> pd.DataFrame:
+def _pivotar_ine(df, col_indicador):
     """Limpia valores, agrupa por municipio y pivota un CSV de renta del INE."""
     df['Total_Num'] = df['Total'].apply(lambda x: limpiar_valor_numerico(x, to_nan=True))
     df['Cod_Muni'] = formatear_serie_codigo(df[df.columns[0]], 5)
@@ -27,7 +26,7 @@ def _pivotar_ine(df: pd.DataFrame, col_indicador: str) -> pd.DataFrame:
     return df_pivot.reset_index()
 
 
-def _procesar_csv_ine(path_entrada: str, path_salida: str, fn_pivot: Callable) -> pd.DataFrame:
+def _procesar_csv_ine(path_entrada, path_salida, fn_pivot):
     """Lee un CSV del INE, extrae lista maestra, aplica fn_pivot y guarda el resultado."""
     try:
         df = leer_archivo_csv(path_entrada)
@@ -42,19 +41,19 @@ def _procesar_csv_ine(path_entrada: str, path_salida: str, fn_pivot: Callable) -
         raise
 
 
-def procesar_archivo_ine(path_entrada: str, path_salida: str) -> pd.DataFrame:
+def procesar_archivo_ine(path_entrada, path_salida):
     """Orquesta el proceso de indicadores de renta media (30824.csv)."""
     return _procesar_csv_ine(path_entrada, path_salida,
                              lambda df: _pivotar_ine(df, 'Indicadores de renta media'))
 
 
-def procesar_archivo_gini(path_entrada: str, path_salida: str) -> pd.DataFrame:
+def procesar_archivo_gini(path_entrada, path_salida):
     """Orquesta el proceso para Gini y Distribución P80/P20 (37677.csv)."""
     return _procesar_csv_ine(path_entrada, path_salida,
                              lambda df: _pivotar_ine(df, 'Indicadores de renta media'))
 
 
-def procesar_fuente_ingresos(path_entrada: str, path_salida: str) -> pd.DataFrame:
+def procesar_fuente_ingresos(path_entrada, path_salida):
     """Orquesta el proceso para el archivo de Fuente de Ingresos (30825.csv)."""
     col = 'Distribución por fuente de ingresos'
     def _pivot(df):

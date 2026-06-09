@@ -1,9 +1,8 @@
 import pandas as pd
 import os
-from typing import Union
 from .funciones_genericas_limpieza import formatear_serie_codigo, limpiar_serie_numerica, guardar_dataframe_csv, leer_archivo_csv
 
-def procesar_geografia_municipios(path_entrada: str, path_salida: str) -> pd.DataFrame:
+def procesar_geografia_municipios(path_entrada, path_salida):
     """Procesa el dataset geográfico municipal para normalizar IDs y campos numéricos."""
     if not os.path.exists(path_entrada):
         raise FileNotFoundError(f"El archivo no se encuentra en {path_entrada}")

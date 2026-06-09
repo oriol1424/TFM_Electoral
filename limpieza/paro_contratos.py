@@ -1,27 +1,18 @@
 import os
-from typing import Any, Optional, Union
 import numpy as np
 import pandas as pd
 from .funciones_genericas_limpieza import formatear_serie_codigo, limpiar_valor_numerico, guardar_dataframe_csv
 
-def procesar_hoja_sepe(df: pd.DataFrame, tipo: str = 'paro') -> pd.DataFrame:
-    """
-    Identifica dinámicamente la fila de inicio de datos, asigna las columnas correctas
-    según el tipo y limpia los valores contenidos en ellas.
-    Args:
-        df (pd.DataFrame): DataFrame bruto correspondiente a una hoja del Excel.
-        tipo (str, optional): Indica el tipo de datos para asignar cabeceras ('paro' o 'contratos').
-                              Por defecto es 'paro'.
-    Returns:
-        pd.DataFrame: DataFrame procesado, normalizado y sin cabeceras basuras.
-    """
+
+def procesar_hoja_sepe(df, tipo='paro'):
+    """Identifica la fila de inicio de datos y limpia una hoja del Excel del SEPE."""
     start_row = 0
     for i in range(len(df)):
         val = str(df.iloc[i, 0]).split('.')[0]
         if val.isdigit() and 4 <= len(val) <= 5:
             start_row = i
             break
-    
+
     df_clean = df.iloc[start_row:].copy()
     if tipo == 'paro':
         cols = [
@@ -37,7 +28,7 @@ def procesar_hoja_sepe(df: pd.DataFrame, tipo: str = 'paro') -> pd.DataFrame:
             'c_m_indef', 'c_m_temp', 'c_m_conv',
             'c_agr', 'c_ind', 'c_con', 'c_ser'
         ]
-    
+
     faltan_columnas = len(cols) - df_clean.shape[1]
     if faltan_columnas > 0:
         for i in range(faltan_columnas):
@@ -54,24 +45,12 @@ def procesar_hoja_sepe(df: pd.DataFrame, tipo: str = 'paro') -> pd.DataFrame:
     return df_clean
 
 
-def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.DataFrame]:
-    """
-    Función maestra que procesa un archivo Excel del SEPE, emparejando hojas 
-    con tolerancia a errores tipográficos y realizando un cruce de datos inclusivo.
-    Args:
-        path_entrada (str): Ruta al archivo Excel crudo (.xls o .xlsx).
-        path_salida (str): Ruta donde se exportará el archivo CSV procesado.
-    Returns:
-        Optional[pd.DataFrame]: DataFrame consolidado resultante, o None si no hay datos 
-        válidos o si se produce una excepción crítica.
-    Raises:
-        Exception: Atrapa y loguea cualquier error de ejecución impredecible, 
-        devolviendo None como control de fallo controlado.
-    """
+def limpiar_y_exportar_sepe(path_entrada, path_salida):
+    """Procesa un Excel del SEPE emparejando hojas PARO/CONTRATOS y exporta a CSV."""
     try:
         engine = 'xlrd' if path_entrada.endswith('.xls') else 'openpyxl'
         print(f"DEBUG: Abriendo archivo con motor {engine}: {path_entrada}")
-        
+
         if not os.path.exists(path_entrada):
             print(f"ERROR: No se encuentra el archivo de entrada: {path_entrada}")
             return None
@@ -114,19 +93,19 @@ def limpiar_y_exportar_sepe(path_entrada: str, path_salida: str) -> Optional[pd.
                 merged['nombre_municipio'] = merged['nombre_municipio'].fillna(merged['nombre_municipio_cont'])
                 merged = merged.drop(columns=['nombre_municipio_cont'])
             all_data.append(merged)
-        
+
         if not all_data:
             print("WARNING: No se pudo extraer ningún dato de las hojas encontradas.")
             return None
-        
+
         df_ml = pd.concat(all_data, ignore_index=True)
         cols_numericas = df_ml.columns.drop(['id_municipio', 'nombre_municipio'])
         df_ml[cols_numericas] = df_ml[cols_numericas].fillna(0).astype(float).astype(int)
-        
+
         print(f"DEBUG: Exportando {len(df_ml)} filas a {path_salida}")
         guardar_dataframe_csv(df_ml, path_salida)
         return df_ml
-    
+
     except Exception as e:
         print(f"\nError crítico en limpieza_sepe: {e}")
         return None

@@ -24,22 +24,7 @@ def analizar_pca(
     n_components: int = 10,
     cols_override: list = None,
 ) -> pd.DataFrame:
-    """
-    Realiza un PCA sobre las features socioeconómicas del dataset municipal.
-
-    Pasos:
-      1. Selecciona features: si se pasa cols_override, usa esa lista exacta;
-         si no, toma todas las numéricas excluyendo identificadores, targets y flags.
-      2. Elimina filas con NaN residuales (no debería haber tras imputación).
-      3. Estandariza (media=0, std=1) con StandardScaler.
-      4. Aplica PCA y genera:
-         a. Scree plot (varianza explicada acumulada).
-         b. Heatmap de loadings de los primeros 4 componentes.
-         c. Scatter plot municipios en PC1 vs PC2, coloreado por log_poblacion.
-      5. Imprime tabla de loadings de PC1 y PC2.
-
-    Devuelve el dataframe original con las columnas PC1..PCn añadidas.
-    """
+    """PCA sobre features socioeconómicas municipales. Devuelve el df con columnas PC1..PCn añadidas."""
     os.makedirs(output_dir, exist_ok=True)
 
     if cols_override is not None:

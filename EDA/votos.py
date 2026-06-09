@@ -204,13 +204,7 @@ def analizar_umbral_votos_nacional(df_votos: pd.DataFrame, umbral: float = 0.03,
 
 
 def eda_slots_pct_votos(df_pct: pd.DataFrame, anyo: str = "2019") -> None:
-    """
-    EDA de las columnas pct_* (targets ML).
-
-    Produce dos visualizaciones:
-    1. Barplot horizontal del % medio nacional por slot — justifica qué partidos importan.
-    2. Heatmap provincia × slot para regionalistas — justifica los ceros estructurales.
-    """
+    """EDA de columnas pct_*: barplot de % medio por slot y heatmap provincia × slot para regionalistas."""
 
     pct_cols = sorted([c for c in df_pct.columns if c.startswith('pct_')])
     if not pct_cols:

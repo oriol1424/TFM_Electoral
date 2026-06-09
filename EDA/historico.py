@@ -7,14 +7,7 @@ from EDA.visuals import obtener_mapeo_provincias, plot_smart_bar
 
 
 def eda_panel_historico_cobertura(panel: pd.DataFrame) -> None:
-    """
-    Caracterización del panel histórico: cobertura geográfica y distribución por tamaño.
-
-    Muestra:
-      1. Resumen numérico (municipios, provincias, años)
-      2. Municipios por provincia — barras horizontales ordenadas
-      3. Distribución por tamaño poblacional (usa categorizar_municipios_tfm)
-    """
+    """Cobertura del panel histórico: resumen numérico, barras por provincia y distribución por tamaño."""
     n_munis    = len(panel)
     n_provincias = panel["provincia_enc"].nunique()
     anos_elec  = [2015, 2016, 2019, 2023]

@@ -1,40 +1,20 @@
 import os
 import json
 import re
-from typing import Optional
 import pandas as pd
 from .funciones_genericas_limpieza import leer_datos_mixtos, formatear_serie_codigo, guardar_dataframe_csv, guardar_json
 
-def extraer_anyo(texto_titulo: str) -> Optional[int]:
-    """
-    Extrae un año de un texto dado utilizando expresiones regulares.
-    Busca un patrón de cuatro dígitos que represente un año comenzando por 19 o 20.
-    Args:
-        texto_titulo (str): El texto del cual extraer el año.
-    Returns:
-        Optional[int]: El año extraído como entero, o None si no se encuentra 
-        ninguna coincidencia.
-    """
+
+def extraer_anyo(texto_titulo):
+    """Extrae un año (19xx ó 20xx) de un texto usando regex."""
     match = re.search(r'\b(19|20)\d{2}\b', str(texto_titulo))
     if match:
         return int(match.group(0))
     return None
 
 
-def procesar_poblacion_maestro(path_lectura: str, path_salida_json: str, path_salida_csv: str) -> None:
-    """
-    Ejecuta el pipeline ETL completo del Padrón Municipal.
-    Lee el archivo de origen, limpia y transforma los datos asignando 
-    identificadores unificados, calcula totales poblacionales por provincia 
-    y a nivel nacional, y exporta los resultados a formatos CSV plano y 
-    JSON jerárquico.
-    Args:
-        path_lectura (str): Ruta del archivo de entrada (Excel o CSV).
-        path_salida_json (str): Ruta de destino para el archivo JSON jerárquico.
-        path_salida_csv (str): Ruta de destino para el archivo CSV plano.
-    Returns:
-        None
-    """
+def procesar_poblacion_maestro(path_lectura, path_salida_json, path_salida_csv):
+    """Pipeline ETL del Padrón Municipal: lee, limpia y exporta a CSV y JSON jerárquico."""
     df_raw = leer_datos_mixtos(path_lectura, header=None)
     titulo = df_raw.iloc[0, 0]
     anyo_padron = extraer_anyo(titulo)

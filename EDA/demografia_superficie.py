@@ -2,25 +2,16 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Dict, Any
 from EDA.visuals import plot_smart_bar
 from EDA.funciones_generales import categorizar_municipios_tfm, RANGOS_MUNICIPIO
 
-def mostrar_distribucion_poblacion(df_csv: pd.DataFrame, data_json: Dict[str, Any]) -> None:
-    """
-    Extrae la población total del JSON y genera un histograma en escala logarítmica 
-    usando el DataFrame CSV para visualizar la distribución de la población.
-    Args:
-        df_csv (pd.DataFrame): DataFrame con la población a nivel municipal.
-        data_json (Dict[str, Any]): Diccionario extraído del JSON con metadatos nacionales.
-    Returns:
-        None: Solo imprime por pantalla y muestra el gráfico.
-    """
+def mostrar_distribucion_poblacion(df_csv, data_json):
+    """Genera histograma de distribución de población municipal en escala logarítmica."""
     poblacion_total = data_json.get('metadatos', {}).get('total_nacional_poblacion', 0)
-    
+
     print(f"RESUMEN DEMOGRÁFICO")
     print(f"Población total: {poblacion_total:,.0f} habitantes\n")
-    
+
     plt.figure(figsize=(10, 6))
     sns.set_theme(style="whitegrid")
     sns.histplot(df_csv['poblacion_total'], bins=50, log_scale=True, color='skyblue')
@@ -31,76 +22,53 @@ def mostrar_distribucion_poblacion(df_csv: pd.DataFrame, data_json: Dict[str, An
     plt.show()
 
 
-def mostrar_extremos_poblacion(df_csv: pd.DataFrame) -> None:
-    """
-    Extrae e imprime los 10 municipios con mayor y menor población.
-    Args:
-        df_csv (pd.DataFrame): DataFrame con la población a nivel municipal.
-    Returns:
-        None: Imprime los resultados formateados por consola.
-    """
+def mostrar_extremos_poblacion(df_csv):
+    """Imprime los 10 municipios con mayor y menor población."""
     top_10 = df_csv.nlargest(10, 'poblacion_total')[['nombre_municipio', 'poblacion_total']]
     bottom_10 = df_csv.nsmallest(10, 'poblacion_total')[['nombre_municipio', 'poblacion_total']]
-    
+
     print("10 MUNICIPIOS MÁS POBLADOS")
     for i, row in enumerate(top_10.itertuples(), 1):
         print(f"{i:2d}. {row.nombre_municipio:<30} | {row.poblacion_total:>10,.0f} habs.")
-        
+
     print("\n10 MUNICIPIOS MENOS POBLADOS")
     for i, row in enumerate(bottom_10.itertuples(), 1):
         print(f"{i:2d}. {row.nombre_municipio:<30} | {row.poblacion_total:>10,.0f} habs.")
 
 
-def procesar_superficie_y_densidad(df_pob: pd.DataFrame, df_sup: pd.DataFrame) -> pd.DataFrame:
-    """
-    Cruza los datos de población y superficie, calcula la densidad poblacional 
-    y segmenta los municipios según los estratos oficiales del Padrón del INE.
-    Args:
-        df_pob (pd.DataFrame): DataFrame con la población municipal.
-        df_sup (pd.DataFrame): DataFrame con la superficie y coordenadas.
-    Returns:
-        pd.DataFrame: Un nuevo DataFrame cruzado con las columnas 'densidad_pob' 
-                      y 'tamano_municipio' añadidas.
-    """
+def procesar_superficie_y_densidad(df_pob, df_sup):
+    """Cruza población y superficie, calcula densidad y segmenta por estratos INE."""
     df_merged = pd.merge(df_pob, df_sup, on='id_municipio', how='inner')
     df_merged['superficie_km2'] = pd.to_numeric(
-        df_merged['superficie_km2'].astype(str).str.replace(',', '.'), 
+        df_merged['superficie_km2'].astype(str).str.replace(',', '.'),
         errors='coerce'
     )
-    
+
     df_merged['densidad_pob'] = np.where(
-        df_merged['superficie_km2'] > 0, 
-        df_merged['poblacion_total'] / df_merged['superficie_km2'], 
+        df_merged['superficie_km2'] > 0,
+        df_merged['poblacion_total'] / df_merged['superficie_km2'],
         np.nan
     )
-    
+
     df_merged['tamano_municipio'] = df_merged['poblacion_total'].apply(categorizar_municipios_tfm)
     df_merged['tamano_municipio'] = pd.Categorical(df_merged['tamano_municipio'], categories=RANGOS_MUNICIPIO, ordered=True)
-    
+
     return df_merged
 
 
-def mostrar_analisis_superficie(df_geo: pd.DataFrame) -> None:
-    """
-    Genera gráficos de barras comparando el porcentaje de municipios frente 
-    al porcentaje de población total por tamaño (estratos INE), y realiza 
-    comprobaciones de calidad.
-    Args:
-        df_geo (pd.DataFrame): DataFrame ya procesado con superficie y densidad.
-    Returns:
-        None: Muestra los gráficos e imprime las alertas de calidad de datos.
-    """
+def mostrar_analisis_superficie(df_geo):
+    """Barras de % municipios y % población por tamaño, más control de calidad geográfico."""
     total_municipios = len(df_geo)
     total_poblacion = df_geo['poblacion_total'].sum()
-    
+
     resumen = df_geo.groupby('tamano_municipio', observed=False).agg(
         num_municipios=('poblacion_total', 'count'),
         pob_total=('poblacion_total', 'sum')
     ).reset_index()
-    
+
     resumen['pct_municipios'] = (resumen['num_municipios'] / total_municipios) * 100
     resumen['pct_poblacion'] = (resumen['pob_total'] / total_poblacion) * 100
-    
+
     plot_smart_bar(
         df=resumen,
         cat_col='tamano_municipio',
@@ -113,7 +81,7 @@ def mostrar_analisis_superficie(df_geo: pd.DataFrame) -> None:
         is_percentage=True,
         rotation=45
     )
-    
+
     plot_smart_bar(
         df=resumen,
         cat_col='tamano_municipio',
@@ -126,11 +94,11 @@ def mostrar_analisis_superficie(df_geo: pd.DataFrame) -> None:
         is_percentage=True,
         rotation=45
     )
-    
+
     municipios_sup_cero = df_geo[df_geo['superficie_km2'] <= 0]
     lat_fuera = df_geo[(df_geo['latitud'] < 27.0) | (df_geo['latitud'] > 44.0)]
     lon_fuera = df_geo[(df_geo['longitud'] < -18.5) | (df_geo['longitud'] > 4.5)]
-    
+
     print("CONTROL DE CALIDAD GEOGRÁFICO")
     pob_total_nacional = df_geo['poblacion_total'].sum()
     sup_total_nacional = df_geo['superficie_km2'].sum()
@@ -140,11 +108,8 @@ def mostrar_analisis_superficie(df_geo: pd.DataFrame) -> None:
     print(f"Municipios con latitud fuera de rango: {len(lat_fuera)}")
     print(f"Municipios con longitud fuera de rango: {len(lon_fuera)}")
 
-def analizar_distribucion_provincial(df_municipal: pd.DataFrame, data_json: Any) -> pd.DataFrame:
-    """
-    Analiza la distribución provincial, filtrando Ceuta y Melilla del gráfico 
-    para normalizar la escala de densidades.
-    """
+def analizar_distribucion_provincial(df_municipal, data_json):
+    """Distribución provincial filtrando Ceuta y Melilla del scatter de densidades."""
     provincias_dict = data_json.get('provincias', {})
     if isinstance(data_json, pd.DataFrame):
         data_json = data_json.to_dict()
@@ -157,7 +122,7 @@ def analizar_distribucion_provincial(df_municipal: pd.DataFrame, data_json: Any)
                 'id_provincia': str(codigo_prov).zfill(2),
                 'nombre_provincia': info.get('nombre_provincia')
             })
-    
+
     df_nombres_prov = pd.DataFrame(lista_para_df)
 
     df_municipal['id_provincia'] = df_municipal['id_provincia'].astype(str).str.zfill(2)
@@ -176,7 +141,7 @@ def analizar_distribucion_provincial(df_municipal: pd.DataFrame, data_json: Any)
     df_prov['densidad_provincial'] = df_prov['poblacion_total'] / df_prov['superficie_total']
 
     df_top15 = df_prov.sort_values('poblacion_total', ascending=False).head(15)
-    
+
     plot_smart_bar(
         df=df_top15,
         cat_col='nombre_provincia',
@@ -190,18 +155,18 @@ def analizar_distribucion_provincial(df_municipal: pd.DataFrame, data_json: Any)
     )
 
     df_prov_peninsular = df_prov[~df_prov['id_provincia'].isin(['51', '52'])].copy()
-    
+
     plt.figure(figsize=(10, 8))
     sns.set_theme(style="whitegrid")
     ax = sns.scatterplot(
-        data=df_prov_peninsular, x='pct_superficie', y='pct_poblacion', 
+        data=df_prov_peninsular, x='pct_superficie', y='pct_poblacion',
         size='densidad_provincial', hue='densidad_provincial',
         palette='flare', sizes=(100, 2000), alpha=0.7
     )
-    
+
     max_val = max(df_prov_peninsular['pct_superficie'].max(), df_prov_peninsular['pct_poblacion'].max())
     ax.plot([0, max_val], [0, max_val], '--', color='gray', alpha=0.5, label='Equilibrio (%Pob = %Sup)')
-    
+
     for i, row in df_prov_peninsular.iterrows():
         if row['pct_poblacion'] > 4 or row['pct_superficie'] > 6 or row['nombre_provincia'] in ['Soria', 'Teruel']:
             ax.text(row['pct_superficie']+0.1, row['pct_poblacion'], row['nombre_provincia'], fontsize=9)
@@ -224,24 +189,15 @@ def analizar_distribucion_provincial(df_municipal: pd.DataFrame, data_json: Any)
 
     return df_prov
 
-def eda_demografia_superficie(df_pob: pd.DataFrame, data_json: Dict[str, Any], df_sup: pd.DataFrame) -> pd.DataFrame:
-    """
-    Función orquestadora que ejecuta todo el bloque 1 del EDA secuencialmente.
-    Args:
-        df_pob (pd.DataFrame): DataFrame con la población municipal.
-        data_json (Dict[str, Any]): Diccionario extraído del JSON.
-        df_sup (pd.DataFrame): DataFrame con la superficie geográfica.
-    Returns:
-        pd.DataFrame: El DataFrame unificado y enriquecido listo para la Fase 2.
-    """
+def eda_demografia_superficie(df_pob, data_json, df_sup):
+    """Ejecuta todo el bloque demográfico: distribución, extremos, superficie, análisis provincial."""
     mostrar_distribucion_poblacion(df_pob, data_json)
     mostrar_extremos_poblacion(df_pob)
-    
+
     df_enriquecido = procesar_superficie_y_densidad(df_pob, df_sup)
-    
+
     mostrar_analisis_superficie(df_enriquecido)
 
     df_provincial = analizar_distribucion_provincial(df_enriquecido, data_json)
-    
-    return df_enriquecido
 
+    return df_enriquecido

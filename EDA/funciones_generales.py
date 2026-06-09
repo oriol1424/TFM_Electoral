@@ -2,7 +2,6 @@ import os
 import json
 import pandas as pd
 import numpy as np
-from typing import Optional, List
 
 RANGOS_MUNICIPIO = [
     "<100", "101-500", "501-1000", "1001-2000", "2001-5000",
@@ -24,7 +23,7 @@ def categorizar_municipios_tfm(pob: int) -> str:
     elif pob <= 500000: return "100001-500000"
     else: return ">500000"
 
-def resolver_col_id(df: pd.DataFrame) -> Optional[str]:
+def resolver_col_id(df):
     """Detecta la columna de código de municipio de forma robusta."""
     for nombre in ['Cod_Muni', 'cod_Muni', 'Código', 'Codigo', 'id_municipio', 'index', 'CPROCMUN', 'id']:
         if nombre in df.columns:

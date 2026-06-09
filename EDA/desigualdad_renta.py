@@ -11,7 +11,7 @@ from EDA.visuals import (
 )
 from EDA.funciones_generales import resolver_col_id
 
-def _resolver_cols_desigualdad(df: pd.DataFrame, anyo: str) -> tuple[str, str, str]:
+def _resolver_cols_desigualdad(df, anyo):
     """
     Resuelve los nombres de las columnas de Gini, P80/P20 e ID buscando 
     primero con el año y luego el nombre base.

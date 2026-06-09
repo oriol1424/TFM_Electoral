@@ -18,7 +18,7 @@ def visualizar_grafo_maestro(gdf, w):
     print("Iniciando visualización del grafo...")
     plot_adjacency_graph(gdf, w)
 
-def generar_grafo_adyacencia(anyo: int = 2019, force: bool = False):
+def generar_grafo_adyacencia(anyo=2019, force=False):
     """
     Carga, unifica y calcula la adyacencia física de los municipios españoles.
     Filtra los resultados para que coincidan exactamente con el padrón de población del año indicado.

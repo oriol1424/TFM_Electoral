@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from typing import Optional, List, Tuple
 from EDA.visuals import (
     mapear_nombres_provincias,
     plot_missing_demographics,
@@ -11,7 +10,7 @@ from EDA.visuals import (
 )
 from EDA.funciones_generales import resolver_col_id
 
-def _resolver_identificadores_renta(df: pd.DataFrame) -> Tuple[str, str]:
+def _resolver_identificadores_renta(df):
     """Detecta las columnas de ID y Nombre del municipio de forma robusta."""
     col_id = resolver_col_id(df)
     col_nombre = None

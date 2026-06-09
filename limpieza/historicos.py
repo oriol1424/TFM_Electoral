@@ -1,18 +1,6 @@
-"""
-limpieza/historicos.py
-Construye el panel multianual histórico: una fila por municipio, columnas con sufijo _YYYY.
-
-Subconjunto de municipios que cumple:
-  - Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio en todos los años
-
-Incluye el procesamiento ETL de los años históricos 2015 y 2016, cuyos
-slot mappings electorales difieren de 2019/2023 y no están cubiertos
-por ETL_limpieza.
-"""
 import os
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Optional, Set
 
 from .funciones_genericas_limpieza import (
     leer_json, guardar_dataframe_csv, limpiar_valor_numerico,
@@ -21,11 +9,9 @@ from .funciones_genericas_limpieza import (
 from .votos import limpieza_votos_partidos, generar_columnas_pct_votos
 
 
-# ── Slot mappings históricos ──────────────────────────────────────────────────
-
 # Junio 2016: Unidos Podemos (PODEMOS + IU) corrieron juntos.
 # JxCAT no existía aún (era DL/CDC). VOX marginal.
-SLOT_MAPPING_2016: Dict[str, List[str]] = {
+SLOT_MAPPING_2016 = {
     'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
     'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
     'pct_vox':      ['VOX'],
@@ -49,8 +35,7 @@ SLOT_MAPPING_2016: Dict[str, List[str]] = {
 
 # Diciembre 2015: Podemos e IU corrieron por separado.
 # JxCAT no existía (era DL = Democràcia i Llibertat, fusión CiU/CDC).
-# ERC corrió como SOBIRANISTES en Cataluña.
-SLOT_MAPPING_2015: Dict[str, List[str]] = {
+SLOT_MAPPING_2015 = {
     'pct_psoe':     ['PSOE', 'PSC', 'PSdeG-PSOE', 'PSE-EE_(PSOE)', 'PSIB-PSOE', 'PSN-PSOE'],
     'pct_pp':       ['PP', 'PP-FORO', 'PPSO'],
     'pct_vox':      ['VOX'],
@@ -73,25 +58,44 @@ SLOT_MAPPING_2015: Dict[str, List[str]] = {
     'pct_teruel':   [],
 }
 
-_SLOT_MAPPING_HISTORICO: Dict[str, Dict[str, List[str]]] = {
+_SLOT_MAPPING_HISTORICO = {
     '2015': SLOT_MAPPING_2015,
     '2016': SLOT_MAPPING_2016,
 }
 
+ANOS_ELECCIONES = [2015, 2016, 2019, 2023]
 
-# Años con datos electorales (participación + votos pct)
-ANOS_ELECCIONES: List[int] = [2015, 2016, 2019, 2023]
+_RENTA_MAP = {
+    "Renta neta media por persona":               "renta_neta_persona",
+    "Renta bruta media por persona":              "renta_bruta_persona",
+    "Renta neta media por hogar":                 "renta_neta_hogar",
+    "Mediana de la renta por unidad de consumo":  "mediana_renta_uc",
+}
 
-# ── Mapeos: nombre completo INE → nombre corto para columnas del panel ────────
+_FUENTE_MAP = {
+    "Fuente de ingreso: salario":                      "salarios",
+    "Fuente de ingreso: pensiones":                    "pensiones",
+    "Fuente de ingreso: prestaciones por desempleo":   "desempleo",
+    "Fuente de ingreso: otras prestaciones":           "otras_prestaciones",
+    "Fuente de ingreso: otros ingresos":               "otros_ingresos",
+}
 
-# ── ETL años históricos ──────────────────────────────────────────────────────
+_GINI_MAP = {
+    "Índice de Gini":                    "gini",
+    "Distribución de la renta P80/P20":  "p80p20",
+}
 
-def _etl_votos_anio_historico(config: dict, anio: str) -> None:
-    """
-    Procesa los ficheros de votos de un año histórico (2015 ó 2016) si no existen.
-    Equivalente al ETL que hace ETL_limpieza para 2019/2023, pero con el
-    slot mapping específico de cada año electoral.
-    """
+_PCT_COLS = [
+    "pct_psoe", "pct_pp", "pct_vox", "pct_cs", "pct_up_sumar",
+    "pct_erc", "pct_jxcat", "pct_cup", "pct_pnv", "pct_ehbildu",
+    "pct_bng", "pct_cc", "pct_prc", "pct_naplus", "pct_teruel", "pct_otros",
+]
+
+_FIXED_COLS = {"Municipios", "Distritos", "Secciones", "Periodo", "Total"}
+
+
+def _etl_votos_anio_historico(config, anio):
+    """Procesa los ficheros de votos de un año histórico (2015 ó 2016) si no existen."""
     raw  = config[anio]['raw']
     proc = config[anio]['processed']
 
@@ -128,7 +132,7 @@ def _etl_votos_anio_historico(config: dict, anio: str) -> None:
     print(f"  [OK] Votos {anio} generados.")
 
 
-def _etl_votos_historicos(config: dict) -> None:
+def _etl_votos_historicos(config):
     """Asegura que los ficheros de votos de 2015 y 2016 existen."""
     for anio in ('2015', '2016'):
         if anio in config:
@@ -137,44 +141,8 @@ def _etl_votos_historicos(config: dict) -> None:
             print(f"  [AVISO] Año {anio} no encontrado en config — omitido.")
 
 
-# ── Mapeos INE ────────────────────────────────────────────────────────────────
-
-_RENTA_MAP: Dict[str, str] = {
-    "Renta neta media por persona":               "renta_neta_persona",
-    "Renta bruta media por persona":              "renta_bruta_persona",
-    "Renta neta media por hogar":                 "renta_neta_hogar",
-    "Mediana de la renta por unidad de consumo":  "mediana_renta_uc",
-}
-
-_FUENTE_MAP: Dict[str, str] = {
-    "Fuente de ingreso: salario":                      "salarios",
-    "Fuente de ingreso: pensiones":                    "pensiones",
-    "Fuente de ingreso: prestaciones por desempleo":   "desempleo",
-    "Fuente de ingreso: otras prestaciones":           "otras_prestaciones",
-    "Fuente de ingreso: otros ingresos":               "otros_ingresos",
-}
-
-_GINI_MAP: Dict[str, str] = {
-    "Índice de Gini":                    "gini",
-    "Distribución de la renta P80/P20":  "p80p20",
-}
-
-_PCT_COLS: List[str] = [
-    "pct_psoe", "pct_pp", "pct_vox", "pct_cs", "pct_up_sumar",
-    "pct_erc", "pct_jxcat", "pct_cup", "pct_pnv", "pct_ehbildu",
-    "pct_bng", "pct_cc", "pct_prc", "pct_naplus", "pct_teruel", "pct_otros",
-]
-
-_FIXED_COLS = {"Municipios", "Distritos", "Secciones", "Periodo", "Total"}
-
-
-# ── Helpers internos ─────────────────────────────────────────────────────────
-
-def _leer_ine_municipios(path: str) -> pd.DataFrame:
-    """
-    Lee un CSV del INE filtrando a nivel de municipio (Distritos NaN/vacío).
-    Añade columna cod_ine (5 dígitos).
-    """
+def _leer_ine_municipios(path):
+    """Lee un CSV del INE filtrando a nivel municipio. Añade columna cod_ine."""
     df = leer_archivo_csv(path)
     df = df[df["Distritos"].isna() | (df["Distritos"].astype(str).str.strip() == "")].copy()
     df["cod_ine"] = formatear_serie_codigo(df["Municipios"], 5)
@@ -182,11 +150,8 @@ def _leer_ine_municipios(path: str) -> pd.DataFrame:
     return df
 
 
-def _municipios_completos_ine(path: str) -> Set[str]:
-    """
-    Devuelve los cod_ine sin ningún valor '.' ni nulo en la columna Total
-    para cualquier año/indicador a nivel municipio.
-    """
+def _municipios_completos_ine(path):
+    """Devuelve los cod_ine sin ningún valor '.' ni nulo en la columna Total."""
     df = _leer_ine_municipios(path)
     bad = df["Total"].isna() | df["Total"].astype(str).str.strip().isin(
         [".", "..", '""', "", "-"]
@@ -195,13 +160,8 @@ def _municipios_completos_ine(path: str) -> Set[str]:
     return set(df["cod_ine"].unique()) - bad_munis
 
 
-def _ine_muni_wide(path: str, col_map: Dict[str, str]) -> pd.DataFrame:
-    """
-    Carga un CSV del INE a nivel municipio, pivota en ancho (cod_ine × año)
-    y renombra columnas con col_map.
-    Auto-detecta la columna de indicadores (4ª columna no estándar).
-    Devuelve df con cod_ine + columnas tipo nombre_corto_YYYY.
-    """
+def _ine_muni_wide(path, col_map):
+    """Carga un CSV del INE, pivota en ancho (cod_ine × año) y renombra con col_map."""
     df = _leer_ine_municipios(path)
 
     indicator_cols = [c for c in df.columns if c not in _FIXED_COLS and c != "cod_ine"]
@@ -221,13 +181,8 @@ def _ine_muni_wide(path: str, col_map: Dict[str, str]) -> pd.DataFrame:
     return df_pivot.reset_index()
 
 
-def _cargar_poblacion_anio(path_xlsx: str, anio: int) -> Optional[pd.DataFrame]:
-    """
-    Carga el Padrón Municipal de un año.
-    CPRO y CMUN pueden venir como float o str; se normalizan correctamente.
-    Devuelve df con: cod_ine, poblacion_YYYY, hombres_YYYY, mujeres_YYYY.
-    Retorna None si el archivo no existe.
-    """
+def _cargar_poblacion_anio(path_xlsx, anio):
+    """Carga el Padrón Municipal de un año. Devuelve cod_ine + poblacion/hombres/mujeres."""
     if not path_xlsx or not os.path.exists(path_xlsx):
         return None
 
@@ -261,11 +216,8 @@ def _cargar_poblacion_anio(path_xlsx: str, anio: int) -> Optional[pd.DataFrame]:
     )
 
 
-def _cargar_participacion_anio(path_csv: str, anio: int) -> Optional[pd.DataFrame]:
-    """
-    Carga el CSV de participación electoral para un año.
-    Devuelve df con: cod_ine, participacion_YYYY, votos_blancos_YYYY.
-    """
+def _cargar_participacion_anio(path_csv, anio):
+    """Carga el CSV de participación electoral para un año."""
     if not path_csv or not os.path.exists(path_csv):
         return None
 
@@ -279,12 +231,8 @@ def _cargar_participacion_anio(path_csv: str, anio: int) -> Optional[pd.DataFram
     )[["cod_ine", f"participacion_{anio}", f"votos_blancos_{anio}"]].copy()
 
 
-def _cargar_targets_anio(path_csv: str, anio: int) -> Optional[pd.DataFrame]:
-    """
-    Carga el CSV de porcentajes de voto (votos_pct_YYYY.csv).
-    Añade sufijo _YYYY a todas las columnas pct_*.
-    Devuelve df con: cod_ine + columnas pct_*_YYYY.
-    """
+def _cargar_targets_anio(path_csv, anio):
+    """Carga el CSV de porcentajes de voto y añade sufijo _anio a columnas pct_*."""
     if not path_csv or not os.path.exists(path_csv):
         return None
 
@@ -295,19 +243,10 @@ def _cargar_targets_anio(path_csv: str, anio: int) -> Optional[pd.DataFrame]:
     return df[["cod_ine"] + [f"{c}_{anio}" for c in pct_cols]].copy()
 
 
-# ── Filtro ───────────────────────────────────────────────────────────────────
-
-def calcular_filtro_demo(config: dict) -> Set[str]:
-    """
-    Calcula el subconjunto de municipios con datos INE completos:
-      - Sin '.' ni nulos en 30824, 30825 y 37677/37731 a nivel municipio
-
-    Returns:
-        Set de cod_ine (strings de 5 dígitos) que pasan el criterio.
-    """
+def calcular_filtro_demo(config):
+    """Calcula los municipios con datos INE completos (sin '.' en 30824, 30825 y 37677/37731)."""
     raw19 = config["2019"]["raw"]
 
-    # ── Completitud INE ────────────────────────────────────────────────────
     ok_30824 = _municipios_completos_ine(raw19["renta_disponible"])
     ok_30825 = _municipios_completos_ine(raw19["fuente_ingresos"])
 
@@ -323,30 +262,8 @@ def calcular_filtro_demo(config: dict) -> Set[str]:
     return resultado
 
 
-# ── Orquestador ──────────────────────────────────────────────────────────────
-
-def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
-    """
-    Construye y guarda panel_historico.csv.
-
-    Columnas resultantes:
-      - Identificador: cod_ine
-      - Geografía: superficie_km2, latitud, longitud, altitud, provincia_enc
-      - Población (años electorales): poblacion_YYYY, log_poblacion_YYYY, ratio_sexo_YYYY
-      - Densidad: densidad_YYYY, log_densidad_YYYY
-      - Renta media (2015–2023): renta_neta_persona_YYYY, renta_bruta_persona_YYYY,
-                                  renta_neta_hogar_YYYY, mediana_renta_uc_YYYY
-      - Fuente ingresos (2015–2023): salarios_YYYY, pensiones_YYYY, desempleo_YYYY,
-                                      otras_prestaciones_YYYY, otros_ingresos_YYYY
-      - Desigualdad (2015–2023): gini_YYYY, p80p20_YYYY
-      - Participación (años electorales): participacion_YYYY, votos_blancos_YYYY
-      - Targets electorales: pct_*_YYYY
-      - Bloques ideológicos: pct_izquierda_YYYY, pct_derecha_YYYY,
-                              pct_nacionalistas_YYYY, indice_ideologico_YYYY
-
-    Returns:
-        DataFrame con el panel construido.
-    """
+def ETL_historico(config_path="config_path.json"):
+    """Construye y guarda panel_historico.csv con todos los años electorales."""
     config = leer_json(config_path)
     output_path = config["demo"]["processed"]["panel_demo"]
 
@@ -356,16 +273,14 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
         print(f"     {len(panel)} municipios × {panel.shape[1]} columnas")
         return panel
 
-    # ── 0. ETL años históricos (2015 y 2016) si no existen ────────────────────
     _etl_votos_historicos(config)
 
     raw19 = config["2019"]["raw"]
     print("=== CONSTRUYENDO PANEL HISTÓRICO ===")
 
-    # ── 1. Filtro de municipios ────────────────────────────────────────────
     munis_demo = calcular_filtro_demo(config)
 
-    # ── 2. Base geográfica ─────────────────────────────────────────────────
+    # 2. Base geográfica
     df_sup = pd.read_csv(
         config["2019"]["processed"]["geografia"], sep=";", encoding="utf-8-sig"
     )
@@ -380,7 +295,6 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
     panel["provincia_enc"] = panel["cod_ine"].str[:2].astype(int)
     print(f"  [Base] {len(panel)} municipios con datos geográficos")
 
-    # ── 3. Población y densidad (años electorales) ─────────────────────────
     pop_paths = {
         anio: config.get(str(anio), {}).get("raw", {}).get("poblacion")
         for anio in ANOS_ELECCIONES
@@ -404,28 +318,23 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
         ]
         panel = panel.merge(df_pop[cols], on="cod_ine", how="left")
 
-        # Densidad derivada inmediatamente
         panel[f"densidad_{anio}"] = panel[f"poblacion_{anio}"] / panel["superficie_km2"]
         panel[f"log_densidad_{anio}"] = np.log1p(panel[f"densidad_{anio}"])
 
-    # ── 4. Renta media — 30824.csv (todos los años disponibles) ───────────
     df_renta = _ine_muni_wide(raw19["renta_disponible"], _RENTA_MAP)
     df_renta = df_renta[df_renta["cod_ine"].isin(munis_demo)]
     panel = panel.merge(df_renta, on="cod_ine", how="left")
     print(f"  [Renta] {len(df_renta.columns) - 1} columnas añadidas")
 
-    # ── 5. Fuente de ingresos — 30825.csv ─────────────────────────────────
     df_fuente = _ine_muni_wide(raw19["fuente_ingresos"], _FUENTE_MAP)
     df_fuente = df_fuente[df_fuente["cod_ine"].isin(munis_demo)]
     panel = panel.merge(df_fuente, on="cod_ine", how="left")
     print(f"  [Fuente ingresos] {len(df_fuente.columns) - 1} columnas añadidas")
 
-    # ── 6. Gini / P80P20 — 37677.csv + suplemento 37731.csv ──────────────
     df_gini_nac = _ine_muni_wide(raw19["GINI_P80P20"], _GINI_MAP)
     df_gini_nav = _ine_muni_wide(
         config["demo"]["raw"]["GINI_P80P20_navarra_multianual"], _GINI_MAP
     )
-    # Prioriza datos de Navarra (37731) sobre los nacionales (37677) donde haya NaN
     df_gini_all = (
         df_gini_nac.set_index("cod_ine")
         .combine_first(df_gini_nav.set_index("cod_ine"))
@@ -435,7 +344,6 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
     panel = panel.merge(df_gini_all, on="cod_ine", how="left")
     print(f"  [Gini/P80P20] {len(df_gini_all.columns) - 1} columnas añadidas")
 
-    # ── 7. Participación electoral ─────────────────────────────────────────
     for anio in ANOS_ELECCIONES:
         carpeta = config[str(anio)]["processed"]["carpeta_votos"]
         path_part = os.path.join(carpeta, f"participación_electoral_{anio}.csv")
@@ -446,7 +354,6 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
         df_part = df_part[df_part["cod_ine"].isin(munis_demo)]
         panel = panel.merge(df_part, on="cod_ine", how="left")
 
-    # ── 8. Targets electorales ─────────────────────────────────────────────
     for anio in ANOS_ELECCIONES:
         path_pct = config[str(anio)]["processed"]["votos_pct"]
         df_pct = _cargar_targets_anio(path_pct, anio)
@@ -456,7 +363,6 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
         df_pct = df_pct[df_pct["cod_ine"].isin(munis_demo)]
         panel = panel.merge(df_pct, on="cod_ine", how="left")
 
-    # ── 9. Bloques ideológicos (columnas derivadas) ───────────────────────
     _IZQ  = ["psoe", "up_sumar", "erc", "cup", "ehbildu", "bng", "naplus"]
     _DER  = ["pp", "vox", "cs"]
     _NAC  = ["pnv", "jxcat", "cc", "prc", "teruel"]
@@ -479,7 +385,6 @@ def ETL_historico(config_path: str = "config_path.json") -> pd.DataFrame:
         if izq is not None and der is not None:
             panel[f"indice_ideologico_{anio}"] = der - izq
 
-    # ── 10. Guardar ────────────────────────────────────────────────────────
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     guardar_dataframe_csv(panel, output_path)
 
