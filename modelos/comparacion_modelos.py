@@ -3,7 +3,6 @@ from typing import Dict, Optional
 
 from modelos.entrenamiento import entrenar_modelos, cargar_modelos
 from modelos.evaluacion import evaluar_modelos, comparar_metricas_modelos, comparar_dhondt_modelos
-from modelos.alternativos.random_forest import entrenar_modelos_rf, cargar_modelos_rf
 from modelos.alternativos.bayesiano import entrenar_modelos_bayesiano, cargar_modelos_bayesiano
 from modelos.alternativos.espacial import (
     entrenar_modelos_espacial, cargar_modelos_espacial,
@@ -20,7 +19,7 @@ def pipeline_comparacion_modelos(
     sin_cs: bool = False,
 ) -> pd.DataFrame:
     """
-    Entrena XGBoost, Random Forest, Bayesian Ridge y XGBoost espacial sobre df_train.
+    Entrena XGBoost, Bayesian Ridge y XGBoost espacial sobre df_train.
     Evalúa todos contra df_test y devuelve tabla comparativa de MAE y R2 por partido.
 
     sin_cs=True: aplica la redistribución CS→PP y PRC→PSOE antes de entrenar.
@@ -40,9 +39,6 @@ def pipeline_comparacion_modelos(
     modelos_xgb = entrenar_modelos(df_tr, guardar=guardar,
                                    carpeta=f'modelos/modelos_guardados{sufijo}')
     print(sep)
-    modelos_rf = entrenar_modelos_rf(df_tr, guardar=guardar,
-                                     carpeta=f'modelos/modelos_rf{sufijo}')
-    print(sep)
     modelos_bayes = entrenar_modelos_bayesiano(df_tr, guardar=guardar,
                                                carpeta=f'modelos/modelos_bayesiano{sufijo}')
     print(sep)
@@ -52,7 +48,6 @@ def pipeline_comparacion_modelos(
 
     print(f"\nEVALUACIÓN TEST (2023){etiqueta}\n")
     met_xgb   = evaluar_modelos(modelos_xgb,   df_test, etiqueta=f"XGBoost{etiqueta}")
-    met_rf    = evaluar_modelos(modelos_rf,     df_test, etiqueta=f"RandomForest{etiqueta}")
     met_bayes = evaluar_modelos(modelos_bayes,  df_test, etiqueta=f"Bayesiano{etiqueta}")
 
     X_test_esp = preparar_features_espacial(df_test, w)
@@ -62,7 +57,6 @@ def pipeline_comparacion_modelos(
     df_cmp = comparar_metricas_modelos(
         {
             f'xgboost{sufijo}':   met_xgb,
-            f'rf{sufijo}':        met_rf,
             f'bayesiano{sufijo}': met_bayes,
             f'espacial{sufijo}':  met_esp,
         },
@@ -83,12 +77,12 @@ def pipeline_escanos_todos_modelos(
     Aplica D'Hondt a las predicciones de cada modelo y devuelve tabla comparativa.
     Filas = partidos, columnas = real + cada modelo.
 
-    modelos_dict: {'xgboost': modelos_xgb, 'rf': modelos_rf, ...}
+    modelos_dict: {'xgboost': modelos_xgb, 'bayesiano': modelos_bayes, 'espacial': modelos_esp}
     esc_real: dict {partido: escanos} del resultado oficial (opcional).
 
     Uso en main.ipynb:
         df_escanos = pipeline_escanos_todos_modelos(
-            {'xgboost': modelos, 'rf': modelos_rf, 'bayesiano': modelos_bayes, 'espacial': modelos_esp},
+            {'xgboost': modelos, 'bayesiano': modelos_bayes, 'espacial': modelos_esp},
             df_2023_completo, w, ruta_json_pob, esc_real
         )
     """
