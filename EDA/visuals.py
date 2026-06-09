@@ -80,38 +80,6 @@ def plot_votos_apilados_provincial(df_plot: pd.DataFrame, title: str):
     plt.tight_layout()
     plt.show()
 
-def plot_votos_individuales_por_provincia(df_final: pd.DataFrame):
-    """
-    Genera un gráfico de barras por cada provincia con etiquetas de porcentaje al lado.
-    """
-    cols_evitar = ['id_provincia', 'nombre_provincia', 'id_municipio', 'Nombre_Muni', 'nombre_muni', 'fecha_eleccion']
-    cols_votos = [c for c in df_final.columns if c.lower() not in cols_evitar]
-    
-    print("\n--- Generando Gráficos Individuales por Provincia ---")
-    
-    for _, row in df_final.iterrows():
-        prov_name = row['nombre_provincia'] if pd.notna(row['nombre_provincia']) else row['id_provincia']
-        prov_name = _limpiar_caracteres_especiales(str(prov_name))
-        
-        data = row[cols_votos].sort_values(ascending=False)
-        data = data[data > 0]
-        if data.empty: continue
-            
-        data_pct = (data / data.sum()) * 100
-        data_pct.index = [_limpiar_caracteres_especiales(str(i)) for i in data_pct.index]
-        
-        plt.figure(figsize=(10, len(data_pct) * 0.5 + 1))
-        ax = sns.barplot(x=data_pct.values, y=data_pct.index, palette='viridis', hue=data_pct.index, legend=False)
-        
-        plt.title(f"Distribución de Votos en {prov_name} (%)", fontsize=14, pad=15)
-        plt.xlabel("Porcentaje de Votos (%)")
-        plt.xlim(0, max(data_pct.values) * 1.2)
-        
-        for i, v in enumerate(data_pct.values):
-            ax.text(v + 0.5, i, f'{v:.2f}%', color='black', va='center', fontweight='bold')
-            
-        plt.tight_layout()
-        plt.show()
 
 def plot_histogram(
     df: pd.DataFrame, 

@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from EDA.visuals import (
     mapear_nombres_provincias, plot_histogram, plot_boxplot,
-    plot_votos_apilados_provincial, plot_votos_individuales_por_provincia,
-    obtener_mapeo_provincias
+    plot_votos_apilados_provincial, obtener_mapeo_provincias
 )
 from EDA.funciones_generales import RANGOS_MUNICIPIO
 
@@ -282,7 +281,7 @@ def eda_slots_pct_votos(df_pct: pd.DataFrame, anyo: str = "2019") -> None:
     print(f"Municipios con pct_otros > 5%: {(df_pct['pct_otros'] > 0.05).sum()} de {len(df_pct)}")
 
 
-def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019", individual: bool = True):
+def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019", individual: bool = False):
     """Orquestador del EDA de votos con granularidad total."""
     print(f"Iniciando EDA de Resultados Electorales ({anyo})")
 
@@ -305,8 +304,5 @@ def eda_votos_granularidad_total(df_votos_total: pd.DataFrame, anyo: str = "2019
 
     df_final = agrupar_minorias_provincial(df_prov, umbral=0.03)
     plot_votos_apilados_provincial(df_final, title=f"Distribución del Peso del Voto por Provincia (Nov {anyo})")
-
-    if individual:
-        plot_votos_individuales_por_provincia(df_final)
 
     return df_final
