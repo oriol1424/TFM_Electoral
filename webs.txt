@@ -85,3 +85,4 @@ Mapa España con las fronteras municipales
 		3. El archivo .PRJ (Incluido en el SHP)
 			Por qué este: Aunque no lo eliges tú (viene dentro del zip del Shapefile), es vital que no lo borres. Contiene la proyección cartográfica. Sin él, el software no sabrá si las coordenadas están en metros o en 			grados, y fallará al intentar calcular qué municipios están "pegados".
 -----------------------------------------------
+El modelo predice con éxito la parte del reparto parlamentario que depende de la estructura socioeconómica territorial de España, con un MAE de 6.53 escaños. El error residual no refleja un fallo del modelo sino el límite de lo que los indicadores macroeconómicos pueden explicar: los realineamientos políticos coyunturales quedan fuera del alcance de cualquier modelo sin encuestas.
