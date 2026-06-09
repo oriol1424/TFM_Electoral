@@ -87,9 +87,13 @@ def calcular_descomposicion(
 
 
 def _componentes(r_eco: float, r_tot: float) -> tuple:
+    # Cuando r_eco < 0 las variables económicas predicen al revés;
+    # todo el poder predictivo se atribuye a la provincia (terr = r_tot).
+    # Así eco + terr + resid = 1 siempre y las barras no se salen de 1.
+    r_tot_clamped = max(r_tot, 0.0)
     eco   = max(r_eco, 0.0)
-    terr  = max(0.0, r_tot - r_eco)
-    resid = 1.0 - max(r_tot, 0.0)
+    terr  = r_tot_clamped - eco
+    resid = 1.0 - r_tot_clamped
     return eco, terr, resid
 
 
@@ -152,8 +156,9 @@ def visualizar_descomposicion(
                         fontsize=8, color='#333')
 
     plt.suptitle('Descomposición de la varianza del voto\nEconómico | Territorial | No explicado',
-                 fontsize=13, fontweight='bold', y=1.02)
+                 fontsize=13, fontweight='bold')
     plt.tight_layout()
+    plt.subplots_adjust(top=0.85)
     if guardar:
         os.makedirs(CARPETA_IMAGENES, exist_ok=True)
         plt.savefig(f'{CARPETA_IMAGENES}/capacidad_explicativa.png',
