@@ -17,25 +17,8 @@ NAC = ['pct_pnv', 'pct_jxcat', 'pct_cc', 'pct_prc', 'pct_teruel',
 BLOQUES_COLS = {'derecha': DER, 'izquierda': IZQ, 'nacionalistas': NAC}
 
 
-def calcular_descomposicion(
-    df_2019: pd.DataFrame,
-    df_2023: pd.DataFrame,
-    res_total: dict,
-    feat_tot: list,
-    r2_part: dict,
-) -> tuple:
-    """
-    Calcula R²_eco (sin provincia_enc) y R²_total (con provincia_enc) para
-    los 5 partidos estatales y los 3 bloques ideológicos.
-
-    Parámetros
-    ----------
-    res_total : dict devuelto por muestra_total_bloques — R² total por bloque
-    feat_tot  : lista de features con provincia_enc (devuelta por muestra_total_bloques)
-    r2_part   : dict devuelto por hallazgo_central — R² total por partido
-
-    Devuelve (r2_eco_part, r2_eco_bloque).
-    """
+def calcular_descomposicion(df_2019, df_2023, res_total, feat_tot, r2_part):
+    """R² económico puro vs económico+provincial para partidos y bloques."""
     feat_eco = [c for c in feat_tot if c != 'provincia_enc']
 
     r2_eco_part = {}
@@ -52,7 +35,6 @@ def calcular_descomposicion(
 
     print('PARTIDOS — R² descomposición (train 2019 → test 2023, n≈7.880)')
     print(f'{"Partido":<14} {"R²_eco":>8} {"R²_total":>10} {"Δterritorial":>14} {"Residual":>10}')
-    print('-' * 60)
     for p in ['pp', 'vox', 'cs', 'psoe', 'up_sumar']:
         r_eco = r2_eco_part.get(p, float('nan'))
         r_tot = r2_part.get(p, float('nan'))
@@ -75,7 +57,6 @@ def calcular_descomposicion(
     print()
     print('BLOQUES — R² descomposición (train 2019 → test 2023, n≈7.880)')
     print(f'{"Bloque":<16} {"R²_eco":>8} {"R²_total":>10} {"Δterritorial":>14} {"Residual":>10}')
-    print('-' * 60)
     for bloque in ['derecha', 'izquierda', 'nacionalistas']:
         r_eco = r2_eco_bloque.get(bloque, float('nan'))
         r_tot = res_total.get(bloque, {}).get('r2', float('nan'))
@@ -97,17 +78,8 @@ def _componentes(r_eco: float, r_tot: float) -> tuple:
     return eco, terr, resid
 
 
-def visualizar_descomposicion(
-    r2_eco_part: dict,
-    r2_part: dict,
-    r2_eco_bloque: dict,
-    res_total: dict,
-    guardar: bool = True,
-) -> None:
-    """
-    Gráfico de barras apiladas: componente económico, territorial y no explicado
-    para partidos individuales y bloques ideológicos.
-    """
+def visualizar_descomposicion(r2_eco_part, r2_part, r2_eco_bloque, res_total, guardar=True):
+    """Barras apiladas: componente económico, territorial y no explicado por partido y bloque."""
     etiquetas_part = ['PP', 'VOX', 'CS', 'PSOE', 'UP/Sumar']
     keys_part      = ['pp', 'vox', 'cs', 'psoe', 'up_sumar']
     etiquetas_blq  = ['Derecha', 'Izquierda', 'Nacionalistas']

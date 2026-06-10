@@ -46,27 +46,23 @@ FEAT_TOT_CAND = [
 ]
 
 
-def _get_X_panel(df: pd.DataFrame, anio: int) -> pd.DataFrame:
+def _get_X_panel(df, anio):
     cols = [f'{f}_{anio}' for f in FEAT_PANEL_BASE if f'{f}_{anio}' in df.columns]
     rename = {f'{f}_{anio}': f for f in FEAT_PANEL_BASE if f'{f}_{anio}' in cols}
     return df[FEAT_FIXED + cols].copy().rename(columns=rename)
 
 
-def _get_y_bloque_panel(df: pd.DataFrame, anio: int, partidos: list) -> pd.Series:
+def _get_y_bloque_panel(df, anio, partidos):
     cols = [f'pct_{p}_{anio}' for p in partidos if f'pct_{p}_{anio}' in df.columns]
     return df[cols].fillna(0).sum(axis=1)
 
 
-def _suma(df: pd.DataFrame, cols: list) -> pd.Series:
+def _suma(df, cols):
     return df[[c for c in cols if c in df.columns]].fillna(0).sum(axis=1)
 
 
-def walk_forward_bloques(panel: pd.DataFrame) -> pd.DataFrame:
-    """
-    Walk-forward sobre el panel de 1.207 municipios (sin imputación KNN).
-    Tres rondas: test 2016, 2019 y 2023.
-    Devuelve DataFrame con R²/MAE por bloque y año de test.
-    """
+def walk_forward_bloques(panel):
+    """Walk-forward sobre el panel de 1207 municipios: test 2016, 2019 y 2023."""
     res_panel = {b: {} for b in BLOQUES}
 
     for bloque in BLOQUES:
@@ -100,7 +96,7 @@ def walk_forward_bloques(panel: pd.DataFrame) -> pd.DataFrame:
     print(f'\n{"Bloque":<18}', end='')
     for r in RONDAS_WF:
         print(f'  R2_{r["test"]}  MAE_{r["test"]}', end='')
-    print('\n' + '-' * 72)
+    print()
     for b in BLOQUES:
         print(f'{b:<18}', end='')
         for r in RONDAS_WF:
@@ -121,15 +117,8 @@ def walk_forward_bloques(panel: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def muestra_total_bloques(
-    df_2019: pd.DataFrame,
-    df_2023: pd.DataFrame,
-) -> tuple:
-    """
-    Entrena un modelo XGBoost por bloque sobre df_2019 y evalúa en df_2023.
-    Añade columnas pct_izquierda/pct_derecha/pct_nacionalistas a ambos DataFrames.
-    Devuelve (res_total, models_bloq, feat_tot).
-    """
+def muestra_total_bloques(df_2019, df_2023):
+    """Entrena XGBoost por bloque en 2019 y evalúa en 2023; devuelve (res_total, models_bloq, feat_tot)."""
     for df_ in [df_2019, df_2023]:
         df_['pct_izquierda']     = _suma(df_, IZQ)
         df_['pct_derecha']       = _suma(df_, DER)
@@ -169,18 +158,8 @@ def muestra_total_bloques(
     return res_total, models_bloq, feat_tot
 
 
-def hallazgo_central(
-    df_2019: pd.DataFrame,
-    df_2023: pd.DataFrame,
-    res_total: dict,
-    feat_tot: list,
-    guardar: bool = True,
-) -> tuple:
-    """
-    Compara R² de partidos individuales vs bloques (test 2023, muestra total).
-    Genera gráfico de barras comparativo.
-    Devuelve (df_comparativa, r2_part) donde r2_part es {partido: r2_total}.
-    """
+def hallazgo_central(df_2019, df_2023, res_total, feat_tot, guardar=True):
+    """Compara R² de partidos individuales vs bloques y genera gráfico."""
     PARTIDOS_CMP = ['pp', 'vox', 'cs', 'psoe', 'up_sumar']
     r2_part = {}
     for p in PARTIDOS_CMP:
@@ -207,9 +186,7 @@ def hallazgo_central(
     ]
 
     print('HALLAZGO CENTRAL: partido individual vs bloque total (test 2023, muestra total)')
-    print('=' * 65)
     print(f'  {"Target":<22}  {"R2":>8}  Tipo')
-    print(f'  {"-"*22}  {"-"*8}  {"-"*18}')
     for nombre, r2, tipo in comparativa:
         marca = '***' if 'BLOQUE' in tipo else '   '
         print(f'{marca}  {nombre:<22}  {r2:>8.3f}  {tipo}')

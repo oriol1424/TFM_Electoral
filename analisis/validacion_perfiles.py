@@ -13,12 +13,8 @@ FEAT_ECO_BASE = [
 ]
 
 
-def correlacion_geografica(panel: pd.DataFrame, guardar: bool = True) -> pd.DataFrame:
-    """
-    Heatmap de correlación entre % de voto por partido en 2019.
-    Muestra si los partidos van a los mismos municipios o no.
-    Devuelve la matriz de correlación.
-    """
+def correlacion_geografica(panel, guardar=True):
+    """Heatmap de correlación entre % de voto por partido en 2019."""
     voto_map = {
         'PP': 'pct_pp_2019', 'VOX': 'pct_vox_2019', 'CS': 'pct_cs_2019',
         'PSOE': 'pct_psoe_2019', 'UP/Sumar': 'pct_up_sumar_2019',
@@ -48,12 +44,8 @@ def correlacion_geografica(panel: pd.DataFrame, guardar: bool = True) -> pd.Data
     return corr_geo
 
 
-def correlacion_transferencias(panel: pd.DataFrame, guardar: bool = True) -> pd.DataFrame:
-    """
-    Correlación entre cambios de voto 2019→2023 por municipio.
-    Confirma la transferencia Cs→PP y el movimiento PSOE↔UP/Sumar.
-    Devuelve la matriz de correlaciones de los deltas.
-    """
+def correlacion_transferencias(panel, guardar=True):
+    """Correlación entre cambios de voto 2019→2023; confirma transferencia Cs→PP."""
     delta_data = {}
     for party, label in [('pp', 'PP'), ('cs', 'CS'), ('vox', 'VOX'),
                          ('psoe', 'PSOE'), ('up_sumar', 'UP/Sumar')]:
@@ -112,13 +104,8 @@ def correlacion_transferencias(panel: pd.DataFrame, guardar: bool = True) -> pd.
     return corr_delta
 
 
-def perfil_socioeconomico(panel: pd.DataFrame, anio: int = 2019,
-                          guardar: bool = True) -> pd.DataFrame:
-    """
-    Heatmap de correlación entre variables socioeconómicas y % de voto por partido.
-    Muestra el perfil económico de cada partido.
-    Devuelve la matriz de correlaciones (partidos × variables eco).
-    """
+def perfil_socioeconomico(panel, anio=2019, guardar=True):
+    """Heatmap de correlación entre variables socioeconómicas y % de voto por partido."""
     feat_eco_cols = [f'{f}_{anio}' for f in FEAT_ECO_BASE if f'{f}_{anio}' in panel.columns]
     feat_eco_labels = [f.replace(f'_{anio}', '').replace('_', ' ') for f in feat_eco_cols]
 
