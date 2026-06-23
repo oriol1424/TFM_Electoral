@@ -32,7 +32,7 @@ def generar_json_desde_cis(fichero_cis, output_json):
         "000065": {"cis_name": "BNG", "voto_retrospectivo_id": "bloque_nacionalista_gal"},
         "000031": {"cis_name": "CCa-PNC-NC", "voto_retrospectivo_id": "bloque_nacionalista_canario"},
         "000032": {"cis_name": "CCa-PNC-NC", "voto_retrospectivo_id": "bloque_nacionalista_canario"},
-        "000023": {"cis_name": "Teruel Existe", "voto_retrospectivo_id": "bloque_nacionalista_canario"}
+        "000023": {"cis_name": "Teruel Existe", "voto_retrospectivo_id": "bloque_nacionalista_Aragones"}
     }
 
     json_maestro = {}

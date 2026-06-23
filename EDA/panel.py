@@ -9,33 +9,24 @@ from EDA.visuals import (
     plot_boxplot,
 )
 
-# Constantes del panel
-
 ANOS_ELECCIONES = [2015, 2016, 2019, 2023]
 
-# Variables para análisis de variabilidad y distribuciones
 VARS_PANEL = ["renta_neta_persona", "desempleo", "gini", "participacion"]
 
-# 11 features ML: 8 socioeconómicas + log_poblacion + log_densidad + superficie_km2
 FEATURES_ML = [
     "renta_neta_persona", "gini", "p80p20",
     "salarios", "pensiones", "desempleo", "otras_prestaciones", "otros_ingresos",
     "log_poblacion", "log_densidad",
 ]
-# superficie_km2 es fija (sin sufijo de año)
 
-# 4 targets de interés para correlaciones
 TARGETS_CORR = ["pct_psoe", "pct_pp", "pct_vox", "pct_up_sumar"]
 
-# Todos los targets del panel
 _ALL_TARGETS = [
     "pct_psoe", "pct_pp", "pct_vox", "pct_cs", "pct_up_sumar",
     "pct_erc", "pct_jxcat", "pct_cup", "pct_pnv", "pct_ehbildu",
     "pct_bng", "pct_cc", "pct_prc", "pct_naplus", "pct_teruel", "pct_otros",
 ]
 
-
-# Utilidades internas
 
 def _col(var, anio):
     return f"{var}_{anio}"
@@ -68,7 +59,6 @@ def _detectar_anos_var(panel, var):
     return sorted(anos)
 
 
-# Sección 1: Cobertura y nulos
 
 def eda_panel_nulos(panel, anos_elec=ANOS_ELECCIONES):
     """Cobertura y nulos del panel demo: heatmap, tabla de cobertura, municipios con nulos sistémicos."""
@@ -88,7 +78,6 @@ def eda_panel_nulos(panel, anos_elec=ANOS_ELECCIONES):
         "pct_up_sumar":       "pct_up_sumar",
     }
 
-    # 1a. heatmap nulos
     rows_heat = {}
     for var, label in grupos.items():
         row = {}
@@ -114,7 +103,6 @@ def eda_panel_nulos(panel, anos_elec=ANOS_ELECCIONES):
     plt.tight_layout()
     plt.show()
 
-    # 1b. cobertura
     print("COBERTURA: % de municipios CON dato en cada año electoral")
     header = f"{'Variable':<25}" + "".join(f"  {a:>6}" for a in anos_elec)
     print(header)
@@ -129,7 +117,6 @@ def eda_panel_nulos(panel, anos_elec=ANOS_ELECCIONES):
                 fila += f"  {'N/A':>6}"
         print(fila)
 
-    # 1c. nulos sistematicos
     clave_cols = [_col("renta_neta_persona", a) for a in anos_elec
                   if _col("renta_neta_persona", a) in panel.columns]
     if clave_cols:
@@ -140,7 +127,6 @@ def eda_panel_nulos(panel, anos_elec=ANOS_ELECCIONES):
             print(panel.loc[mask, ["cod_ine"] + clave_cols].head(10).to_string(index=False))
 
 
-# Sección 2: Variabilidad temporal
 
 def eda_variabilidad_temporal(panel, variables=VARS_PANEL):
     """CV intra-municipio (std/mean x 100) a lo largo de todos los años disponibles."""
@@ -191,7 +177,6 @@ def eda_variabilidad_temporal(panel, variables=VARS_PANEL):
     return pd.DataFrame(resultados)
 
 
-# Sección 3: Distribuciones por año electoral
 
 def eda_distribuciones_por_anyo(panel, variables=VARS_PANEL, anos_elec=ANOS_ELECCIONES):
     """Boxplots comparativos de variables para los 4 años electorales."""
@@ -220,7 +205,6 @@ def eda_distribuciones_por_anyo(panel, variables=VARS_PANEL, anos_elec=ANOS_ELEC
         print()
 
 
-# Sección 4: Correlación features-targets
 
 def eda_correlacion_features_targets(panel, features=FEATURES_ML, targets=TARGETS_CORR, anos_elec=ANOS_ELECCIONES):
     """Heatmap correlación features x targets para cada año electoral y scatter multi-año."""
@@ -255,7 +239,6 @@ def eda_correlacion_features_targets(panel, features=FEATURES_ML, targets=TARGET
         plt.tight_layout()
         plt.show()
 
-    # 4b. scatter multi-año
     colores = {2015: "#3498db", 2016: "#2ecc71", 2019: "#e67e22", 2023: "#e74c3c"}
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -286,13 +269,11 @@ def eda_correlacion_features_targets(panel, features=FEATURES_ML, targets=TARGET
     plt.show()
 
 
-# Sección 5: Bloques ideológicos
 
 def eda_bloques_ideologicos(panel, anos_elec=ANOS_ELECCIONES):
     """Evolución y estructura de los bloques ideológicos."""
     print("Sección 5: bloques ideológicos")
 
-    # 5a. evolución temporal
     medias = {a: panel[_col("indice_ideologico", a)].mean()
               for a in anos_elec if _col("indice_ideologico", a) in panel.columns}
 
@@ -312,7 +293,6 @@ def eda_bloques_ideologicos(panel, anos_elec=ANOS_ELECCIONES):
         for anio, val in medias.items():
             print(f"  {anio}: {val:+.4f}  {'-> derecha' if val > 0 else '-> izquierda'}")
 
-    # 5b. heatmap provincia
     if "provincia_enc" in panel.columns:
         idx_cols = [_col("indice_ideologico", a) for a in anos_elec
                     if _col("indice_ideologico", a) in panel.columns]
@@ -336,7 +316,6 @@ def eda_bloques_ideologicos(panel, anos_elec=ANOS_ELECCIONES):
             plt.tight_layout()
             plt.show()
 
-    # 5c. scatter renta vs ideología
     r_col = "renta_neta_persona_2019"
     i_col = "indice_ideologico_2019"
     p_col = "log_poblacion_2019"
@@ -361,7 +340,6 @@ def eda_bloques_ideologicos(panel, anos_elec=ANOS_ELECCIONES):
         plt.show()
 
 
-# Sección 6: Leakage check
 
 def eda_leakage_check(panel, anos_elec=ANOS_ELECCIONES):
     """Verificaciones de consistencia para el ML: suma pct_*, bloques, participación."""
@@ -398,7 +376,6 @@ def eda_leakage_check(panel, anos_elec=ANOS_ELECCIONES):
         plt.tight_layout()
         plt.show()
 
-    # 6b. bloques
     print("\nVERIFICACIÓN: pct_izq + pct_der + pct_nac + pct_otros ~ 1")
     for anio in anos_elec:
         bl_cols = [_col(b, anio) for b in
@@ -413,7 +390,6 @@ def eda_leakage_check(panel, anos_elec=ANOS_ELECCIONES):
               f"max_desv={desv_bl.max():.4f}  "
               f"municipios con |suma-1|>0.01: {(desv_bl > 0.01).sum()}")
 
-    # 6c. pct_otros
     df_otros = _panel_a_long(panel, "pct_otros", anos_elec).dropna(subset=["valor"])
     if not df_otros.empty:
         plot_boxplot(
@@ -433,7 +409,6 @@ def eda_leakage_check(panel, anos_elec=ANOS_ELECCIONES):
                   f"P90={v.quantile(.9):.3f}  "
                   f"%>15%: {(v > 0.15).mean()*100:.1f}%")
 
-    # 6d. participación
     print("\nRANGO DE PARTICIPACIÓN:")
     for anio in anos_elec:
         col = _col("participacion", anio)
@@ -446,7 +421,6 @@ def eda_leakage_check(panel, anos_elec=ANOS_ELECCIONES):
               f"media={s.mean():.1f}{flag}")
 
 
-# Sección 7: Señal del panel temporal
 
 def eda_senyal_panel_temporal(panel, pares_olas=[(2015, 2016), (2016, 2019), (2019, 2023)]):
     """Análisis de cambios entre olas electorales: delta renta, desempleo, pct_pp, pct_psoe."""
