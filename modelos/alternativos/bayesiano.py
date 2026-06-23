@@ -3,9 +3,10 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import BayesianRidge
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 
-from modelos.entrenamiento import preparar_features, TARGETS
+from modelos.entrenamiento import TARGETS
 
 PARAMS_DEFAULT_BAYES = {
     'max_iter': 300,
@@ -16,11 +17,64 @@ PARAMS_DEFAULT_BAYES = {
     'lambda_2': 1e-6,
 }
 
-# Grid log-escala sobre los priors más influyentes
 PARAM_GRID_BAYES = {
     'alpha_1':  [1e-8, 1e-6, 1e-4, 1e-2],
     'lambda_1': [1e-8, 1e-6, 1e-4, 1e-2],
 }
+
+# Sin 'otros ingresos': rompe la dependencia composicional (salarios+pensiones+otros≈100%)
+FEAT_CONT_BAYES = [
+    'log_poblacion', 'log_densidad_poblacional', 'superficie',
+    'indice gini', 'renta media persona', 'ratio_sexo',
+    'salarios', 'pensiones', 'otras prestaciones', 'desempleo'
+]
+
+
+def preparar_features_bayesiano(df, carpeta=None, scaler=None, ohe_cols=None):
+    """
+    Preprocessing para BayesianRidge: OHE de provincia + StandardScaler.
+
+    Modos:
+      Fit   (scaler=None, sin transformers.pkl en carpeta): ajusta y guarda en carpeta.
+      Transform (scaler dado O transformers.pkl existe en carpeta): aplica sin reajustar.
+
+    Retorna: (X_DataFrame, scaler, ohe_cols)
+    """
+    trans_path = os.path.join(carpeta, 'transformers.pkl') if carpeta else None
+
+    if scaler is None and trans_path and os.path.exists(trans_path):
+        scaler, ohe_cols = joblib.load(trans_path)
+
+    df_p = df.copy()
+
+    if 'renta media persona' in df_p.columns:
+        df_p['renta media persona'] = df_p['renta media persona'].rank(pct=True)
+
+    cols_disp = [c for c in FEAT_CONT_BAYES if c in df_p.columns]
+    cols_falt = [c for c in FEAT_CONT_BAYES if c not in df_p.columns]
+    if cols_falt:
+        print(f'  Aviso: features no encontradas en Bayesiano: {cols_falt}')
+
+    X_cont = df_p[cols_disp].fillna(df_p[cols_disp].median())
+
+    prov_dummies = pd.get_dummies(df_p['provincia'], prefix='prov').astype(float)
+    if ohe_cols is not None:
+        prov_dummies = prov_dummies.reindex(columns=ohe_cols, fill_value=0.0)
+    else:
+        ohe_cols = list(prov_dummies.columns)
+
+    X = pd.concat([X_cont, prov_dummies], axis=1)
+
+    if scaler is None:
+        scaler = StandardScaler()
+        X_vals = scaler.fit_transform(X)
+        if trans_path:
+            os.makedirs(carpeta, exist_ok=True)
+            joblib.dump((scaler, ohe_cols), trans_path)
+    else:
+        X_vals = scaler.transform(X)
+
+    return pd.DataFrame(X_vals, columns=X.columns, index=df_p.index), scaler, ohe_cols
 
 
 def _buscar_mejores_params(X_train, y_train) -> dict:
@@ -36,7 +90,6 @@ def _buscar_mejores_params(X_train, y_train) -> dict:
     )
     gs.fit(X_train, y_train)
     mejores = gs.best_params_
-    # Completar con los priors no buscados (alpha_2, lambda_2 = misma escala)
     mejores.setdefault('alpha_2', mejores['alpha_1'])
     mejores.setdefault('lambda_2', mejores['lambda_1'])
     mejores['max_iter'] = 300
@@ -51,17 +104,21 @@ def entrenar_modelos_bayesiano(
     carpeta='modelos/modelos_bayesiano',
     buscar_params=True,
 ):
+    trans_path = os.path.join(carpeta, 'transformers.pkl')
+
     if os.path.isdir(carpeta) and all(
         os.path.exists(os.path.join(carpeta, f"{p}.pkl")) for p in TARGETS
-    ):
+    ) and os.path.exists(trans_path):
         print(f"Modelos Bayesianos ya existentes en '{carpeta}/' — cargando sin reentrenar.")
         return cargar_modelos_bayesiano(carpeta)
 
-    X_train = preparar_features(df_train)
+    X_train, _, _ = preparar_features_bayesiano(
+        df_train, carpeta=carpeta if guardar else None
+    )
 
-    print("ENTRENAMIENTO BAYESIANO (BayesianRidge)")
+    print("ENTRENAMIENTO BAYESIANO (BayesianRidge + OHE provincia + StandardScaler)")
     print(f"Municipios train : {len(X_train)}")
-    print(f"Features          : {list(X_train.columns)}")
+    print(f"Features          : {X_train.shape[1]} ({len(FEAT_CONT_BAYES)} continuas + OHE provincia)")
     print(f"Modelos a entrenar: {len(TARGETS)}\n")
 
     modelos = {}
@@ -105,3 +162,18 @@ def cargar_modelos_bayesiano(
 
     print(f"Cargados {len(modelos)} modelos Bayesianos desde '{carpeta}/'")
     return modelos
+
+
+def pipeline_prediccion_bayesiano(modelos, df, carpeta='modelos/modelos_bayesiano'):
+    """Pipeline de predicción para BayesianRidge con preprocessing v2 (OHE + StandardScaler)."""
+    from modelos.prediccion import normalizar_predicciones, predicciones_a_votos
+
+    X, _, _ = preparar_features_bayesiano(df, carpeta=carpeta)
+
+    cols_id = [c for c in ['municipio', 'provincia'] if c in df.columns]
+    df_pred = df[cols_id].copy()
+    for partido, modelo in modelos.items():
+        df_pred[partido] = np.clip(modelo.predict(X), 0, None)
+
+    df_norm = normalizar_predicciones(df_pred)
+    return predicciones_a_votos(df_norm, df)

@@ -2,7 +2,10 @@ import pandas as pd
 
 from modelos.entrenamiento import entrenar_modelos, cargar_modelos
 from modelos.evaluacion import evaluar_modelos, comparar_metricas_modelos, comparar_dhondt_modelos
-from modelos.alternativos.bayesiano import entrenar_modelos_bayesiano, cargar_modelos_bayesiano
+from modelos.alternativos.bayesiano import (
+    entrenar_modelos_bayesiano, cargar_modelos_bayesiano,
+    preparar_features_bayesiano, pipeline_prediccion_bayesiano,
+)
 from modelos.alternativos.espacial import (
     entrenar_modelos_espacial, cargar_modelos_espacial,
     cargar_pesos_espaciales, preparar_features_espacial,
@@ -45,7 +48,8 @@ def pipeline_comparacion_modelos(
 
     print(f"\nEVALUACIÓN TEST (2023){etiqueta}\n")
     met_xgb   = evaluar_modelos(modelos_xgb,   df_test, etiqueta=f"XGBoost{etiqueta}")
-    met_bayes = evaluar_modelos(modelos_bayes,  df_test, etiqueta=f"Bayesiano{etiqueta}")
+    X_test_bayes = preparar_features_bayesiano(df_test, carpeta=f'modelos/modelos_bayesiano{sufijo}')[0]
+    met_bayes = evaluar_modelos(modelos_bayes,  df_test, etiqueta=f"Bayesiano{etiqueta}", X_test=X_test_bayes)
 
     X_test_esp = preparar_features_espacial(df_test, w)
     met_esp = evaluar_modelos(modelos_esp, df_test, etiqueta=f"Espacial{etiqueta}",
@@ -97,6 +101,9 @@ def pipeline_escanos_todos_modelos(
         elif 'v2' in nombre:
             from modelos.v2 import pipeline_prediccion_v2
             df_pred = pipeline_prediccion_v2(modelos, df_2023)
+        elif 'bayesiano' in nombre:
+            carpeta_bayes = f'modelos/modelos_{nombre}'
+            df_pred = pipeline_prediccion_bayesiano(modelos, df_2023, carpeta_bayes)
         else:
             df_pred = pipeline_prediccion(modelos, df_2023)
 
